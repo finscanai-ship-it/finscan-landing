@@ -536,11 +536,20 @@
     .lang-opt:hover { background: rgba(255,255,255,.06); }
 
     @media (max-width: 600px) {
-      nav { padding: 12px 14px; gap: 8px; }
-      nav > div { gap: 10px !important; }
-      nav a[href="#features"], nav a[href="#pricing"] { display: none; }
-      .logo { font-size: 1.15rem; }
-      .nav-cta { padding: 8px 14px; font-size: .8rem; }
+      nav { padding: 10px 10px; gap: 6px; }
+      nav > div { gap: 8px !important; }
+      nav a[href="#features"], nav a[href="#pricing"] { font-size: .72rem !important; }
+      .logo { font-size: 1rem; }
+      .nav-cta { padding: 6px 10px; font-size: .72rem; }
+      #langSwitcher button { padding: 5px 8px !important; font-size: .72rem !important; }
+      .urgency-bar {
+        padding: 6px 10px;
+        font-size: .72rem;
+        gap: 6px;
+        top: 50px;
+      }
+      .urgency-bar .countdown { padding: 2px 8px; font-size: .85rem; letter-spacing: 1px; }
+      .urgency-bar .promo-tag { font-size: .6rem; padding: 2px 6px; }
       .stat { min-width: 50%; }
       .step { border-right: none; border-bottom: 1px solid var(--border); }
       .step:last-child { border-bottom: none; }
