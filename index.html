@@ -1524,7 +1524,7 @@
     const email = document.getElementById('ecEmail').value.trim();
     btn.disabled = true; btn.textContent = 'Sending…';
     try {
-      const r = await fetch('https://finscan-server-production.up.railway.app/subscribe', {
+      const r = await fetch('https://web-production-01031.up.railway.app/subscribe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, ref: sessionStorage.getItem('finscan_ref') || '' })
