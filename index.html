@@ -320,7 +320,7 @@
     .pricing-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
-      border-radius: 20px; padding: 36px 32px;
+      border-radius: 20px; padding: 26px 26px;
       display: flex; flex-direction: column;
       transition: border-color .3s, transform .3s;
       position: relative; overflow: hidden;
@@ -341,31 +341,31 @@
       box-shadow: 0 4px 16px rgba(0,0,0,.5), 0 0 12px rgba(0,208,132,.5);
       text-shadow: 0 1px 3px rgba(0,0,0,.4);
     }
-    .plan-name { font-size: .8rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .plan-name { font-size: .75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
     .plan-price {
-      font-size: 3rem; font-weight: 800; letter-spacing: -2px; line-height: 1;
-      margin-bottom: 4px;
+      font-size: 2.4rem; font-weight: 800; letter-spacing: -2px; line-height: 1;
+      margin-bottom: 3px;
     }
-    .plan-price sup { font-size: 1.3rem; vertical-align: super; letter-spacing: 0; font-weight: 600; }
-    .plan-price sub { font-size: 1rem; letter-spacing: 0; font-weight: 400; color: var(--muted); }
-    .plan-billing { font-size: .85rem; color: var(--muted); margin-bottom: 6px; }
+    .plan-price sup { font-size: 1.1rem; vertical-align: super; letter-spacing: 0; font-weight: 600; }
+    .plan-price sub { font-size: .9rem; letter-spacing: 0; font-weight: 400; color: var(--muted); }
+    .plan-billing { font-size: .8rem; color: var(--muted); margin-bottom: 5px; }
     .plan-badge {
       display: inline-block; background: rgba(0,208,132,.15);
       color: var(--accent); border: 1px solid rgba(0,208,132,.3);
-      font-size: .75rem; font-weight: 700; padding: 3px 10px;
-      border-radius: 999px; margin-bottom: 24px;
+      font-size: .7rem; font-weight: 700; padding: 3px 10px;
+      border-radius: 999px; margin-bottom: 12px;
     }
     .plan-badge.hidden { visibility: hidden; }
-    .plan-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 24px; }
-    .plan-features { list-style: none; margin-bottom: 32px; flex: 1; }
+    .plan-divider { border: none; border-top: 1px solid var(--border); margin-bottom: 14px; }
+    .plan-features { list-style: none; margin-bottom: 16px; flex: 1; }
     .plan-features li {
-      font-size: .9rem; color: var(--muted); padding: 7px 0;
-      display: flex; align-items: flex-start; gap: 10px; line-height: 1.5;
+      font-size: .85rem; color: var(--muted); padding: 4px 0;
+      display: flex; align-items: flex-start; gap: 10px; line-height: 1.4;
     }
     .plan-features li::before { content: '✓'; color: var(--accent); font-weight: 700; flex-shrink: 0; }
     .plan-btn {
       display: block; text-align: center; text-decoration: none;
-      padding: 14px; border-radius: 10px; font-weight: 700; font-size: .95rem;
+      padding: 12px; border-radius: 10px; font-weight: 700; font-size: .9rem;
       transition: opacity .2s, transform .2s;
     }
     .plan-btn:hover { opacity: .85; transform: translateY(-1px); }
@@ -602,6 +602,55 @@
         box-shadow: 0 0 24px rgba(0,208,132,.45);
       }
       .btn-secondary { padding: 14px 24px; font-size: .9rem; }
+    }
+
+    /* Email capture modal */
+    .ec-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.78);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; padding: 20px; animation: ecFade .25s ease;
+    }
+    .ec-overlay.show { display: flex; }
+    @keyframes ecFade { from { opacity: 0; } to { opacity: 1; } }
+    .ec-modal {
+      background: linear-gradient(135deg, #111827, #0D1117);
+      border: 1px solid rgba(0,208,132,.35);
+      border-radius: 16px; padding: 36px 32px; max-width: 440px; width: 100%;
+      text-align: center; position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.6), 0 0 40px rgba(0,208,132,.15);
+    }
+    .ec-close {
+      position: absolute; top: 12px; right: 14px; background: none;
+      border: none; color: #6B7280; font-size: 1.4rem; cursor: pointer;
+      line-height: 1; padding: 4px 10px; border-radius: 6px;
+    }
+    .ec-close:hover { color: #fff; background: rgba(255,255,255,.06); }
+    .ec-icon { font-size: 2.6rem; margin-bottom: 8px; }
+    .ec-title { font-size: 1.5rem; font-weight: 800; margin: 0 0 8px; color: #fff; letter-spacing: -.5px; }
+    .ec-sub { color: #9CA3AF; font-size: .95rem; line-height: 1.55; margin: 0 0 22px; }
+    .ec-form { display: flex; flex-direction: column; gap: 10px; }
+    .ec-input {
+      width: 100%; padding: 14px 16px; border-radius: 10px;
+      background: #0D1117; border: 1px solid rgba(255,255,255,.12);
+      color: #fff; font-size: .95rem; outline: none;
+      transition: border-color .15s;
+    }
+    .ec-input:focus { border-color: #00D084; }
+    .ec-submit {
+      padding: 14px; border-radius: 10px; border: none; cursor: pointer;
+      background: linear-gradient(135deg, #00D084, #00A86B); color: #0D1117;
+      font-weight: 800; font-size: 1rem; letter-spacing: .3px;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .ec-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(0,208,132,.4); }
+    .ec-submit:disabled { opacity: .6; cursor: wait; transform: none; }
+    .ec-disclaimer { color: #6B7280; font-size: .75rem; margin: 14px 0 0; }
+    .ec-success { display: none; }
+    .ec-modal.done .ec-form, .ec-modal.done .ec-sub, .ec-modal.done .ec-disclaimer { display: none; }
+    .ec-modal.done .ec-success { display: block; }
+    @media (max-width: 600px) {
+      .ec-modal { padding: 28px 22px; }
+      .ec-title { font-size: 1.25rem; }
     }
   </style>
 </head>
@@ -1392,6 +1441,104 @@
   }
   tick();
 </script>
+
+<!-- ── EMAIL CAPTURE MODAL ────────────────────────────────────────────── -->
+<div class="ec-overlay" id="ecOverlay" role="dialog" aria-modal="true" aria-labelledby="ecTitle">
+  <div class="ec-modal" id="ecModal">
+    <button class="ec-close" onclick="closeEC()" aria-label="Close">×</button>
+    <div class="ec-icon">📘</div>
+    <h2 class="ec-title" id="ecTitle">Wait — grab your free checklist</h2>
+    <p class="ec-sub">Get our <strong style="color:#00D084;">10-Point Stock Screening Checklist</strong> — the same framework FinScan uses to find undervalued stocks. Free PDF, no spam, unsubscribe anytime.</p>
+    <form class="ec-form" id="ecForm" onsubmit="submitEC(event)">
+      <input class="ec-input" type="email" id="ecEmail" placeholder="your@email.com" required autocomplete="email"/>
+      <button class="ec-submit" type="submit" id="ecBtn">Send me the checklist 📥</button>
+    </form>
+    <p class="ec-disclaimer">We only email you when we ship updates. Zero spam.</p>
+    <div class="ec-success">
+      <div style="font-size:2.6rem;">✅</div>
+      <h3 style="color:#00D084;margin:8px 0;">Check your inbox!</h3>
+      <p style="color:#9CA3AF;font-size:.95rem;">Your checklist is on its way. If you don't see it in 2 min, check spam.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Affiliate ?ref=CODE handler ──
+  (function () {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (!ref) return;
+    const code = ref.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 32);
+    if (!code) return;
+    sessionStorage.setItem('finscan_ref', code);
+    document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(a => {
+      try {
+        const u = new URL(a.href);
+        u.searchParams.set('prefilled_promo_code', code);
+        a.href = u.toString();
+      } catch (e) {}
+    });
+  })();
+
+  // ── Email capture: exit-intent (desktop) + scroll 50% (mobile) ──
+  (function () {
+    const KEY = 'finscan_ec_v1';
+    if (localStorage.getItem(KEY)) return;            // already shown / converted
+    const overlay = document.getElementById('ecOverlay');
+    let shown = false;
+    function show() {
+      if (shown) return;
+      shown = true;
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      localStorage.setItem(KEY, 'shown');
+    }
+    window.closeEC = function () {
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+    };
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeEC(); });
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile) {
+      let triggered = false;
+      window.addEventListener('scroll', () => {
+        if (triggered) return;
+        const scrolled = (window.scrollY + window.innerHeight) / document.body.scrollHeight;
+        if (scrolled > 0.5) { triggered = true; setTimeout(show, 300); }
+      }, { passive: true });
+    } else {
+      // desktop exit-intent: cursor leaves through the top
+      document.addEventListener('mouseleave', e => {
+        if (e.clientY <= 0) show();
+      });
+      // fallback: 45s on page
+      setTimeout(show, 45000);
+    }
+  })();
+
+  // ── Submit handler ──
+  window.submitEC = async function (e) {
+    e.preventDefault();
+    const btn = document.getElementById('ecBtn');
+    const email = document.getElementById('ecEmail').value.trim();
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const r = await fetch('https://finscan-server-production.up.railway.app/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, ref: sessionStorage.getItem('finscan_ref') || '' })
+      });
+      if (!r.ok) throw new Error('subscribe failed');
+      document.getElementById('ecModal').classList.add('done');
+      localStorage.setItem('finscan_ec_v1', 'converted');
+    } catch (err) {
+      btn.disabled = false; btn.textContent = 'Try again';
+      alert('Sorry, something went wrong. Please try again or email finscan.ai@gmail.com');
+    }
+  };
+</script>
+
 <!-- Cloudflare Web Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "480943078aa94e9bb1ed76799694150a"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
