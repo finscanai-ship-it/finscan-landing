@@ -6,6 +6,7 @@
   <title>FinScan — Smart Stock Screener</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 56 56'><defs><clipPath id='h'><polygon points='28,4 50,16 50,40 28,52 6,40 6,16'/></clipPath></defs><polygon points='28,4 50,16 50,40 28,52 6,40 6,16' fill='%230D1117' stroke='%2300D084' stroke-width='2.5'/><g clip-path='url(%23h)'><path d='M10 38 L20 30 L28 34 L36 22 L44 8 L52 -2' fill='none' stroke='%2300D084' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/></g><circle cx='44' cy='8' r='3.2' fill='white'/></svg>"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@7.2.3/css/flag-icons.min.css"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -40,10 +41,10 @@
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
     }
-    .logo { font-size: 1.4rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 9px; }
+    .logo { font-size: 1.6rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; display: flex; align-items: center; gap: 10px; }
     .logo span { color: var(--accent); }
     .logo-mark {
-      width: 30px; height: 30px; flex-shrink: 0;
+      width: 34px; height: 34px; flex-shrink: 0;
       filter: drop-shadow(0 0 8px rgba(0,208,132,.35));
     }
     .nav-cta {
@@ -283,7 +284,7 @@
       font-size: .85rem; color: var(--muted);
     }
     footer a { color: var(--accent); text-decoration: none; }
-    footer .logo-f { font-size: 1.2rem; font-weight: 800; color: #fff; margin-bottom: 12px; display: block; }
+    footer .logo-f { font-size: 1.4rem; font-weight: 800; color: #fff; margin-bottom: 12px; display: block; }
     footer .logo-f span { color: var(--accent); }
 
     /* ── URGENCY BANNER ─────────────────────────────────────────────────── */
@@ -674,7 +675,7 @@
       </g>
       <circle cx="44" cy="8" r="2.8" fill="#fff"/>
     </svg>
-    <span style="color:#fff;">Fin</span><span style="color:var(--accent);">Scan</span>
+    <span style="color:#fff;">Fin<span style="color:var(--accent);">Scan</span></span>
   </div>
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="#features" style="color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;" data-i18n="nav_features">Features</a>
@@ -682,14 +683,14 @@
     <!-- Language switcher -->
     <div style="position:relative;" id="langSwitcher">
       <button onclick="toggleLangMenu()" style="background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
-        <span id="currentFlag">🇬🇧</span> <span id="currentLang">EN</span> <span style="font-size:.6rem;">▼</span>
+        <span id="currentFlag" class="fi fi-gb" style="font-size:1rem;"></span> <span id="currentLang">EN</span> <span style="font-size:.6rem;">▼</span>
       </button>
       <div id="langMenu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#1C2333;border:1px solid var(--border);border-radius:10px;overflow:hidden;min-width:140px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);">
-        <div onclick="setLang('en')"  class="lang-opt"><span>🇬🇧</span> English</div>
-        <div onclick="setLang('es')"  class="lang-opt"><span>🇪🇸</span> Español</div>
-        <div onclick="setLang('de')"  class="lang-opt"><span>🇩🇪</span> Deutsch</div>
-        <div onclick="setLang('fr')"  class="lang-opt"><span>🇫🇷</span> Français</div>
-        <div onclick="setLang('pt')"  class="lang-opt"><span>🇵🇹</span> Português</div>
+        <div onclick="setLang('en')"  class="lang-opt"><span class="fi fi-gb"></span> English</div>
+        <div onclick="setLang('es')"  class="lang-opt"><span class="fi fi-es"></span> Español</div>
+        <div onclick="setLang('de')"  class="lang-opt"><span class="fi fi-de"></span> Deutsch</div>
+        <div onclick="setLang('fr')"  class="lang-opt"><span class="fi fi-fr"></span> Français</div>
+        <div onclick="setLang('pt')"  class="lang-opt"><span class="fi fi-pt"></span> Português</div>
       </div>
     </div>
     <a class="nav-cta" href="#pricing" data-i18n="nav_cta">Get Access</a>
@@ -749,7 +750,7 @@
 <!-- URGENCY BAR -->
 <div class="urgency-bar" id="urgencyBar">
   <span class="promo-tag" data-i18n="urgency_tag">⚡ Limited Offer</span>
-  <span data-i18n="urgency_text">Get <strong>10% OFF</strong> any plan — offer expires in</span>
+  <span data-i18n="urgency_text">Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in</span>
   <span class="countdown" id="countdown">60:00</span>
   <a href="#pricing" id="claimLink" style="color:#FBBF24;font-weight:800;text-decoration:underline;white-space:nowrap;" data-i18n="urgency_claim">Claim now →</a>
 </div>
@@ -982,7 +983,7 @@
     <div class="step">
       <div class="step-num">3</div>
       <h3 data-i18n="step3_h">Run a Scan</h3>
-      <p data-i18n="step3_p">Double-click a .bat file — full market scan, single stock, or by category.</p>
+      <p data-i18n="step3_p">Double-click run_finscan.bat — pick from a menu: single stock, group, or full market scan.</p>
     </div>
     <div class="step">
       <div class="step-num">4</div>
@@ -1022,7 +1023,7 @@
       <div class="plan-price"><sup>€</sup>19<sub>.99</sub></div>
       <div class="plan-billing" data-i18n="plan_monthly_bill">billed monthly</div>
       <div class="plan-badge hidden">placeholder</div>
-      <div class="discount-line" id="disc-monthly">🏷 <span data-i18n="disc_monthly">10% off → <strong>€17.99</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong></span></div>
+      <div class="discount-line" id="disc-monthly">🚀 <span data-i18n="disc_monthly">25% off → <strong>€14.99</strong> — use code <strong style="color:#FBBF24;">BETA25</strong></span></div>
       <hr class="plan-divider"/>
       <ul class="plan-features">
         <li data-i18n="mf1">770+ stocks across 18 categories</li>
@@ -1043,8 +1044,7 @@
       <div class="plan-price"><sup>€</sup>44<sub>.99</sub></div>
       <div class="plan-billing" data-i18n="plan_quarterly_bill">billed every 3 months</div>
       <div class="plan-badge" data-i18n="plan_quarterly_badge">Save 25% vs monthly</div>
-      <div class="discount-line" id="disc-quarterly">🏷 <span data-i18n="disc_quarterly">10% off → <strong>€40.49</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong></span></div>
-      <div class="beta-promo">🚀 <span>Launch offer — use code <strong>BETA25</strong> for 25% off <span style="font-weight:400;color:#9CA3AF;font-size:.75rem;">(one code per order)</span></span></div>
+      <div class="discount-line" id="disc-quarterly">🚀 <span data-i18n="disc_quarterly">30% off → <strong>€31.49</strong> — use code <strong style="color:#FBBF24;">BETA30</strong></span></div>
       <hr class="plan-divider"/>
       <ul class="plan-features">
         <li data-i18n="qf1">Everything in Monthly</li>
@@ -1065,8 +1065,7 @@
       <div class="plan-price"><sup>€</sup>143<sub>.99</sub></div>
       <div class="plan-billing" data-i18n="plan_yearly_bill">billed annually</div>
       <div class="plan-badge" data-i18n="plan_yearly_badge">Save 40% vs monthly</div>
-      <div class="discount-line" id="disc-yearly">🏷 <span data-i18n="disc_yearly">10% off → <strong>€129.59</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong></span></div>
-      <div class="beta-promo">🚀 <span>Launch offer — use code <strong>BETA25</strong> for 25% off <span style="font-weight:400;color:#9CA3AF;font-size:.75rem;">(one code per order)</span></span></div>
+      <div class="discount-line" id="disc-yearly">🚀 <span data-i18n="disc_yearly">40% off → <strong>€86.39</strong> — use code <strong style="color:#FBBF24;">BETA40</strong></span></div>
       <hr class="plan-divider"/>
       <ul class="plan-features">
         <li data-i18n="yf1">Everything in Quarterly</li>
@@ -1109,7 +1108,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <span class="logo-f" style="display:inline-flex;align-items:center;gap:8px;">
+  <span class="logo-f" style="display:flex;align-items:center;justify-content:center;gap:8px;">
     <svg width="22" height="22" viewBox="0 0 56 56" style="vertical-align:middle;">
       <defs><clipPath id="hexClipFooter"><polygon points="28,4 50,16 50,40 28,52 6,40 6,16"/></clipPath></defs>
       <polygon points="28,4 50,16 50,40 28,52 6,40 6,16" fill="none" stroke="#00D084" stroke-width="2.5"/>
@@ -1118,7 +1117,7 @@
       </g>
       <circle cx="44" cy="8" r="3" fill="#fff"/>
     </svg>
-    <span style="color:#fff;">Fin</span><span>Scan</span>
+    <span style="color:#fff;">Fin<span style="color:var(--accent);">Scan</span></span>
   </span>
   <span data-i18n="footer_tagline">Professional stock screening for serious investors.</span><br/><br/>
   <a href="mailto:finscan.ai@gmail.com">finscan.ai@gmail.com</a>
@@ -1138,7 +1137,7 @@
       hero_btn1:'🚀 Request Access', hero_btn2:'See How It Works ↓',
       stat1:'Stocks Analysed', stat2:'Market Categories', stat3:'Data Points per Stock', stat4:'Data Sources',
       urgency_tag:'⚡ Limited Offer',
-      urgency_text:'Get <strong>10% OFF</strong> any plan — offer expires in',
+      urgency_text:'Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in',
       urgency_claim:'Claim now →',
       mockup_label:'Live Preview', mockup_title:'See it in action',
       mockup_sub:'Real output. Real data. This is exactly what lands in your Excel file after every scan.',
@@ -1153,7 +1152,7 @@
       hiw_label:'How It Works', hiw_title:'Up and running in minutes', hiw_sub:'No installations, no configuration headaches. Just open and scan.',
       step1_h:'Get Access', step1_p:'Contact us by email. We send you a personalised licence key valid for your chosen period.',
       step2_h:'Enter Your Key', step2_p:'Open finscan.cfg in Notepad, paste your key. Done. Takes 30 seconds.',
-      step3_h:'Run a Scan', step3_p:'Double-click a .bat file — full market scan, single stock, or by category.',
+      step3_h:'Run a Scan', step3_p:'Double-click run_finscan.bat — pick from a menu: single stock, group, or full market scan.',
       step4_h:'Read the Results', step4_p:'Open your Excel file in the output folder. Ranked, scored, and ready to act on.',
       score_label:'Scoring System', score_title:'One score. Full picture.',
       score_sub:'Every stock is rated 0–100. The verdict tells you exactly where it stands.',
@@ -1166,9 +1165,9 @@
       plan_monthly:'Monthly', plan_monthly_bill:'billed monthly',
       plan_quarterly:'Quarterly', plan_quarterly_bill:'billed every 3 months', plan_quarterly_badge:'Save 25% vs monthly',
       plan_yearly:'Yearly', plan_yearly_bill:'billed annually', plan_yearly_badge:'Save 40% vs monthly',
-      disc_monthly:'10% off → <strong>€17.99</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_quarterly:'10% off → <strong>€40.49</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_yearly:'10% off → <strong>€129.59</strong> — use code <strong style="color:#FBBF24;">EARLY10</strong>',
+      disc_monthly:'25% off → <strong>€14.99</strong> — use code <strong style="color:#FBBF24;">BETA25</strong>',
+      disc_quarterly:'30% off → <strong>€31.49</strong> — use code <strong style="color:#FBBF24;">BETA30</strong>',
+      disc_yearly:'40% off → <strong>€86.39</strong> — use code <strong style="color:#FBBF24;">BETA40</strong>',
       mf1:'770+ stocks across 18 categories', mf2:'Full technical + fundamental analysis',
       mf3:'Simple View & Full Analysis Excel output', mf4:'Price charts for top 10 stocks',
       mf5:'Data cached — repeat scans in 2-3 min',
@@ -1191,7 +1190,7 @@
       hero_btn1:'🚀 Solicitar Acceso', hero_btn2:'Cómo Funciona ↓',
       stat1:'Acciones Analizadas', stat2:'Categorías de Mercado', stat3:'Datos por Acción', stat4:'Fuentes de Datos',
       urgency_tag:'⚡ Oferta Limitada',
-      urgency_text:'Obtén un <strong>10% DE DESCUENTO</strong> en cualquier plan — la oferta expira en',
+      urgency_text:'Oferta de lanzamiento — ahorra <strong>hasta un 40%</strong> en cualquier plan — expira en',
       urgency_claim:'Reclamar ahora →',
       mockup_label:'Vista Previa', mockup_title:'Míralo en acción',
       mockup_sub:'Resultados reales. Datos reales. Esto es exactamente lo que aparece en tu archivo Excel después de cada análisis.',
@@ -1206,7 +1205,7 @@
       hiw_label:'Cómo Funciona', hiw_title:'En marcha en minutos', hiw_sub:'Sin instalaciones, sin complicaciones. Solo abre y escanea.',
       step1_h:'Obtén Acceso', step1_p:'Contáctanos por email. Te enviamos una clave de licencia personalizada válida por el período elegido.',
       step2_h:'Introduce Tu Clave', step2_p:'Abre finscan.cfg en el Bloc de notas, pega tu clave. Listo. Tarda 30 segundos.',
-      step3_h:'Ejecuta un Análisis', step3_p:'Haz doble clic en un archivo .bat — análisis completo del mercado, acción individual o por categoría.',
+      step3_h:'Ejecuta un Análisis', step3_p:'Haz doble clic en run_finscan.bat — elige en el menú: acción individual, grupo o análisis completo del mercado.',
       step4_h:'Lee los Resultados', step4_p:'Abre tu archivo Excel en la carpeta de salida. Clasificados, puntuados y listos para actuar.',
       score_label:'Sistema de Puntuación', score_title:'Una puntuación. Visión completa.',
       score_sub:'Cada acción recibe una nota de 0 a 100. El veredicto te dice exactamente dónde está.',
@@ -1219,9 +1218,9 @@
       plan_monthly:'Mensual', plan_monthly_bill:'facturado mensualmente',
       plan_quarterly:'Trimestral', plan_quarterly_bill:'facturado cada 3 meses', plan_quarterly_badge:'Ahorra 25% vs mensual',
       plan_yearly:'Anual', plan_yearly_bill:'facturado anualmente', plan_yearly_badge:'Ahorra 40% vs mensual',
-      disc_monthly:'10% dto → <strong>€17.99</strong> — usa el código <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_quarterly:'10% dto → <strong>€40.49</strong> — usa el código <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_yearly:'10% dto → <strong>€129.59</strong> — usa el código <strong style="color:#FBBF24;">EARLY10</strong>',
+      disc_monthly:'25% dto → <strong>€14.99</strong> — usa el código <strong style="color:#FBBF24;">BETA25</strong>',
+      disc_quarterly:'30% dto → <strong>€31.49</strong> — usa el código <strong style="color:#FBBF24;">BETA30</strong>',
+      disc_yearly:'40% dto → <strong>€86.39</strong> — usa el código <strong style="color:#FBBF24;">BETA40</strong>',
       mf1:'770+ acciones en 18 categorías', mf2:'Análisis técnico + fundamental completo',
       mf3:'Excel con Vista Simple y Análisis Completo', mf4:'Gráficos de precios de las 10 mejores',
       mf5:'Datos en caché — análisis repetidos en 2-3 min',
@@ -1244,7 +1243,7 @@
       hero_btn1:'🚀 Zugang anfragen', hero_btn2:'Wie es funktioniert ↓',
       stat1:'Analysierte Aktien', stat2:'Marktkategorien', stat3:'Datenpunkte je Aktie', stat4:'Datenquellen',
       urgency_tag:'⚡ Begrenztes Angebot',
-      urgency_text:'<strong>10% RABATT</strong> auf jeden Plan — Angebot läuft ab in',
+      urgency_text:'Launch-Angebot — spare <strong>bis zu 40%</strong> auf jeden Plan — läuft ab in',
       urgency_claim:'Jetzt sichern →',
       mockup_label:'Vorschau', mockup_title:'Sieh es in Aktion',
       mockup_sub:'Echte Ergebnisse. Echte Daten. Genau das landet nach jedem Scan in deiner Excel-Datei.',
@@ -1259,7 +1258,7 @@
       hiw_label:'So funktioniert es', hiw_title:'In Minuten einsatzbereit', hiw_sub:'Keine Installation, keine Konfiguration. Einfach öffnen und scannen.',
       step1_h:'Zugang erhalten', step1_p:'Kontaktiere uns per E-Mail. Wir senden dir einen persönlichen Lizenzschlüssel für deinen gewählten Zeitraum.',
       step2_h:'Schlüssel eingeben', step2_p:'Öffne finscan.cfg im Editor, füge deinen Schlüssel ein. Fertig. Dauert 30 Sekunden.',
-      step3_h:'Scan starten', step3_p:'Doppelklick auf eine .bat-Datei — Vollmarkt-Scan, einzelne Aktie oder nach Kategorie.',
+      step3_h:'Scan starten', step3_p:'Doppelklick auf run_finscan.bat — wähle im Menü: einzelne Aktie, Gruppe oder Vollmarkt-Scan.',
       step4_h:'Ergebnisse lesen', step4_p:'Öffne deine Excel-Datei im Ausgabeordner. Eingestuft, bewertet und bereit zum Handeln.',
       score_label:'Bewertungssystem', score_title:'Ein Score. Vollständiges Bild.',
       score_sub:'Jede Aktie wird von 0–100 bewertet. Das Urteil zeigt dir genau, wo sie steht.',
@@ -1272,9 +1271,9 @@
       plan_monthly:'Monatlich', plan_monthly_bill:'monatlich abgerechnet',
       plan_quarterly:'Vierteljährlich', plan_quarterly_bill:'alle 3 Monate abgerechnet', plan_quarterly_badge:'25% sparen vs. monatlich',
       plan_yearly:'Jährlich', plan_yearly_bill:'jährlich abgerechnet', plan_yearly_badge:'40% sparen vs. monatlich',
-      disc_monthly:'10% Rabatt → <strong>€17,99</strong> — Code: <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_quarterly:'10% Rabatt → <strong>€40,49</strong> — Code: <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_yearly:'10% Rabatt → <strong>€129,59</strong> — Code: <strong style="color:#FBBF24;">EARLY10</strong>',
+      disc_monthly:'25% Rabatt → <strong>€14,99</strong> — Code: <strong style="color:#FBBF24;">BETA25</strong>',
+      disc_quarterly:'30% Rabatt → <strong>€31,49</strong> — Code: <strong style="color:#FBBF24;">BETA30</strong>',
+      disc_yearly:'40% Rabatt → <strong>€86,39</strong> — Code: <strong style="color:#FBBF24;">BETA40</strong>',
       mf1:'770+ Aktien in 18 Kategorien', mf2:'Vollständige technische + fundamentale Analyse',
       mf3:'Einfache Ansicht & Vollanalyse als Excel', mf4:'Kursdiagramme für Top 10 Aktien',
       mf5:'Daten gecacht — Wiederholungsscans in 2-3 Min.',
@@ -1297,7 +1296,7 @@
       hero_btn1:'🚀 Demander l\'accès', hero_btn2:'Voir comment ça marche ↓',
       stat1:'Actions analysées', stat2:'Catégories de marché', stat3:'Points de données par action', stat4:'Sources de données',
       urgency_tag:'⚡ Offre limitée',
-      urgency_text:'<strong>10% DE RÉDUCTION</strong> sur tout plan — l\'offre expire dans',
+      urgency_text:'Offre de lancement — économisez <strong>jusqu\'à 40%</strong> sur tout plan — expire dans',
       urgency_claim:'Profiter maintenant →',
       mockup_label:'Aperçu', mockup_title:'Voyez-le en action',
       mockup_sub:'Vrais résultats. Vraies données. C\'est exactement ce qui apparaît dans votre fichier Excel après chaque analyse.',
@@ -1312,7 +1311,7 @@
       hiw_label:'Comment ça marche', hiw_title:'Opérationnel en quelques minutes', hiw_sub:'Pas d\'installation, pas de configuration. Ouvrez et scannez.',
       step1_h:'Obtenir l\'accès', step1_p:'Contactez-nous par e-mail. Nous vous envoyons une clé de licence personnalisée pour la période choisie.',
       step2_h:'Entrer votre clé', step2_p:'Ouvrez finscan.cfg dans le Bloc-notes, collez votre clé. Terminé en 30 secondes.',
-      step3_h:'Lancer une analyse', step3_p:'Double-cliquez sur un fichier .bat — analyse complète du marché, action unique ou par catégorie.',
+      step3_h:'Lancer une analyse', step3_p:'Double-cliquez sur run_finscan.bat — choisissez dans le menu : action unique, groupe ou analyse complète du marché.',
       step4_h:'Lire les résultats', step4_p:'Ouvrez votre fichier Excel dans le dossier de sortie. Classé, noté et prêt à l\'action.',
       score_label:'Système de notation', score_title:'Un score. Vision complète.',
       score_sub:'Chaque action est notée de 0 à 100. Le verdict vous dit exactement où elle en est.',
@@ -1325,9 +1324,9 @@
       plan_monthly:'Mensuel', plan_monthly_bill:'facturé mensuellement',
       plan_quarterly:'Trimestriel', plan_quarterly_bill:'facturé tous les 3 mois', plan_quarterly_badge:'Économisez 25% vs mensuel',
       plan_yearly:'Annuel', plan_yearly_bill:'facturé annuellement', plan_yearly_badge:'Économisez 40% vs mensuel',
-      disc_monthly:'10% de remise → <strong>€17,99</strong> — code <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_quarterly:'10% de remise → <strong>€40,49</strong> — code <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_yearly:'10% de remise → <strong>€129,59</strong> — code <strong style="color:#FBBF24;">EARLY10</strong>',
+      disc_monthly:'25% de remise → <strong>€14,99</strong> — code <strong style="color:#FBBF24;">BETA25</strong>',
+      disc_quarterly:'30% de remise → <strong>€31,49</strong> — code <strong style="color:#FBBF24;">BETA30</strong>',
+      disc_yearly:'40% de remise → <strong>€86,39</strong> — code <strong style="color:#FBBF24;">BETA40</strong>',
       mf1:'770+ actions dans 18 catégories', mf2:'Analyse technique + fondamentale complète',
       mf3:'Vue Simple & Analyse Complète en Excel', mf4:'Graphiques pour le top 10',
       mf5:'Données en cache — analyses répétées en 2-3 min',
@@ -1350,7 +1349,7 @@
       hero_btn1:'🚀 Pedir Acesso', hero_btn2:'Ver Como Funciona ↓',
       stat1:'Ações Analisadas', stat2:'Categorias de Mercado', stat3:'Dados por Ação', stat4:'Fontes de Dados',
       urgency_tag:'⚡ Oferta Limitada',
-      urgency_text:'<strong>10% DESCONTO</strong> em qualquer plano — oferta termina em',
+      urgency_text:'Oferta de lançamento — poupe <strong>até 40%</strong> em qualquer plano — termina em',
       urgency_claim:'Aproveitar agora →',
       mockup_label:'Pré-visualização', mockup_title:'Veja em ação',
       mockup_sub:'Resultados reais. Dados reais. É exatamente isto que aparece no seu ficheiro Excel após cada scan.',
@@ -1365,7 +1364,7 @@
       hiw_label:'Como Funciona', hiw_title:'Pronto em minutos', hiw_sub:'Sem instalações, sem configurações complicadas. Abra e scaneie.',
       step1_h:'Obter Acesso', step1_p:'Contacte-nos por email. Enviamos-lhe uma chave de licença personalizada para o período escolhido.',
       step2_h:'Introduzir a Chave', step2_p:'Abra o finscan.cfg no Bloco de Notas, cole a sua chave. Pronto. Demora 30 segundos.',
-      step3_h:'Executar um Scan', step3_p:'Clique duas vezes num ficheiro .bat — scan completo do mercado, ação individual ou por categoria.',
+      step3_h:'Executar um Scan', step3_p:'Clique duas vezes em run_finscan.bat — escolhe no menu: ação individual, grupo ou scan completo do mercado.',
       step4_h:'Ler os Resultados', step4_p:'Abra o seu ficheiro Excel na pasta de saída. Classificado, pontuado e pronto para agir.',
       score_label:'Sistema de Pontuação', score_title:'Uma pontuação. Visão completa.',
       score_sub:'Cada ação é avaliada de 0 a 100. O veredicto diz-lhe exatamente onde está.',
@@ -1378,9 +1377,9 @@
       plan_monthly:'Mensal', plan_monthly_bill:'faturado mensalmente',
       plan_quarterly:'Trimestral', plan_quarterly_bill:'faturado de 3 em 3 meses', plan_quarterly_badge:'Poupe 25% vs mensal',
       plan_yearly:'Anual', plan_yearly_bill:'faturado anualmente', plan_yearly_badge:'Poupe 40% vs mensal',
-      disc_monthly:'10% desc → <strong>€17,99</strong> — use o código <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_quarterly:'10% desc → <strong>€40,49</strong> — use o código <strong style="color:#FBBF24;">EARLY10</strong>',
-      disc_yearly:'10% desc → <strong>€129,59</strong> — use o código <strong style="color:#FBBF24;">EARLY10</strong>',
+      disc_monthly:'25% desc → <strong>€14,99</strong> — use o código <strong style="color:#FBBF24;">BETA25</strong>',
+      disc_quarterly:'30% desc → <strong>€31,49</strong> — use o código <strong style="color:#FBBF24;">BETA30</strong>',
+      disc_yearly:'40% desc → <strong>€86,39</strong> — use o código <strong style="color:#FBBF24;">BETA40</strong>',
       mf1:'770+ ações em 18 categorias', mf2:'Análise técnica + fundamental completa',
       mf3:'Excel com Vista Simples e Análise Completa', mf4:'Gráficos de preços para o top 10',
       mf5:'Dados em cache — scans repetidos em 2-3 min',
@@ -1397,7 +1396,7 @@
     }
   };
 
-  const FLAGS = { en:'🇬🇧', es:'🇪🇸', de:'🇩🇪', fr:'🇫🇷', pt:'🇵🇹' };
+  const FLAGS = { en:'fi-gb', es:'fi-es', de:'fi-de', fr:'fi-fr', pt:'fi-pt' };
   const LABELS = { en:'EN', es:'ES', de:'DE', fr:'FR', pt:'PT' };
   let currentLang = localStorage.getItem('finscan_lang') || 'en';
 
@@ -1408,7 +1407,8 @@
       const key = el.getAttribute('data-i18n');
       if (dict[key] !== undefined) el.innerHTML = dict[key];
     });
-    document.getElementById('currentFlag').textContent = FLAGS[lang];
+    const flagEl = document.getElementById('currentFlag');
+    flagEl.className = 'fi ' + FLAGS[lang];
     document.getElementById('currentLang').textContent = LABELS[lang];
     document.documentElement.lang = lang;
     currentLang = lang;
