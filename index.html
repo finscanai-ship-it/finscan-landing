@@ -189,16 +189,17 @@
     /* ── FEATURES ────────────────────────────────────────────────────────── */
     section { padding: 96px 24px; }
     .section-label {
-      text-align: center; font-size: .8rem; font-weight: 700;
-      letter-spacing: 2px; color: var(--accent); text-transform: uppercase;
-      margin-bottom: 14px;
+      text-align: center; font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800; letter-spacing: -0.5px; color: var(--accent);
+      margin-bottom: 8px;
     }
     .section-title {
-      text-align: center; font-size: clamp(1.8rem, 4vw, 2.8rem);
-      font-weight: 800; letter-spacing: -1px; margin-bottom: 16px;
+      text-align: center; font-size: clamp(1rem, 2vw, 1.15rem);
+      font-weight: 500; color: #fff; letter-spacing: 0;
+      margin-bottom: 24px;
     }
     .section-sub {
-      text-align: center; color: var(--muted); font-size: 1.05rem;
+      text-align: center; color: var(--muted); font-size: .92rem;
       max-width: 540px; margin: 0 auto 64px; line-height: 1.7;
     }
 
@@ -444,10 +445,13 @@
     }
     .excel-tab {
       padding: 6px 18px; font-size: .75rem; font-weight: 600;
-      border-radius: 6px 6px 0 0; cursor: default;
+      border-radius: 6px 6px 0 0; cursor: pointer; transition: background .15s, color .15s;
     }
     .excel-tab.active { background: #1D2432; color: #fff; }
-    .excel-tab.inactive { background: transparent; color: var(--muted); }
+    .excel-tab:not(.active) { background: transparent; color: var(--muted); }
+    .excel-tab:not(.active):hover { background: rgba(255,255,255,.04); color: #CBD5E1; }
+    .excel-panel { display: none; }
+    .excel-panel.active { display: block; }
     .excel-body { overflow-x: auto; padding: 0; }
     .xls {
       width: 100%; border-collapse: collapse;
@@ -572,9 +576,9 @@
       .discount-line { font-size: .72rem; margin-bottom: 6px; }
       #pricing, #features, #how-it-works, .mockup-section { scroll-margin-top: 100px; }
       section { padding: 44px 16px; }
-      .section-title { font-size: 1.5rem !important; margin-bottom: 8px; }
+      .section-label { font-size: 1.4rem !important; margin-bottom: 6px; }
+      .section-title { font-size: .95rem !important; margin-bottom: 8px; }
       .section-sub { font-size: .85rem; margin-bottom: 28px; line-height: 1.5; }
-      .section-label { font-size: .68rem; margin-bottom: 8px; letter-spacing: 1.5px; }
       .features-grid { gap: 12px; grid-template-columns: 1fr; }
       .feature-card { padding: 16px 18px; border-radius: 12px; }
       .feature-icon { width: 36px; height: 36px; font-size: 1.1rem; margin-bottom: 10px; border-radius: 8px; }
@@ -759,7 +763,7 @@
 <section class="mockup-section">
   <div class="section-label" data-i18n="mockup_label">Live Preview</div>
   <h2 class="section-title" data-i18n="mockup_title">See it in action</h2>
-  <p class="section-sub" data-i18n="mockup_sub">Real output. Real data. This is exactly what lands in your Excel file after every scan.</p>
+  <p class="section-sub" data-i18n="mockup_sub">Real output. Real data. A sneak peek of what lands in your Excel file after every scan.</p>
 
   <div class="mockup-wrap">
 
@@ -771,155 +775,98 @@
           <div class="title">finscan_20260410_0900.xlsx</div>
         </div>
         <div class="excel-wrap">
-          <div class="excel-tabs">
-            <div class="excel-tab active">Simple View</div>
-            <div class="excel-tab inactive">Full Analysis</div>
-            <div class="excel-tab inactive">Sources &amp; Notes</div>
+          <div class="excel-tabs" id="xlsTabs">
+            <div class="excel-tab active" onclick="switchTab(0)">Simple View</div>
+            <div class="excel-tab" onclick="switchTab(1)">Full Analysis</div>
+            <div class="excel-tab" onclick="switchTab(2)">Sources &amp; Notes</div>
           </div>
-          <div class="excel-body">
-            <table class="xls">
-              <thead>
-                <tr>
+
+          <!-- TAB 0: Simple View -->
+          <div class="excel-panel active" id="xlsPanel0">
+            <div class="excel-body">
+              <table class="xls">
+                <thead><tr>
                   <th>#</th><th>Symbol</th><th>Company</th><th>Price ($)</th>
                   <th>Score</th><th>Verdict</th><th>Valuation</th><th>Growth</th>
                   <th>Profitability</th><th>Health</th><th>Analyst</th><th>Upside %</th><th>Next Earnings</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td><td class="sym">NVDA</td><td class="name">NVIDIA Corporation</td><td>$875.40</td>
-                  <td><strong>88.4</strong></td>
-                  <td><span class="badge b-sb">Strong Buy</span></td>
-                  <td><span class="badge b-vcheap">Very Cheap</span></td>
-                  <td><span class="badge b-hg">High Growth</span></td>
-                  <td><span class="badge b-hp">Highly Profitable</span></td>
-                  <td><span class="badge b-vh">Very Healthy</span></td>
-                  <td><span class="badge b-sb">Strong Buy</span></td>
-                  <td class="up-pos">+24.3%</td><td>May 28, 2026</td>
-                </tr>
-                <tr>
-                  <td>2</td><td class="sym">META</td><td class="name">Meta Platforms Inc.</td><td>$512.80</td>
-                  <td><strong>81.2</strong></td>
-                  <td><span class="badge b-sb">Strong Buy</span></td>
-                  <td><span class="badge b-cheap">Cheap</span></td>
-                  <td><span class="badge b-hg">High Growth</span></td>
-                  <td><span class="badge b-hp">Highly Profitable</span></td>
-                  <td><span class="badge b-vh">Very Healthy</span></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td class="up-pos">+18.7%</td><td>Apr 30, 2026</td>
-                </tr>
-                <tr>
-                  <td>3</td><td class="sym">PLTR</td><td class="name">Palantir Technologies</td><td>$24.60</td>
-                  <td><strong>74.9</strong></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td><span class="badge b-fair">Fair</span></td>
-                  <td><span class="badge b-gr">Growing</span></td>
-                  <td><span class="badge b-hp">Highly Profitable</span></td>
-                  <td><span class="badge b-vh">Very Healthy</span></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td class="up-pos">+31.2%</td><td>May 05, 2026</td>
-                </tr>
-                <tr>
-                  <td>4</td><td class="sym">LMT</td><td class="name">Lockheed Martin Corp.</td><td>$468.20</td>
-                  <td><strong>68.3</strong></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td><span class="badge b-cheap">Cheap</span></td>
-                  <td><span class="badge b-gr">Growing</span></td>
-                  <td><span class="badge b-pr">Profitable</span></td>
-                  <td><span class="badge b-hl">Healthy</span></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td class="up-pos">+12.4%</td><td>Apr 22, 2026</td>
-                </tr>
-                <tr>
-                  <td>5</td><td class="sym">MSFT</td><td class="name">Microsoft Corporation</td><td>$415.70</td>
-                  <td><strong>63.7</strong></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td><span class="badge b-fair">Fair</span></td>
-                  <td><span class="badge b-gr">Growing</span></td>
-                  <td><span class="badge b-hp">Highly Profitable</span></td>
-                  <td><span class="badge b-vh">Very Healthy</span></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td class="up-pos">+9.8%</td><td>Apr 30, 2026</td>
-                </tr>
-                <tr>
-                  <td>6</td><td class="sym">BAESY</td><td class="name">BAE Systems plc</td><td>$14.85</td>
-                  <td><strong>57.1</strong></td>
-                  <td><span class="badge b-w">Watch</span></td>
-                  <td><span class="badge b-cheap">Cheap</span></td>
-                  <td><span class="badge b-gr">Growing</span></td>
-                  <td><span class="badge b-pr">Profitable</span></td>
-                  <td><span class="badge b-md">Moderate Debt</span></td>
-                  <td><span class="badge b-b">Buy</span></td>
-                  <td class="up-pos">+16.0%</td><td>Not available yet</td>
-                </tr>
-                <tr>
-                  <td>7</td><td class="sym">TSLA</td><td class="name">Tesla Inc.</td><td>$172.30</td>
-                  <td><strong>41.5</strong></td>
-                  <td><span class="badge b-w">Watch</span></td>
-                  <td><span class="badge b-exp">Expensive</span></td>
-                  <td><span class="badge b-dc">Declining</span></td>
-                  <td><span class="badge b-pr">Profitable</span></td>
-                  <td><span class="badge b-vh">Very Healthy</span></td>
-                  <td><span class="badge b-w" style="background:rgba(255,235,156,.15);color:#FCD34D;">Hold</span></td>
-                  <td class="up-neg">-8.2%</td><td>Apr 22, 2026</td>
-                </tr>
-              </tbody>
-            </table>
+                </tr></thead>
+                <tbody>
+                  <tr><td>1</td><td class="sym">NVDA</td><td class="name">NVIDIA Corporation</td><td>$875.40</td><td><strong>88.4</strong></td><td><span class="badge b-sb">Strong Buy</span></td><td><span class="badge b-vcheap">Very Cheap</span></td><td><span class="badge b-hg">High Growth</span></td><td><span class="badge b-hp">Highly Profitable</span></td><td><span class="badge b-vh">Very Healthy</span></td><td><span class="badge b-sb">Strong Buy</span></td><td class="up-pos">+24.3%</td><td>May 28, 2026</td></tr>
+                  <tr><td>2</td><td class="sym">META</td><td class="name">Meta Platforms Inc.</td><td>$512.80</td><td><strong>81.2</strong></td><td><span class="badge b-sb">Strong Buy</span></td><td><span class="badge b-cheap">Cheap</span></td><td><span class="badge b-hg">High Growth</span></td><td><span class="badge b-hp">Highly Profitable</span></td><td><span class="badge b-vh">Very Healthy</span></td><td><span class="badge b-b">Buy</span></td><td class="up-pos">+18.7%</td><td>Apr 30, 2026</td></tr>
+                  <tr><td>3</td><td class="sym">PLTR</td><td class="name">Palantir Technologies</td><td>$24.60</td><td><strong>74.9</strong></td><td><span class="badge b-b">Buy</span></td><td><span class="badge b-fair">Fair</span></td><td><span class="badge b-gr">Growing</span></td><td><span class="badge b-hp">Highly Profitable</span></td><td><span class="badge b-vh">Very Healthy</span></td><td><span class="badge b-b">Buy</span></td><td class="up-pos">+31.2%</td><td>May 05, 2026</td></tr>
+                  <tr><td>4</td><td class="sym">LMT</td><td class="name">Lockheed Martin Corp.</td><td>$468.20</td><td><strong>68.3</strong></td><td><span class="badge b-b">Buy</span></td><td><span class="badge b-cheap">Cheap</span></td><td><span class="badge b-gr">Growing</span></td><td><span class="badge b-pr">Profitable</span></td><td><span class="badge b-hl">Healthy</span></td><td><span class="badge b-b">Buy</span></td><td class="up-pos">+12.4%</td><td>Apr 22, 2026</td></tr>
+                  <tr><td>5</td><td class="sym">MSFT</td><td class="name">Microsoft Corporation</td><td>$415.70</td><td><strong>63.7</strong></td><td><span class="badge b-b">Buy</span></td><td><span class="badge b-fair">Fair</span></td><td><span class="badge b-gr">Growing</span></td><td><span class="badge b-hp">Highly Profitable</span></td><td><span class="badge b-vh">Very Healthy</span></td><td><span class="badge b-b">Buy</span></td><td class="up-pos">+9.8%</td><td>Apr 30, 2026</td></tr>
+                  <tr><td>6</td><td class="sym">BAESY</td><td class="name">BAE Systems plc</td><td>$14.85</td><td><strong>57.1</strong></td><td><span class="badge b-w">Watch</span></td><td><span class="badge b-cheap">Cheap</span></td><td><span class="badge b-gr">Growing</span></td><td><span class="badge b-pr">Profitable</span></td><td><span class="badge b-md">Moderate Debt</span></td><td><span class="badge b-b">Buy</span></td><td class="up-pos">+16.0%</td><td>Not available yet</td></tr>
+                  <tr><td>7</td><td class="sym">TSLA</td><td class="name">Tesla Inc.</td><td>$172.30</td><td><strong>41.5</strong></td><td><span class="badge b-w">Watch</span></td><td><span class="badge b-exp">Expensive</span></td><td><span class="badge b-dc">Declining</span></td><td><span class="badge b-pr">Profitable</span></td><td><span class="badge b-vh">Very Healthy</span></td><td><span class="badge b-w" style="background:rgba(255,235,156,.15);color:#FCD34D;">Hold</span></td><td class="up-neg">-8.2%</td><td>Apr 22, 2026</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 1: Full Analysis -->
+          <div class="excel-panel" id="xlsPanel1">
+            <div class="excel-body">
+              <table class="xls">
+                <thead><tr>
+                  <th>#</th><th>Symbol</th><th>Price</th><th>Score</th>
+                  <th>P/E</th><th>Fwd P/E</th><th>EV/EBITDA</th><th>Gross Margin</th>
+                  <th>FCF Margin</th><th>Rev Growth</th><th>Debt/Eq</th><th>ROE</th>
+                  <th>RSI</th><th>MACD</th><th>EMA Trend</th><th>Support</th><th>Resistance</th>
+                </tr></thead>
+                <tbody>
+                  <tr><td>1</td><td class="sym">NVDA</td><td>$875.40</td><td><strong>88.4</strong></td><td>34.2</td><td>26.8</td><td>28.1</td><td>73.0%</td><td>42.1%</td><td class="up-pos">+122%</td><td>0.41</td><td>115.2%</td><td>58.3</td><td><span style="color:#4ADE80;">BUY</span></td><td><span style="color:#4ADE80;">BULLISH</span></td><td>$812</td><td>$920</td></tr>
+                  <tr><td>2</td><td class="sym">META</td><td>$512.80</td><td><strong>81.2</strong></td><td>23.1</td><td>19.4</td><td>14.2</td><td>81.5%</td><td>33.8%</td><td class="up-pos">+27%</td><td>0.28</td><td>33.4%</td><td>52.7</td><td><span style="color:#4ADE80;">BUY</span></td><td><span style="color:#4ADE80;">BULLISH</span></td><td>$478</td><td>$545</td></tr>
+                  <tr><td>3</td><td class="sym">PLTR</td><td>$24.60</td><td><strong>74.9</strong></td><td>188.4</td><td>62.3</td><td>95.7</td><td>81.1%</td><td>28.4%</td><td class="up-pos">+21%</td><td>0.00</td><td>10.2%</td><td>61.4</td><td><span style="color:#4ADE80;">BUY</span></td><td><span style="color:#4ADE80;">BULLISH</span></td><td>$21.8</td><td>$27.5</td></tr>
+                  <tr><td>4</td><td class="sym">LMT</td><td>$468.20</td><td><strong>68.3</strong></td><td>17.2</td><td>16.1</td><td>13.8</td><td>13.3%</td><td>6.8%</td><td class="up-pos">+9%</td><td>2.54</td><td>72.8%</td><td>48.9</td><td><span style="color:#6B7280;">NEUTRAL</span></td><td><span style="color:#4ADE80;">BULLISH</span></td><td>$442</td><td>$490</td></tr>
+                  <tr><td>5</td><td class="sym">MSFT</td><td>$415.70</td><td><strong>63.7</strong></td><td>34.8</td><td>30.1</td><td>23.2</td><td>69.4%</td><td>28.6%</td><td class="up-pos">+16%</td><td>0.29</td><td>38.5%</td><td>44.2</td><td><span style="color:#6B7280;">NEUTRAL</span></td><td><span style="color:#4ADE80;">BULLISH</span></td><td>$390</td><td>$435</td></tr>
+                  <tr><td>6</td><td class="sym">BAESY</td><td>$14.85</td><td><strong>57.1</strong></td><td>21.4</td><td>18.6</td><td>11.2</td><td>21.8%</td><td>5.2%</td><td class="up-pos">+12%</td><td>1.18</td><td>28.1%</td><td>55.1</td><td><span style="color:#4ADE80;">BUY</span></td><td><span style="color:#6B7280;">NEUTRAL</span></td><td>$13.2</td><td>$16.1</td></tr>
+                  <tr><td>7</td><td class="sym">TSLA</td><td>$172.30</td><td><strong>41.5</strong></td><td>58.6</td><td>72.4</td><td>38.9</td><td>18.2%</td><td>4.1%</td><td class="up-neg">-9%</td><td>0.11</td><td>19.7%</td><td>38.6</td><td><span style="color:#F87171;">SELL</span></td><td><span style="color:#F87171;">BEARISH</span></td><td>$155</td><td>$195</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- TAB 2: Sources & Notes -->
+          <div class="excel-panel" id="xlsPanel2">
+            <div class="excel-body" style="padding:24px 28px;font-size:.82rem;color:#9CA3AF;line-height:1.9;">
+              <p style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:14px;">Data Sources &amp; Methodology</p>
+              <table class="xls" style="font-size:.8rem;">
+                <thead><tr><th style="text-align:left;">Source</th><th style="text-align:left;">Data Provided</th><th style="text-align:left;">Refresh Rate</th></tr></thead>
+                <tbody>
+                  <tr><td style="text-align:left;color:#60A5FA;font-weight:600;">Yahoo Finance</td><td style="text-align:left;">Price history, EMA, MACD, RSI, Bollinger Bands, support/resistance</td><td style="text-align:left;">Live (24h cache)</td></tr>
+                  <tr><td style="text-align:left;color:#60A5FA;font-weight:600;">yfinance API</td><td style="text-align:left;">P/E, Forward P/E, EV/EBITDA, margins, debt/equity, ROE, FCF, revenue growth</td><td style="text-align:left;">Live (24h cache)</td></tr>
+                  <tr><td style="text-align:left;color:#60A5FA;font-weight:600;">Finviz</td><td style="text-align:left;">Analyst ratings, price targets, EPS history, insider ownership, short float</td><td style="text-align:left;">Live (24h cache)</td></tr>
+                  <tr><td style="text-align:left;color:#60A5FA;font-weight:600;">ETF Constituents</td><td style="text-align:left;">Dynamic universe building — ITA, CIBR, XLE, GDX, IBB, and 14 more sector ETFs</td><td style="text-align:left;">Weekly</td></tr>
+                </tbody>
+              </table>
+              <p style="margin-top:18px;color:#6B7280;font-size:.78rem;line-height:1.7;">
+                <strong style="color:#9CA3AF;">Scoring:</strong> Composite 0–100 score combining technical signals (40%), fundamental metrics (40%), and analyst sentiment (20%). Weights are calibrated across 770+ stocks. All data is cached for 24 hours to minimise API load and speed up repeat scans.<br/>
+                <strong style="color:#9CA3AF;">Disclaimer:</strong> FinScan is a screening tool — not financial advice. Always do your own research before investing.
+              </p>
+            </div>
           </div>
         </div>
       </div>
       <p class="mockup-caption">Simple View — colour-coded verdicts and badges make it easy to spot opportunities at a glance</p>
     </div>
 
-    <!-- ── TERMINAL ───────────────────────────────────────────────── -->
+    <!-- ── VIDEO DEMO ─────────────────────────────────────────────── -->
     <div>
       <div class="window">
         <div class="window-bar">
           <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-          <div class="title">C:\FinScan\run_finscan.bat</div>
+          <div class="title">run_finscan.bat</div>
         </div>
-        <div class="terminal-body">
-          <div class="t-dim">================================================</div>
-          <div class="t-dim">&nbsp; FinScan - Full Market Scan</div>
-          <div class="t-dim">================================================</div>
-          <div>&nbsp;</div>
-          <div><span class="t-cyan">Building dynamic universe from ETF constituents…</span></div>
-          <div><span class="t-muted">&nbsp; ITA → 43 tickers &nbsp; CIBR → 6 tickers &nbsp; BOTZ → 2 tickers</span></div>
-          <div><span class="t-muted">&nbsp; Wikipedia S&amp;P 500 → 503 tickers &nbsp; Nasdaq 100 → 101 tickers</span></div>
-          <div><span class="t-accent">Dynamic universe built: 773 unique tickers across 18 categories</span></div>
-          <div>&nbsp;</div>
-          <div><span class="t-cyan">Downloading price history…</span></div>
-          <div><span class="t-cyan">Running technical analysis…</span></div>
-          <div><span class="t-green">&nbsp; Technical analysis complete: <strong>728 / 769</strong> symbols</span></div>
-          <div>&nbsp;</div>
-          <div><span class="t-cyan">Fetching fundamentals (yfinance)…</span></div>
-          <div>
-            &nbsp; Fundamentals
-            <span class="t-bar" style="width:180px"></span>
-            <span class="t-green">728/728</span>
-          </div>
-          <div>&nbsp;</div>
-          <div><span class="t-cyan">Enriching from Finviz…</span></div>
-          <div>
-            &nbsp; Finviz enrichment
-            <span class="t-bar" style="width:140px"></span>
-            <span class="t-yellow">412/728</span>
-          </div>
-          <div class="t-muted">&nbsp; (cached results reused where available)</div>
-          <div>&nbsp;</div>
-          <div class="t-panel">
-            <div class="t-white">Summary — Top 10 picks</div>
-            <div><span class="t-muted">&nbsp; EMA trend BULLISH: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-green">7</span><span class="t-muted"> / 10</span></div>
-            <div><span class="t-muted">&nbsp; MACD BUY signal: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-green">8</span><span class="t-muted"> / 10</span></div>
-            <div><span class="t-muted">&nbsp; EPS beats in selection: </span><span class="t-green">9</span><span class="t-muted"> / 10</span></div>
-            <div><span class="t-muted">&nbsp; Top pick: </span><span class="t-accent">NVDA</span><span class="t-muted">  score=88.4  trend=BULLISH  MACD=BUY  PEG=1.2</span></div>
-          </div>
-          <div>&nbsp;</div>
-          <div><span class="t-accent">✓ Excel saved:</span><span class="t-muted"> output/finscan_20260410_0900.xlsx</span></div>
-          <div><span class="t-accent">✓ Charts saved:</span><span class="t-muted"> output/ (10 charts)</span> <span class="cursor"></span></div>
+        <div class="terminal-body" style="padding:0;min-height:auto;">
+          <video id="demoVideo" width="100%" autoplay muted loop playsinline
+                 poster="demo_poster.jpg"
+                 style="display:block;background:#0D1117;">
+            <source src="demo.mp4" type="video/mp4"/>
+            Your browser does not support HTML5 video.
+          </video>
         </div>
       </div>
-      <p class="mockup-caption">Terminal output during a full scan — live progress bars, category breakdown, and a summary of the top picks</p>
+      <p class="mockup-caption">Watch FinScan run a full market scan — from launch to results in minutes</p>
     </div>
 
   </div>
@@ -1140,7 +1087,7 @@
       urgency_text:'Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in',
       urgency_claim:'Claim now →',
       mockup_label:'Live Preview', mockup_title:'See it in action',
-      mockup_sub:'Real output. Real data. This is exactly what lands in your Excel file after every scan.',
+      mockup_sub:'Real output. Real data. A sneak peek of what lands in your Excel file after every scan.',
       feat_label:'What You Get', feat_title:'Everything you need to<br/>find the right stocks',
       feat_sub:'FinScan combines three professional data sources into one simple Excel output — no coding, no dashboards, no subscriptions to juggle.',
       feat1_h:'Composite Scoring', feat1_p:'Every stock gets a score from 0 to 100 combining technicals, fundamentals, and analyst sentiment — so you always know what\'s worth your attention.',
@@ -1193,7 +1140,7 @@
       urgency_text:'Oferta de lanzamiento — ahorra <strong>hasta un 40%</strong> en cualquier plan — expira en',
       urgency_claim:'Reclamar ahora →',
       mockup_label:'Vista Previa', mockup_title:'Míralo en acción',
-      mockup_sub:'Resultados reales. Datos reales. Esto es exactamente lo que aparece en tu archivo Excel después de cada análisis.',
+      mockup_sub:'Resultados reales. Datos reales. Un adelanto de lo que aparece en tu archivo Excel después de cada análisis.',
       feat_label:'Lo Que Obtienes', feat_title:'Todo lo que necesitas para<br/>encontrar las acciones correctas',
       feat_sub:'FinScan combina tres fuentes de datos profesionales en un simple Excel — sin código, sin paneles, sin suscripciones adicionales.',
       feat1_h:'Puntuación Compuesta', feat1_p:'Cada acción recibe una puntuación de 0 a 100 que combina técnicos, fundamentales y sentimiento de analistas.',
@@ -1246,7 +1193,7 @@
       urgency_text:'Launch-Angebot — spare <strong>bis zu 40%</strong> auf jeden Plan — läuft ab in',
       urgency_claim:'Jetzt sichern →',
       mockup_label:'Vorschau', mockup_title:'Sieh es in Aktion',
-      mockup_sub:'Echte Ergebnisse. Echte Daten. Genau das landet nach jedem Scan in deiner Excel-Datei.',
+      mockup_sub:'Echte Ergebnisse. Echte Daten. Ein Vorgeschmack auf das, was nach jedem Scan in deiner Excel-Datei landet.',
       feat_label:'Was Du bekommst', feat_title:'Alles was du brauchst,<br/>um die richtigen Aktien zu finden',
       feat_sub:'FinScan kombiniert drei professionelle Datenquellen in einem einfachen Excel — kein Code, keine Dashboards, keine zusätzlichen Abos.',
       feat1_h:'Zusammengesetzter Score', feat1_p:'Jede Aktie erhält einen Score von 0 bis 100 aus Technik, Fundamentaldaten und Analystensentiment.',
@@ -1299,7 +1246,7 @@
       urgency_text:'Offre de lancement — économisez <strong>jusqu\'à 40%</strong> sur tout plan — expire dans',
       urgency_claim:'Profiter maintenant →',
       mockup_label:'Aperçu', mockup_title:'Voyez-le en action',
-      mockup_sub:'Vrais résultats. Vraies données. C\'est exactement ce qui apparaît dans votre fichier Excel après chaque analyse.',
+      mockup_sub:'Vrais résultats. Vraies données. Un aperçu de ce qui apparaît dans votre fichier Excel après chaque analyse.',
       feat_label:'Ce que vous obtenez', feat_title:'Tout ce qu\'il vous faut<br/>pour trouver les bonnes actions',
       feat_sub:'FinScan combine trois sources de données professionnelles en un Excel simple — pas de code, pas de tableaux de bord, pas d\'abonnements supplémentaires.',
       feat1_h:'Score Composite', feat1_p:'Chaque action reçoit un score de 0 à 100 combinant technique, fondamentaux et sentiment des analystes.',
@@ -1352,7 +1299,7 @@
       urgency_text:'Oferta de lançamento — poupe <strong>até 40%</strong> em qualquer plano — termina em',
       urgency_claim:'Aproveitar agora →',
       mockup_label:'Pré-visualização', mockup_title:'Veja em ação',
-      mockup_sub:'Resultados reais. Dados reais. É exatamente isto que aparece no seu ficheiro Excel após cada scan.',
+      mockup_sub:'Resultados reais. Dados reais. Uma amostra do que aparece no seu ficheiro Excel após cada scan.',
       feat_label:'O Que Obtém', feat_title:'Tudo o que precisa para<br/>encontrar as ações certas',
       feat_sub:'O FinScan combina três fontes de dados profissionais num Excel simples — sem código, sem dashboards, sem subscrições extra.',
       feat1_h:'Pontuação Composta', feat1_p:'Cada ação recebe uma pontuação de 0 a 100 combinando técnicos, fundamentais e sentimento de analistas.',
@@ -1435,6 +1382,16 @@
 
   // Apply saved language on load
   applyLang(currentLang);
+
+  // ── Excel tab switcher ────────────────────────────────────────────────────
+  window.switchTab = function(idx) {
+    document.querySelectorAll('#xlsTabs .excel-tab').forEach((t,i) => {
+      t.classList.toggle('active', i === idx);
+    });
+    document.querySelectorAll('.excel-panel').forEach((p,i) => {
+      p.classList.toggle('active', i === idx);
+    });
+  };
 
   // ── Countdown: 1 hour from first page load, stored in sessionStorage ──────
   const KEY = 'finscan_deadline';
