@@ -656,8 +656,37 @@
     .ec-submit:disabled { opacity: .6; cursor: wait; transform: none; }
     .ec-disclaimer { color: #6B7280; font-size: .75rem; margin: 14px 0 0; }
     .ec-success { display: none; }
-    .ec-modal.done .ec-form, .ec-modal.done .ec-sub, .ec-modal.done .ec-disclaimer { display: none; }
+    .ec-modal.done .ec-form, .ec-modal.done .ec-sub, .ec-modal.done .ec-disclaimer,
+    .ec-modal.done .ec-tickers, .ec-modal.done .ec-switch, .ec-modal.done .ec-badge { display: none; }
     .ec-modal.done .ec-success { display: block; }
+    /* Free-scan tickers row */
+    .ec-tickers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+    .ec-tickers input {
+      width: 100%; padding: 12px 10px; border-radius: 10px;
+      background: #0D1117; border: 1px solid rgba(255,255,255,.12);
+      color: #fff; font-size: .95rem; outline: none; text-align: center;
+      text-transform: uppercase; letter-spacing: 1px; font-weight: 700;
+      transition: border-color .15s;
+    }
+    .ec-tickers input:focus { border-color: #00D084; }
+    .ec-badge {
+      display: inline-block; background: rgba(0,208,132,.15); color: #00D084;
+      font-size: .7rem; font-weight: 800; letter-spacing: 1px;
+      padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+      border: 1px solid rgba(0,208,132,.35); text-transform: uppercase;
+    }
+    .ec-switch {
+      margin-top: 18px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.06);
+      font-size: .82rem; color: #6B7280;
+    }
+    .ec-switch a {
+      color: #9CA3AF; text-decoration: underline; cursor: pointer;
+      background: none; border: none; font-size: .82rem; padding: 0;
+    }
+    .ec-switch a:hover { color: #fff; }
+    /* Mode swap: hide ticker fields when in checklist mode */
+    .ec-modal[data-mode="checklist"] .ec-tickers { display: none; }
+    .ec-modal[data-mode="checklist"] .ec-badge { display: none; }
     @media (max-width: 600px) {
       .ec-modal { padding: 28px 22px; }
       .ec-title { font-size: 1.25rem; }
@@ -763,7 +792,7 @@
 <section class="mockup-section">
   <div class="section-label" data-i18n="mockup_label">Live Preview</div>
   <h2 class="section-title" data-i18n="mockup_title">See it in action</h2>
-  <p class="section-sub" data-i18n="mockup_sub">Real output. Real data. A sneak peek of what lands in your Excel file after every scan.</p>
+  <p class="section-sub" data-i18n="mockup_sub">Real output. Real data.<br/>A sneak peek of what lands in your Excel file after every scan.</p>
 
   <div class="mockup-wrap">
 
@@ -851,7 +880,7 @@
     </div>
 
     <!-- ── VIDEO DEMO ─────────────────────────────────────────────── -->
-    <div>
+    <div style="max-width:840px;margin:0 auto;">
       <div class="window">
         <div class="window-bar">
           <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
@@ -1087,7 +1116,7 @@
       urgency_text:'Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in',
       urgency_claim:'Claim now →',
       mockup_label:'Live Preview', mockup_title:'See it in action',
-      mockup_sub:'Real output. Real data. A sneak peek of what lands in your Excel file after every scan.',
+      mockup_sub:'Real output. Real data.<br/>A sneak peek of what lands in your Excel file after every scan.',
       feat_label:'What You Get', feat_title:'Everything you need to<br/>find the right stocks',
       feat_sub:'FinScan combines three professional data sources into one simple Excel output — no coding, no dashboards, no subscriptions to juggle.',
       feat1_h:'Composite Scoring', feat1_p:'Every stock gets a score from 0 to 100 combining technicals, fundamentals, and analyst sentiment — so you always know what\'s worth your attention.',
@@ -1140,7 +1169,7 @@
       urgency_text:'Oferta de lanzamiento — ahorra <strong>hasta un 40%</strong> en cualquier plan — expira en',
       urgency_claim:'Reclamar ahora →',
       mockup_label:'Vista Previa', mockup_title:'Míralo en acción',
-      mockup_sub:'Resultados reales. Datos reales. Un adelanto de lo que aparece en tu archivo Excel después de cada análisis.',
+      mockup_sub:'Resultados reales. Datos reales.<br/>Un adelanto de lo que aparece en tu archivo Excel después de cada análisis.',
       feat_label:'Lo Que Obtienes', feat_title:'Todo lo que necesitas para<br/>encontrar las acciones correctas',
       feat_sub:'FinScan combina tres fuentes de datos profesionales en un simple Excel — sin código, sin paneles, sin suscripciones adicionales.',
       feat1_h:'Puntuación Compuesta', feat1_p:'Cada acción recibe una puntuación de 0 a 100 que combina técnicos, fundamentales y sentimiento de analistas.',
@@ -1193,7 +1222,7 @@
       urgency_text:'Launch-Angebot — spare <strong>bis zu 40%</strong> auf jeden Plan — läuft ab in',
       urgency_claim:'Jetzt sichern →',
       mockup_label:'Vorschau', mockup_title:'Sieh es in Aktion',
-      mockup_sub:'Echte Ergebnisse. Echte Daten. Ein Vorgeschmack auf das, was nach jedem Scan in deiner Excel-Datei landet.',
+      mockup_sub:'Echte Ergebnisse. Echte Daten.<br/>Ein Vorgeschmack auf das, was nach jedem Scan in deiner Excel-Datei landet.',
       feat_label:'Was Du bekommst', feat_title:'Alles was du brauchst,<br/>um die richtigen Aktien zu finden',
       feat_sub:'FinScan kombiniert drei professionelle Datenquellen in einem einfachen Excel — kein Code, keine Dashboards, keine zusätzlichen Abos.',
       feat1_h:'Zusammengesetzter Score', feat1_p:'Jede Aktie erhält einen Score von 0 bis 100 aus Technik, Fundamentaldaten und Analystensentiment.',
@@ -1246,7 +1275,7 @@
       urgency_text:'Offre de lancement — économisez <strong>jusqu\'à 40%</strong> sur tout plan — expire dans',
       urgency_claim:'Profiter maintenant →',
       mockup_label:'Aperçu', mockup_title:'Voyez-le en action',
-      mockup_sub:'Vrais résultats. Vraies données. Un aperçu de ce qui apparaît dans votre fichier Excel après chaque analyse.',
+      mockup_sub:'Vrais résultats. Vraies données.<br/>Un aperçu de ce qui apparaît dans votre fichier Excel après chaque analyse.',
       feat_label:'Ce que vous obtenez', feat_title:'Tout ce qu\'il vous faut<br/>pour trouver les bonnes actions',
       feat_sub:'FinScan combine trois sources de données professionnelles en un Excel simple — pas de code, pas de tableaux de bord, pas d\'abonnements supplémentaires.',
       feat1_h:'Score Composite', feat1_p:'Chaque action reçoit un score de 0 à 100 combinant technique, fondamentaux et sentiment des analystes.',
@@ -1299,7 +1328,7 @@
       urgency_text:'Oferta de lançamento — poupe <strong>até 40%</strong> em qualquer plano — termina em',
       urgency_claim:'Aproveitar agora →',
       mockup_label:'Pré-visualização', mockup_title:'Veja em ação',
-      mockup_sub:'Resultados reais. Dados reais. Uma amostra do que aparece no seu ficheiro Excel após cada scan.',
+      mockup_sub:'Resultados reais. Dados reais.<br/>Uma amostra do que aparece no seu ficheiro Excel após cada scan.',
       feat_label:'O Que Obtém', feat_title:'Tudo o que precisa para<br/>encontrar as ações certas',
       feat_sub:'O FinScan combina três fontes de dados profissionais num Excel simples — sem código, sem dashboards, sem subscrições extra.',
       feat1_h:'Pontuação Composta', feat1_p:'Cada ação recebe uma pontuação de 0 a 100 combinando técnicos, fundamentais e sentimento de analistas.',
@@ -1428,20 +1457,30 @@
 
 <!-- ── EMAIL CAPTURE MODAL ────────────────────────────────────────────── -->
 <div class="ec-overlay" id="ecOverlay" role="dialog" aria-modal="true" aria-labelledby="ecTitle">
-  <div class="ec-modal" id="ecModal">
+  <div class="ec-modal" id="ecModal" data-mode="scan">
     <button class="ec-close" onclick="closeEC()" aria-label="Close">×</button>
-    <div class="ec-icon">📘</div>
-    <h2 class="ec-title" id="ecTitle">Wait — grab your free checklist</h2>
-    <p class="ec-sub">Get our <strong style="color:#00D084;">10-Point Stock Screening Checklist</strong> — the same framework FinScan uses to find undervalued stocks. Free PDF, no spam, unsubscribe anytime.</p>
+    <span class="ec-badge">🚀 Free trial · No card</span>
+    <div class="ec-icon">🎯</div>
+    <h2 class="ec-title" id="ecTitle">Try FinScan free — analyze 3 stocks now</h2>
+    <p class="ec-sub" id="ecSub">Pick 3 tickers and we'll send you a full FinScan report — same scoring, same verdicts, same data we use across 4,000+ stocks. <strong style="color:#00D084;">One free scan per email.</strong></p>
     <form class="ec-form" id="ecForm" onsubmit="submitEC(event)">
+      <div class="ec-tickers" id="ecTickers">
+        <input type="text" id="ecT1" maxlength="6" placeholder="AAPL" autocomplete="off"/>
+        <input type="text" id="ecT2" maxlength="6" placeholder="NVDA" autocomplete="off"/>
+        <input type="text" id="ecT3" maxlength="6" placeholder="MSFT" autocomplete="off"/>
+      </div>
       <input class="ec-input" type="email" id="ecEmail" placeholder="your@email.com" required autocomplete="email"/>
-      <button class="ec-submit" type="submit" id="ecBtn">Send me the checklist 📥</button>
+      <button class="ec-submit" type="submit" id="ecBtn">Run my free scan 🚀</button>
     </form>
-    <p class="ec-disclaimer">We only email you when we ship updates. Zero spam.</p>
+    <p class="ec-disclaimer">No spam, unsubscribe anytime. Report arrives within a few minutes.</p>
+    <div class="ec-switch">
+      Just want the checklist?
+      <a id="ecSwitchLink" onclick="toggleECMode()">Get the free 10-point PDF instead →</a>
+    </div>
     <div class="ec-success">
       <div style="font-size:2.6rem;">✅</div>
-      <h3 style="color:#00D084;margin:8px 0;">Check your inbox!</h3>
-      <p style="color:#9CA3AF;font-size:.95rem;">Your checklist is on its way. If you don't see it in 2 min, check spam.</p>
+      <h3 style="color:#00D084;margin:8px 0;" id="ecSuccessTitle">Check your inbox!</h3>
+      <p style="color:#9CA3AF;font-size:.95rem;" id="ecSuccessSub">Your free scan is being processed. If you don't see it within 5 min, check spam.</p>
     </div>
   </div>
 </div>
@@ -1501,23 +1540,77 @@
     }
   })();
 
+  // ── Toggle modal mode (scan ↔ checklist) ──
+  window.toggleECMode = function () {
+    const modal = document.getElementById('ecModal');
+    const isScan = modal.getAttribute('data-mode') === 'scan';
+    if (isScan) {
+      // → switch to checklist mode
+      modal.setAttribute('data-mode', 'checklist');
+      document.getElementById('ecTitle').textContent = 'Grab your free checklist';
+      document.getElementById('ecSub').innerHTML = 'Get our <strong style="color:#00D084;">10-Point Stock Screening Checklist</strong> — the framework FinScan uses to find undervalued stocks. Free PDF, no spam.';
+      document.getElementById('ecBtn').textContent = 'Send me the checklist 📥';
+      document.getElementById('ecSuccessSub').textContent = "Your checklist is on its way. If you don't see it in 2 min, check spam.";
+      document.getElementById('ecSwitchLink').textContent = '← Actually, run my free 3-stock scan instead';
+      ['ecT1','ecT2','ecT3'].forEach(id => document.getElementById(id).removeAttribute('required'));
+    } else {
+      modal.setAttribute('data-mode', 'scan');
+      document.getElementById('ecTitle').textContent = 'Try FinScan free — analyze 3 stocks now';
+      document.getElementById('ecSub').innerHTML = "Pick 3 tickers and we'll send you a full FinScan report — same scoring, same verdicts, same data we use across 4,000+ stocks. <strong style=\"color:#00D084;\">One free scan per email.</strong>";
+      document.getElementById('ecBtn').textContent = 'Run my free scan 🚀';
+      document.getElementById('ecSuccessSub').textContent = "Your free scan is being processed. If you don't see it within 5 min, check spam.";
+      document.getElementById('ecSwitchLink').textContent = 'Get the free 10-point PDF instead →';
+    }
+  };
+
   // ── Submit handler ──
   window.submitEC = async function (e) {
     e.preventDefault();
-    const btn = document.getElementById('ecBtn');
+    const modal = document.getElementById('ecModal');
+    const mode  = modal.getAttribute('data-mode');
+    const btn   = document.getElementById('ecBtn');
     const email = document.getElementById('ecEmail').value.trim();
+    const ref   = sessionStorage.getItem('finscan_ref') || '';
+    const API   = 'https://web-production-01031.up.railway.app';
+
+    let url, body;
+    if (mode === 'scan') {
+      const tickers = ['ecT1','ecT2','ecT3']
+        .map(id => document.getElementById(id).value.trim().toUpperCase())
+        .filter(Boolean);
+      if (tickers.length < 1) {
+        alert('Please enter at least one ticker.');
+        return;
+      }
+      url  = API + '/free-scan';
+      body = { email, tickers, ref };
+    } else {
+      url  = API + '/subscribe';
+      body = { email, ref };
+    }
+
     btn.disabled = true; btn.textContent = 'Sending…';
     try {
-      const r = await fetch('https://web-production-01031.up.railway.app/subscribe', {
+      const r = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, ref: sessionStorage.getItem('finscan_ref') || '' })
+        body: JSON.stringify(body)
       });
-      if (!r.ok) throw new Error('subscribe failed');
-      document.getElementById('ecModal').classList.add('done');
+      if (!r.ok) {
+        const err = await r.json().catch(() => ({}));
+        if (err.error === 'already_used') {
+          alert("You've already used your free scan. Pick a plan to keep scanning unlimited stocks.");
+          window.location.href = '#pricing';
+          closeEC();
+          return;
+        }
+        throw new Error(err.error || 'request failed');
+      }
+      modal.classList.add('done');
       localStorage.setItem('finscan_ec_v1', 'converted');
     } catch (err) {
-      btn.disabled = false; btn.textContent = 'Try again';
+      btn.disabled = false;
+      btn.textContent = mode === 'scan' ? 'Try again' : 'Try again';
       alert('Sorry, something went wrong. Please try again or email finscan.ai@gmail.com');
     }
   };
