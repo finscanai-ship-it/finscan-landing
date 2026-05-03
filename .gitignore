@@ -1,0 +1,8 @@
+# Large binary — distributed via GitHub Releases, not Netlify
+FinScan.zip
+
+# Local dev artefacts
+demo_original.mp4
+*.log
+.DS_Store
+Thumbs.db
