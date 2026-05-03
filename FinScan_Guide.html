@@ -429,12 +429,17 @@
       <ol>
         <li><strong>Download your FinScan</strong> — Click the green <strong>Download Your FinScan</strong> button in your purchase email. It serves a personalised <strong>FinScan.zip</strong> with your credentials already inside.</li>
         <li><strong>Unzip the folder</strong> — Extract the <strong>FinScan</strong> folder anywhere on your computer (e.g. Desktop).</li>
-        <li><strong>You're done</strong> — Your <strong>finscan.cfg</strong> is pre-filled. The first time Windows runs the app it may show a <em>"Windows protected your PC"</em> popup — click <strong>More info → Run anyway</strong>.</li>
+        <li><strong>Double-click <code style="color:#00D084;">run_finscan.bat</code></strong> — That's the only file you ever need to launch. <em>Ignore <code>finscan.exe</code> and <code>finscan.cfg</code></em> — the bat file uses them automatically.</li>
       </ol>
       <div class="config-box">
         <span class="section">[license]</span><br/>
         <span class="key">customer_id</span> = <span class="val">YourName</span><br/>
         <span class="key">access_key</span> &nbsp;= <span class="val">2026051024XXXXXX</span>
+      </div>
+      <div class="note" style="margin-top:14px;border-left:3px solid #FBBF24;background:rgba(251,191,36,.08);">
+        <strong style="color:#FBBF24;">⚠️ If Windows blocks the app on first launch:</strong><br/>
+        <strong>(a) "Windows protected your PC" popup</strong> → click <strong>More info → Run anyway</strong>. Done.<br/>
+        <strong>(b) Smart App Control blocked it (no "Run anyway" button)</strong> → open <strong>Windows Security → Virus &amp; threat protection → Protection history</strong>, find the FinScan entry, click <strong>Actions → Allow on device</strong>, then re-run the bat file. If that fails, email us at finscan.ai@gmail.com and we'll send you the Python edition (works regardless of Smart App Control).
       </div>
     </div>
 
@@ -444,7 +449,7 @@
         <div class="step-num">2</div>
         <h2>Running a Scan</h2>
       </div>
-      <p>Double-click <strong>run_finscan.bat</strong> and pick an option from the menu:</p>
+      <p>Double-click <strong>run_finscan.bat</strong> (the <strong>only</strong> file you ever launch) and pick an option from the menu:</p>
       <table class="menu-table">
         <tr>
           <td>[1] Single stock</td>
