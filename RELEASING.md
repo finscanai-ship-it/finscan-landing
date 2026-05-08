@@ -43,3 +43,28 @@ change needed when shipping a new version.
 
 4. **Done.** Railway's cache expires after 6h. To force-refresh sooner,
    redeploy the Railway service or trigger a download.
+
+---
+
+# First-time setup after cloning
+
+Run this once after `git clone` so the repo's pre-commit hooks are enabled:
+
+```
+git config core.hooksPath .githooks
+```
+
+The hooks (in `.githooks/`) block two failure modes that have bitten us:
+
+- **0-byte files** sneaking into a `git add .` — this is what killed the
+  `Stock_Screening_Checklist.pdf` download for live users
+- **PDFs missing the `%PDF-` header** — i.e. files with a `.pdf` extension
+  but corrupt/non-PDF contents
+
+If you ever genuinely need to commit something the hook flags, bypass with:
+
+```
+git commit --no-verify
+```
+
+…but that should be rare. If the hook is wrong, fix the hook.

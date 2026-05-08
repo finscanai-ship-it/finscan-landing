@@ -1,0 +1,55 @@
+#!/bin/sh
+# FinScan landing — pre-commit guard
+#
+# Blocks two failure modes that have bitten us:
+#   1) Empty (0-byte) files of any type sneaking into a `git add .`
+#   2) PDFs that exist but aren't valid PDFs (no %PDF- header)
+#
+# Bypass (only when you really mean it):  git commit --no-verify
+
+red()    { printf '\033[31m%s\033[0m\n' "$*" >&2; }
+yellow() { printf '\033[33m%s\033[0m\n' "$*" >&2; }
+green()  { printf '\033[32m%s\033[0m\n' "$*"; }
+
+# Only files staged for add/modify/rename — skip deletions.
+staged=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$staged" ] && exit 0
+
+# Use newline-only IFS so the for loop iterates one path per line.
+# (File paths with literal newlines are not handled — extremely rare.)
+OLDIFS=$IFS
+IFS='
+'
+for file in $staged; do
+  [ -z "$file" ] && continue
+  [ ! -f "$file" ] && continue
+
+  size=$(wc -c < "$file" | tr -d ' ')
+
+  # 1) Empty-file guard
+  if [ "$size" -eq 0 ]; then
+    red   "✖ pre-commit: 0-byte file staged: $file"
+    yellow "  Empty files are almost always a mistake."
+    yellow "  If you really want to commit an empty placeholder: git commit --no-verify"
+    IFS=$OLDIFS
+    exit 1
+  fi
+
+  # 2) PDF integrity guard — must start with %PDF-
+  case "$file" in
+    *.pdf|*.PDF)
+      header=$(head -c 5 "$file")
+      if [ "$header" != "%PDF-" ]; then
+        red   "✖ pre-commit: invalid PDF (missing %PDF- header): $file"
+        yellow "  File is $size bytes but doesn't look like a PDF."
+        yellow "  Re-render it before committing."
+        IFS=$OLDIFS
+        exit 1
+      fi
+      ;;
+  esac
+done
+IFS=$OLDIFS
+
+green "✓ pre-commit checks passed"
+exit 0
