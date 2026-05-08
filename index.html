@@ -695,6 +695,11 @@
 </head>
 <body>
 
+<!-- Partner banner (shown only when ?ref=slug is set and that slug exists in partners.json) -->
+<div id="partnerBanner" style="display:none;background:linear-gradient(90deg,rgba(0,208,132,.18),rgba(0,208,132,.06));border-bottom:1px solid rgba(0,208,132,.4);padding:10px 20px;text-align:center;font-size:.92rem;color:#E5E7EB;font-weight:500;">
+  <span id="partnerBannerText"></span>
+</div>
+
 <!-- NAV -->
 <nav>
   <div class="logo">
@@ -1103,6 +1108,82 @@
 </footer>
 
 <script>
+  // ═══════════════════════════════════════════════════════════════════════════
+  // PARTNER REFERRAL TRACKING
+  // ───────────────────────────────────────────────────────────────────────────
+  // 1. Reads ?ref=slug from URL → stores in localStorage + cookie (90 days)
+  // 2. Loads partners.json → shows the partner banner with their intro line
+  // 3. Rewrites every Stripe checkout link to include ?client_reference_id=ref
+  //    so Stripe attributes the sale back to the partner in their dashboard.
+  // ═══════════════════════════════════════════════════════════════════════════
+  (function() {
+    const REF_KEY = 'finscan_ref';
+    const REF_TTL_DAYS = 90;
+
+    // Read incoming ?ref= from URL (takes priority over stored value)
+    const url = new URL(window.location.href);
+    const incomingRef = (url.searchParams.get('ref') || '').toLowerCase().replace(/[^a-z0-9_-]/g, '');
+
+    let activeRef = '';
+    if (incomingRef) {
+      activeRef = incomingRef;
+      try { localStorage.setItem(REF_KEY, activeRef); } catch (e) {}
+      // Also drop a cookie so it survives across subdomains / sessions
+      const expires = new Date(Date.now() + REF_TTL_DAYS * 86400000).toUTCString();
+      document.cookie = `${REF_KEY}=${activeRef}; expires=${expires}; path=/; SameSite=Lax`;
+    } else {
+      try { activeRef = localStorage.getItem(REF_KEY) || ''; } catch (e) {}
+      if (!activeRef) {
+        const m = document.cookie.match(new RegExp('(?:^|; )' + REF_KEY + '=([^;]+)'));
+        if (m) activeRef = m[1];
+      }
+    }
+
+    // Make the active ref available globally so the i18n script (and others) can read it
+    window.__finscanRef = activeRef;
+
+    // Append client_reference_id to every Stripe checkout URL on the page
+    function decorateStripeLinks() {
+      if (!activeRef) return;
+      document.querySelectorAll('a[href*="buy.stripe.com"]').forEach(a => {
+        try {
+          const u = new URL(a.href);
+          u.searchParams.set('client_reference_id', activeRef);
+          a.href = u.toString();
+        } catch (e) {}
+      });
+    }
+
+    // Show the partner banner if we have a known partner
+    function showPartnerBanner() {
+      if (!activeRef) return;
+      fetch('/partners.json', { cache: 'no-cache' })
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data || !data.partners) return;
+          const p = data.partners[activeRef];
+          if (!p) return;
+          const bn = document.getElementById('partnerBanner');
+          const tx = document.getElementById('partnerBannerText');
+          if (!bn || !tx) return;
+          const handleHTML = p.platformUrl
+            ? `<a href="${p.platformUrl}" target="_blank" rel="noopener" style="color:#00D084;font-weight:700;text-decoration:none;">${p.handle || p.displayName}</a>`
+            : `<strong style="color:#00D084;">${p.handle || p.displayName}</strong>`;
+          tx.innerHTML = p.introLine
+            ? `${handleHTML} — ${p.introLine}`
+            : `Sent by ${handleHTML}. They get credit for any plan you pick today.`;
+          bn.style.display = 'block';
+        })
+        .catch(() => {});
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => { decorateStripeLinks(); showPartnerBanner(); });
+    } else {
+      decorateStripeLinks(); showPartnerBanner();
+    }
+  })();
+
   // ── Translations ───────────────────────────────────────────────────────────
   const T = {
     en: {

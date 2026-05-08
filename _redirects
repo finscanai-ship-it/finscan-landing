@@ -1,0 +1,12 @@
+# Partner co-branded URLs — getfinscan.com/{slug} → /?ref={slug}
+# Add one line per partner. Keep entries lowercase and matching the slug used in partners.json.
+#
+# How to add a new partner:
+#   1) Edit partners.json → add their entry under "partners"
+#   2) Add a line below following the same pattern
+#   3) git commit + push → Netlify deploys in ~30 seconds
+#
+# IMPORTANT: keep the explicit list. Do NOT use a catch-all (e.g. /:slug → /?ref=:slug)
+# because it would intercept any future first-level path you add (like /pricing).
+
+/demo            /?ref=demo            301

@@ -1,0 +1,23 @@
+{
+  "_README": "Partner registry. Each entry maps a slug -> display data shown on the co-branded landing page. To add a partner: 1) add an entry here, 2) add a redirect line in _redirects, 3) commit + push. The co-branded URL becomes getfinscan.com/{slug}",
+  "_template": {
+    "displayName": "Their full or display name",
+    "handle": "@theirhandle",
+    "platformUrl": "https://instagram.com/theirhandle",
+    "photoUrl": "https://...optional avatar URL...",
+    "introLine": "Custom 1-line intro shown on the banner",
+    "commission": { "firstSale": 40, "recurring": 20 },
+    "signedAt": "YYYY-MM-DD"
+  },
+  "partners": {
+    "demo": {
+      "displayName": "Demo Partner",
+      "handle": "@demopartner",
+      "platformUrl": "https://instagram.com/",
+      "photoUrl": "",
+      "introLine": "Demo Partner sent you here — they get credit for any plan you pick today.",
+      "commission": { "firstSale": 40, "recurring": 20 },
+      "signedAt": "2026-05-08"
+    }
+  }
+}
