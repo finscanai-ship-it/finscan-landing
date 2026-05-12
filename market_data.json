@@ -1,20 +1,59 @@
 {
-  "_comment": "Auto-refreshed daily by .github/workflows/refresh-data.yml (script: scripts/refresh_market_data.py). DO NOT edit by hand — your changes will be overwritten on next workflow run. To change the symbol set, edit the script.",
-  "as_of_iso": "2026-05-09",
-  "as_of_label": "PRIOR CLOSE · MAY 9, 2026",
+  "_comment": "Auto-refreshed daily by .github/workflows/refresh-data.yml (script: scripts/refresh_market_data.py). DO NOT edit by hand \u2014 your changes will be overwritten on next workflow run. To change the symbol set, edit the script.",
+  "as_of_iso": "2026-05-12",
+  "as_of_label": "PRIOR CLOSE \u00b7 MAY 12, 2026",
   "tickers": {
-    "NVDA":  {"price": 219.00, "change_pct":  1.7},
-    "AAPL":  {"price": 232.40, "change_pct":  0.6},
-    "MSFT":  {"price": 478.30, "change_pct":  0.9},
-    "TSLA":  {"price": 342.80, "change_pct": -1.8},
-    "AMZN":  {"price": 214.20, "change_pct":  1.1},
-    "META":  {"price": 645.10, "change_pct":  1.4},
-    "PLTR":  {"price":  28.50, "change_pct":  2.3},
-    "GLD":   {"price": 268.40, "change_pct":  0.3},
-    "LMT":   {"price": 485.20, "change_pct":  0.5},
-    "BAESY": {"price":  22.35, "change_pct":  1.1},
-    "FCX":   {"price":  44.60, "change_pct": -0.4},
-    "CRWD":  {"price": 412.90, "change_pct":  1.6},
-    "GOOGL": {"price": 198.40, "change_pct":  1.0}
+    "NVDA": {
+      "price": 220.78,
+      "change_pct": 0.61
+    },
+    "AAPL": {
+      "price": 294.8,
+      "change_pct": 0.72
+    },
+    "MSFT": {
+      "price": 407.77,
+      "change_pct": -1.18
+    },
+    "TSLA": {
+      "price": 433.45,
+      "change_pct": -2.6
+    },
+    "AMZN": {
+      "price": 265.82,
+      "change_pct": -1.18
+    },
+    "META": {
+      "price": 603.0,
+      "change_pct": 0.69
+    },
+    "PLTR": {
+      "price": 136.0,
+      "change_pct": -0.65
+    },
+    "GLD": {
+      "price": 432.93,
+      "change_pct": -0.4
+    },
+    "LMT": {
+      "price": 521.0,
+      "change_pct": 1.71
+    },
+    "BAESY": {
+      "price": 104.45,
+      "change_pct": 0.34
+    },
+    "FCX": {
+      "price": 66.03,
+      "change_pct": 2.58
+    },
+    "CRWD": {
+      "price": 546.18,
+      "change_pct": 0.72
+    },
+    "GOOGL": {
+      "price": 387.35,
+      "change_pct": -0.33
+    }
   }
 }
