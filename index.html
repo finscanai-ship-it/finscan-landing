@@ -259,8 +259,29 @@
       border: 1px solid var(--border);
       background: var(--card-bg);
       font-size: .95rem; font-weight: 600;
+      transition: transform .15s;
     }
     .score-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+    /* Outperforming — top-tier emphasis (first pill) */
+    .score-pill.pill-top {
+      background: linear-gradient(135deg, rgba(0,208,132,.22), rgba(0,208,132,.06));
+      border: 1px solid rgba(0,208,132,.55);
+      box-shadow: 0 0 28px rgba(0,208,132,.35), 0 0 6px rgba(0,208,132,.4) inset;
+    }
+    .score-pill.pill-top .score-dot {
+      background: #00D084;
+      box-shadow: 0 0 14px rgba(0,208,132,.85);
+    }
+    /* Weak — bottom-tier emphasis (last pill) */
+    .score-pill.pill-bottom {
+      background: linear-gradient(135deg, rgba(239,68,68,.20), rgba(239,68,68,.04));
+      border: 1px solid rgba(239,68,68,.55);
+      box-shadow: 0 0 28px rgba(239,68,68,.35), 0 0 6px rgba(239,68,68,.4) inset;
+    }
+    .score-pill.pill-bottom .score-dot {
+      background: #EF4444;
+      box-shadow: 0 0 14px rgba(239,68,68,.85);
+    }
 
     /* ── CTA ─────────────────────────────────────────────────────────────── */
     .cta-section {
@@ -995,11 +1016,11 @@
   <h2 class="section-title" data-i18n="score_title">One score. Full picture.</h2>
   <p class="section-sub" data-i18n="score_sub">Every stock is rated 0–100. The verdict tells you exactly where it stands.</p>
   <div class="scores-grid">
-    <div class="score-pill"><div class="score-dot" style="background:#375623"></div><span data-i18n="score_sb"><strong>Outperforming</strong> — Score ≥ 75</span></div>
+    <div class="score-pill pill-top"><div class="score-dot"></div><span data-i18n="score_sb"><strong>Outperforming</strong> — Score ≥ 75</span></div>
     <div class="score-pill"><div class="score-dot" style="background:#00D084"></div><span data-i18n="score_b"><strong>Performing</strong> — Score ≥ 60</span></div>
     <div class="score-pill"><div class="score-dot" style="background:#F59E0B"></div><span data-i18n="score_w"><strong>Neutral</strong> — Score ≥ 45</span></div>
     <div class="score-pill"><div class="score-dot" style="background:#F97316"></div><span data-i18n="score_c"><strong>Underperforming</strong> — Score ≥ 30</span></div>
-    <div class="score-pill"><div class="score-dot" style="background:#F87171"></div><span data-i18n="score_av"><strong>Weak</strong> — Score &lt; 30</span></div>
+    <div class="score-pill pill-bottom"><div class="score-dot"></div><span data-i18n="score_av"><strong>Weak</strong> — Score &lt; 30</span></div>
   </div>
 </section>
 

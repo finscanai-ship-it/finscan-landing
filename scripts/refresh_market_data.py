@@ -37,24 +37,41 @@ OUT_PATH = Path(__file__).resolve().parent.parent / "market_data.json"
 
 
 def fetch_one(symbol: str) -> dict | None:
-    """Pull last 5 trading days, return {price, change_pct} for the most recent close."""
+    """Pull last 5 trading days + shares outstanding for one ticker.
+
+    Returns {price, change_pct, shares_outstanding, market_cap} for the most
+    recent close.  Shares-outstanding can be missing on some tickers (ETFs);
+    we leave those fields out.
+    """
     try:
-        hist = yf.Ticker(symbol).history(period="5d", auto_adjust=False)
+        ticker = yf.Ticker(symbol)
+        hist   = ticker.history(period="5d", auto_adjust=False)
     except Exception as e:
         print(f"  ! {symbol}: fetch error: {e}", file=sys.stderr)
         return None
     if hist is None or hist.empty or len(hist) < 2:
         print(f"  ! {symbol}: insufficient history ({0 if hist is None else len(hist)} rows)", file=sys.stderr)
         return None
-    last_close      = float(hist["Close"].iloc[-1])
-    prior_close     = float(hist["Close"].iloc[-2])
+    last_close  = float(hist["Close"].iloc[-1])
+    prior_close = float(hist["Close"].iloc[-2])
     if prior_close <= 0:
         return None
     change_pct = (last_close - prior_close) / prior_close * 100.0
-    return {
+
+    out: dict = {
         "price":      round(last_close, 2),
         "change_pct": round(change_pct, 2),
     }
+    # Shares outstanding + market cap (used by the bi-weekly analysis carousels)
+    try:
+        info   = ticker.info or {}
+        shares = info.get("sharesOutstanding")
+        if shares and shares > 0:
+            out["shares_outstanding"] = int(shares)
+            out["market_cap"]         = int(round(last_close * shares))
+    except Exception as e:
+        print(f"  · {symbol}: no shares info ({e})", file=sys.stderr)
+    return out
 
 
 def main() -> int:
