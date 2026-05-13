@@ -5,55 +5,81 @@
   "tickers": {
     "NVDA": {
       "price": 220.78,
-      "change_pct": 0.61
+      "change_pct": 0.61,
+      "shares_outstanding": 24300000000,
+      "market_cap": 5364953970337
     },
     "AAPL": {
       "price": 294.8,
-      "change_pct": 0.72
+      "change_pct": 0.72,
+      "shares_outstanding": 14687356000,
+      "market_cap": 4329832369511
     },
     "MSFT": {
       "price": 407.77,
-      "change_pct": -1.18
+      "change_pct": -1.18,
+      "shares_outstanding": 7428434704,
+      "market_cap": 3029092737639
     },
     "TSLA": {
       "price": 433.45,
-      "change_pct": -2.6
+      "change_pct": -2.6,
+      "shares_outstanding": 3755723871,
+      "market_cap": 1627918557731
     },
     "AMZN": {
       "price": 265.82,
-      "change_pct": -1.18
+      "change_pct": -1.18,
+      "shares_outstanding": 10757109436,
+      "market_cap": 2859454909065
     },
     "META": {
       "price": 603.0,
-      "change_pct": 0.69
+      "change_pct": 0.69,
+      "shares_outstanding": 2196045588,
+      "market_cap": 1324215489564
     },
     "PLTR": {
       "price": 136.0,
-      "change_pct": -0.65
+      "change_pct": -0.65,
+      "shares_outstanding": 2296071334,
+      "market_cap": 312265701424
     },
     "GLD": {
       "price": 432.93,
-      "change_pct": -0.4
+      "change_pct": -0.4,
+      "shares_outstanding": 260300000,
+      "market_cap": 112691677094
     },
     "LMT": {
       "price": 521.0,
-      "change_pct": 1.71
+      "change_pct": 1.71,
+      "shares_outstanding": 230563608,
+      "market_cap": 120123639768
     },
     "BAESY": {
-      "price": 104.45,
-      "change_pct": 0.34
+      "price": 104.48,
+      "change_pct": 0.37,
+      "shares_outstanding": 733974299,
+      "market_cap": 76685637223
     },
     "FCX": {
       "price": 66.03,
-      "change_pct": 2.58
+      "change_pct": 2.58,
+      "shares_outstanding": 1437559865,
+      "market_cap": 94922076131
     },
     "CRWD": {
       "price": 546.18,
-      "change_pct": 0.72
+      "change_pct": 0.72,
+      "shares_outstanding": 254536521,
+      "market_cap": 139022755175
     },
     "GOOGL": {
       "price": 387.35,
-      "change_pct": -0.33
+      "change_pct": -0.33,
+      "shares_outstanding": 5823665113,
+      "market_cap": 2255796717065
     }
   }
 }
