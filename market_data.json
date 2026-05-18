@@ -1,85 +1,85 @@
 {
   "_comment": "Auto-refreshed daily by .github/workflows/refresh-data.yml (script: scripts/refresh_market_data.py). DO NOT edit by hand \u2014 your changes will be overwritten on next workflow run. To change the symbol set, edit the script.",
-  "as_of_iso": "2026-05-15",
-  "as_of_label": "PRIOR CLOSE \u00b7 MAY 15, 2026",
+  "as_of_iso": "2026-05-18",
+  "as_of_label": "PRIOR CLOSE \u00b7 MAY 18, 2026",
   "tickers": {
     "NVDA": {
-      "price": 225.32,
-      "change_pct": -4.42,
+      "price": 222.32,
+      "change_pct": -1.33,
       "shares_outstanding": 24220525225,
-      "market_cap": 5457368921093
+      "market_cap": 5384707345418
     },
     "AAPL": {
-      "price": 300.23,
-      "change_pct": 0.68,
+      "price": 297.84,
+      "change_pct": -0.8,
       "shares_outstanding": 14687356000,
-      "market_cap": 4409585053240
+      "market_cap": 4374482057253
     },
     "MSFT": {
-      "price": 421.92,
-      "change_pct": 3.05,
+      "price": 423.54,
+      "change_pct": 0.38,
       "shares_outstanding": 7428434704,
-      "market_cap": 3134205270059
+      "market_cap": 3146239298008
     },
     "TSLA": {
-      "price": 422.24,
-      "change_pct": -4.75,
+      "price": 409.99,
+      "change_pct": -2.9,
       "shares_outstanding": 3755723871,
-      "market_cap": 1585816810614
+      "market_cap": 1539809193194
     },
     "AMZN": {
-      "price": 264.14,
-      "change_pct": -1.15,
+      "price": 264.86,
+      "change_pct": 0.27,
       "shares_outstanding": 10757109436,
-      "market_cap": 2841383044000
+      "market_cap": 2849127847644
     },
     "META": {
-      "price": 614.23,
-      "change_pct": -0.68,
+      "price": 611.21,
+      "change_pct": -0.49,
       "shares_outstanding": 2196045588,
-      "market_cap": 1348877038626
+      "market_cap": 1342245072094
     },
     "PLTR": {
-      "price": 133.99,
-      "change_pct": 0.19,
+      "price": 135.14,
+      "change_pct": 0.86,
       "shares_outstanding": 2296071334,
-      "market_cap": 307650610655
+      "market_cap": 310291078675
     },
     "GLD": {
-      "price": 417.29,
-      "change_pct": -2.32,
+      "price": 418.43,
+      "change_pct": 0.27,
       "shares_outstanding": 260300000,
-      "market_cap": 108620589224
+      "market_cap": 108917327094
     },
     "LMT": {
-      "price": 516.01,
-      "change_pct": -0.85,
+      "price": 528.31,
+      "change_pct": 2.38,
       "shares_outstanding": 230563608,
-      "market_cap": 118973129616
+      "market_cap": 121809059180
     },
     "BAESY": {
-      "price": 98.54,
-      "change_pct": -4.69,
+      "price": 100.96,
+      "change_pct": 2.46,
       "shares_outstanding": 733974299,
-      "market_cap": 72325828095
+      "market_cap": 74102044555
     },
     "FCX": {
-      "price": 63.01,
-      "change_pct": -4.73,
+      "price": 60.5,
+      "change_pct": -3.98,
       "shares_outstanding": 1437559865,
-      "market_cap": 90580644681
+      "market_cap": 86972371832
     },
     "CRWD": {
-      "price": 594.08,
-      "change_pct": 2.44,
+      "price": 618.83,
+      "change_pct": 4.17,
       "shares_outstanding": 254536521,
-      "market_cap": 151215060746
+      "market_cap": 157514839640
     },
     "GOOGL": {
-      "price": 396.78,
-      "change_pct": -1.07,
+      "price": 396.94,
+      "change_pct": 0.04,
       "shares_outstanding": 5823665113,
-      "market_cap": 2310713836427
+      "market_cap": 2311645644172
     }
   }
 }
