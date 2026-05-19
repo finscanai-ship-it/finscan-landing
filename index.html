@@ -1715,8 +1715,19 @@
   (function () {
     const KEY = 'finscan_ec_v1';
     const overlay = document.getElementById('ecOverlay');
-    const initialHash = (window.location.hash || '').toLowerCase();
-    const isDeepLink  = initialHash === '#scan' || initialHash === '#freescan' || initialHash === '#checklist';
+    // Detect deep link from either the URL hash (#scan) OR a query param
+    // (?scan), because Instagram percent-encodes # in bio/story links and
+    // breaks the hash form. The Netlify _redirects file routes /scan,
+    // /freescan, /checklist → /?{name}.
+    function readDeepLink() {
+      const h = (window.location.hash || '').toLowerCase().replace(/^#/, '');
+      const q = new URLSearchParams(window.location.search);
+      const fromHash  = (h === 'scan' || h === 'freescan' || h === 'checklist') ? h : '';
+      const fromQuery = ['scan','freescan','checklist'].find(k => q.has(k)) || '';
+      return fromHash || fromQuery;
+    }
+    const initialDeepLink = readDeepLink();
+    const isDeepLink = !!initialDeepLink;
     // Skip auto-open guards entirely if a deep link is present
     if (!isDeepLink && localStorage.getItem(KEY)) return;     // already shown / converted
     let shown = false;
@@ -1750,23 +1761,22 @@
       setTimeout(show, 45000);
     }
 
-    // ── Deep link: getfinscan.com/#scan opens the free-scan modal directly.
-    // Useful in IG bio / story links. Also #checklist to open in checklist mode.
-    function openFromHash() {
-      const h = (window.location.hash || '').toLowerCase();
-      if (h === '#scan' || h === '#freescan' || h === '#checklist') {
-        localStorage.removeItem(KEY);  // bypass "already-shown" guard
-        const modal = document.getElementById('ecModal');
-        if (h === '#checklist' && modal.getAttribute('data-mode') !== 'checklist') {
-          window.toggleECMode && window.toggleECMode();
-        } else if (h !== '#checklist' && modal.getAttribute('data-mode') !== 'scan') {
-          window.toggleECMode && window.toggleECMode();
-        }
-        shown = false; show();
+    // ── Deep link opener — accepts /scan, /freescan, /checklist, /?scan,
+    // /?checklist, /#scan, /#checklist (IG bio / story-friendly variants).
+    function openFromDeepLink() {
+      const k = readDeepLink();
+      if (!k) return;
+      localStorage.removeItem(KEY);
+      const modal = document.getElementById('ecModal');
+      const wantChecklist = (k === 'checklist');
+      const inChecklist   = modal.getAttribute('data-mode') === 'checklist';
+      if (wantChecklist !== inChecklist) {
+        window.toggleECMode && window.toggleECMode();
       }
+      shown = false; show();
     }
-    openFromHash();
-    window.addEventListener('hashchange', openFromHash);
+    openFromDeepLink();
+    window.addEventListener('hashchange', openFromDeepLink);
   })();
 
   // ── Toggle modal mode (scan ↔ checklist) ──

@@ -9,4 +9,9 @@
 # IMPORTANT: keep the explicit list. Do NOT use a catch-all (e.g. /:slug → /?ref=:slug)
 # because it would intercept any future first-level path you add (like /pricing).
 
+# Deep links for IG bio / story links (no `#` — Instagram URL-encodes it).
+/scan            /?scan                301
+/freescan        /?scan                301
+/checklist       /?checklist           301
+
 /demo            /?ref=demo            301
