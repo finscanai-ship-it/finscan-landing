@@ -343,7 +343,7 @@
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px; max-width: 920px; margin: 0 auto;
+      gap: 24px; max-width: 640px; margin: 0 auto;
     }
     .pricing-card {
       background: var(--card-bg);
@@ -749,6 +749,17 @@
   <div style="display:flex;align-items:center;gap:20px;">
     <a href="#features" style="color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;" data-i18n="nav_features">Features</a>
     <a href="#pricing"  style="color:var(--muted);text-decoration:none;font-size:.9rem;font-weight:500;" data-i18n="nav_pricing">Pricing</a>
+    <!-- Currency switcher -->
+    <div style="position:relative;" id="curSwitcher">
+      <button onclick="toggleCurMenu()" style="background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);padding:7px 12px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
+        <span id="currentCurSym">€</span> <span id="currentCur">EUR</span> <span style="font-size:.6rem;">▼</span>
+      </button>
+      <div id="curMenu" style="display:none;position:absolute;top:calc(100% + 8px);right:0;background:#1C2333;border:1px solid var(--border);border-radius:10px;overflow:hidden;min-width:120px;z-index:200;box-shadow:0 8px 32px rgba(0,0,0,.5);">
+        <div onclick="setCur('EUR')" class="lang-opt">€ EUR</div>
+        <div onclick="setCur('USD')" class="lang-opt">$ USD</div>
+        <div onclick="setCur('GBP')" class="lang-opt">£ GBP</div>
+      </div>
+    </div>
     <!-- Language switcher -->
     <div style="position:relative;" id="langSwitcher">
       <button onclick="toggleLangMenu()" style="background:rgba(255,255,255,.07);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:8px;font-size:.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;">
@@ -810,7 +821,7 @@
 
   <!-- STATS inside hero -->
   <div class="stats" style="width:100%;margin-top:0;border-left:none;border-right:none;position:relative;z-index:1;">
-    <div class="stat"><div class="stat-num">770+</div><div class="stat-label" data-i18n="stat1">Stocks Analysed</div></div>
+    <div class="stat"><div class="stat-num">1,000+</div><div class="stat-label" data-i18n="stat1">Stocks Analysed</div></div>
     <div class="stat"><div class="stat-num">18</div><div class="stat-label" data-i18n="stat2">Market Categories</div></div>
     <div class="stat"><div class="stat-num">40+</div><div class="stat-label" data-i18n="stat3">Data Points per Stock</div></div>
     <div class="stat"><div class="stat-num">3</div><div class="stat-label" data-i18n="stat4">Data Sources</div></div>
@@ -910,7 +921,7 @@
                 </tbody>
               </table>
               <p style="margin-top:18px;color:#6B7280;font-size:.78rem;line-height:1.7;">
-                <strong style="color:#9CA3AF;">Scoring:</strong> Composite 0–100 score combining technical signals (40%), fundamental metrics (40%), and analyst sentiment (20%). Weights are calibrated across 770+ stocks. All data is cached for 24 hours to minimise API load and speed up repeat scans.<br/>
+                <strong style="color:#9CA3AF;">Scoring:</strong> Composite 0–100 score combining technical signals (40%), fundamental metrics (40%), and analyst sentiment (20%). Weights are calibrated across 1,000+ stocks. All data is cached for 24 hours to minimise API load and speed up repeat scans.<br/>
                 <strong style="color:#9CA3AF;">Disclaimer:</strong> FinScan is a screening tool — not financial advice. Always do your own research before investing.
               </p>
             </div>
@@ -1037,13 +1048,13 @@
     <!-- MONTHLY -->
     <div class="pricing-card">
       <div class="plan-name" data-i18n="plan_monthly">Monthly</div>
-      <div class="plan-price"><sup>€</sup>19<sub>.99</sub></div>
+      <div class="plan-price" data-price-key="monthly_list"><sup>€</sup>19<sub>.99</sub></div>
       <div class="plan-billing" data-i18n="plan_monthly_bill">billed monthly</div>
       <div class="plan-badge hidden">placeholder</div>
       <div class="discount-line" id="disc-monthly">🚀 <span data-i18n="disc_monthly">25% off → <strong>€14.99</strong> — use code <strong style="color:#FBBF24;">BETA25</strong></span></div>
       <hr class="plan-divider"/>
       <ul class="plan-features">
-        <li data-i18n="mf1">770+ stocks across 18 categories</li>
+        <li data-i18n="mf1">1,000+ stocks across 18 categories</li>
         <li data-i18n="mf2">Full technical + fundamental analysis</li>
         <li data-i18n="mf3">Simple View &amp; Full Analysis Excel output</li>
         <li data-i18n="mf4">Price charts for top 10 stocks</li>
@@ -1055,49 +1066,31 @@
       </a>
     </div>
 
-    <!-- QUARTERLY (featured) -->
+    <!-- YEARLY (featured) -->
     <div class="pricing-card featured">
-      <div class="plan-name" data-i18n="plan_quarterly">Quarterly</div>
-      <div class="plan-price"><sup>€</sup>44<sub>.99</sub></div>
-      <div class="plan-billing" data-i18n="plan_quarterly_bill">billed every 3 months</div>
-      <div class="plan-badge" data-i18n="plan_quarterly_badge">Save 25% vs monthly</div>
-      <div class="discount-line" id="disc-quarterly">🚀 <span data-i18n="disc_quarterly">30% off → <strong>€31.49</strong> — use code <strong style="color:#FBBF24;">BETA30</strong></span></div>
-      <hr class="plan-divider"/>
-      <ul class="plan-features">
-        <li data-i18n="qf1">Everything in Monthly</li>
-        <li data-i18n="qf2">3-month access in one key</li>
-        <li data-i18n="qf3">Save €15 vs paying monthly</li>
-        <li data-i18n="qf4">Priority support by email</li>
-        <li data-i18n="qf5">Free key renewal reminder</li>
-      </ul>
-      <a class="plan-btn primary" id="btn-quarterly"
-         href="https://buy.stripe.com/bJeeV6bu80hr2bi1NedQQ01" target="_blank" data-i18n="btn_quarterly">
-        Get Quarterly
-      </a>
-    </div>
-
-    <!-- YEARLY -->
-    <div class="pricing-card">
       <div class="plan-name" data-i18n="plan_yearly">Yearly</div>
-      <div class="plan-price"><sup>€</sup>143<sub>.99</sub></div>
+      <div class="plan-price" data-price-key="yearly_list"><sup>€</sup>143<sub>.99</sub></div>
       <div class="plan-billing" data-i18n="plan_yearly_bill">billed annually</div>
       <div class="plan-badge" data-i18n="plan_yearly_badge">Save 40% vs monthly</div>
       <div class="discount-line" id="disc-yearly">🚀 <span data-i18n="disc_yearly">40% off → <strong>€86.39</strong> — use code <strong style="color:#FBBF24;">BETA40</strong></span></div>
       <hr class="plan-divider"/>
       <ul class="plan-features">
-        <li data-i18n="yf1">Everything in Quarterly</li>
+        <li data-i18n="yf1">Everything in Monthly</li>
         <li data-i18n="yf2">12-month access in one key</li>
         <li data-i18n="yf3">Save €96 vs paying monthly</li>
         <li data-i18n="yf4">Priority support by email</li>
         <li data-i18n="yf5">Early access to new features</li>
       </ul>
-      <a class="plan-btn outline" id="btn-yearly"
+      <a class="plan-btn primary" id="btn-yearly"
          href="https://buy.stripe.com/00w28kbu83tDbLSajKdQQ02" target="_blank" data-i18n="btn_yearly">
         Get Yearly
       </a>
     </div>
 
   </div>
+  <p id="curNote" style="text-align:center;font-size:.78rem;color:var(--muted);margin-top:28px;display:none;">
+    USD / GBP shown for convenience — checkout is processed in EUR. Your bank converts at the market rate.
+  </p>
 </section>
 
 <!-- CTA -->
@@ -1352,7 +1345,7 @@
       disc_monthly:'25% off → <strong>€14.99</strong> — use code <strong style="color:#FBBF24;">BETA25</strong>',
       disc_quarterly:'30% off → <strong>€31.49</strong> — use code <strong style="color:#FBBF24;">BETA30</strong>',
       disc_yearly:'40% off → <strong>€86.39</strong> — use code <strong style="color:#FBBF24;">BETA40</strong>',
-      mf1:'770+ stocks across 18 categories', mf2:'Full technical + fundamental analysis',
+      mf1:'1,000+ stocks across 18 categories', mf2:'Full technical + fundamental analysis',
       mf3:'Simple View & Full Analysis Excel output', mf4:'Price charts for top 10 stocks',
       mf5:'Data cached — repeat scans in 2-3 min',
       qf1:'Everything in Monthly', qf2:'3-month access in one key',
@@ -1405,7 +1398,7 @@
       disc_monthly:'25% dto → <strong>€14.99</strong> — usa el código <strong style="color:#FBBF24;">BETA25</strong>',
       disc_quarterly:'30% dto → <strong>€31.49</strong> — usa el código <strong style="color:#FBBF24;">BETA30</strong>',
       disc_yearly:'40% dto → <strong>€86.39</strong> — usa el código <strong style="color:#FBBF24;">BETA40</strong>',
-      mf1:'770+ acciones en 18 categorías', mf2:'Análisis técnico + fundamental completo',
+      mf1:'1.000+ acciones en 18 categorías', mf2:'Análisis técnico + fundamental completo',
       mf3:'Excel con Vista Simple y Análisis Completo', mf4:'Gráficos de precios de las 10 mejores',
       mf5:'Datos en caché — análisis repetidos en 2-3 min',
       qf1:'Todo lo del plan Mensual', qf2:'Acceso de 3 meses con una sola clave',
@@ -1458,7 +1451,7 @@
       disc_monthly:'25% Rabatt → <strong>€14,99</strong> — Code: <strong style="color:#FBBF24;">BETA25</strong>',
       disc_quarterly:'30% Rabatt → <strong>€31,49</strong> — Code: <strong style="color:#FBBF24;">BETA30</strong>',
       disc_yearly:'40% Rabatt → <strong>€86,39</strong> — Code: <strong style="color:#FBBF24;">BETA40</strong>',
-      mf1:'770+ Aktien in 18 Kategorien', mf2:'Vollständige technische + fundamentale Analyse',
+      mf1:'1.000+ Aktien in 18 Kategorien', mf2:'Vollständige technische + fundamentale Analyse',
       mf3:'Einfache Ansicht & Vollanalyse als Excel', mf4:'Kursdiagramme für Top 10 Aktien',
       mf5:'Daten gecacht — Wiederholungsscans in 2-3 Min.',
       qf1:'Alles aus Monatlich', qf2:'3-Monats-Zugang in einem Schlüssel',
@@ -1511,7 +1504,7 @@
       disc_monthly:'25% de remise → <strong>€14,99</strong> — code <strong style="color:#FBBF24;">BETA25</strong>',
       disc_quarterly:'30% de remise → <strong>€31,49</strong> — code <strong style="color:#FBBF24;">BETA30</strong>',
       disc_yearly:'40% de remise → <strong>€86,39</strong> — code <strong style="color:#FBBF24;">BETA40</strong>',
-      mf1:'770+ actions dans 18 catégories', mf2:'Analyse technique + fondamentale complète',
+      mf1:'1 000+ actions dans 18 catégories', mf2:'Analyse technique + fondamentale complète',
       mf3:'Vue Simple & Analyse Complète en Excel', mf4:'Graphiques pour le top 10',
       mf5:'Données en cache — analyses répétées en 2-3 min',
       qf1:'Tout du plan Mensuel', qf2:'Accès 3 mois avec une seule clé',
@@ -1564,7 +1557,7 @@
       disc_monthly:'25% desc → <strong>€14,99</strong> — use o código <strong style="color:#FBBF24;">BETA25</strong>',
       disc_quarterly:'30% desc → <strong>€31,49</strong> — use o código <strong style="color:#FBBF24;">BETA30</strong>',
       disc_yearly:'40% desc → <strong>€86,39</strong> — use o código <strong style="color:#FBBF24;">BETA40</strong>',
-      mf1:'770+ ações em 18 categorias', mf2:'Análise técnica + fundamental completa',
+      mf1:'1.000+ ações em 18 categorias', mf2:'Análise técnica + fundamental completa',
       mf3:'Excel com Vista Simples e Análise Completa', mf4:'Gráficos de preços para o top 10',
       mf5:'Dados em cache — scans repetidos em 2-3 min',
       qf1:'Tudo do plano Mensal', qf2:'Acesso de 3 meses com uma só chave',
@@ -1615,7 +1608,76 @@
     if (sw && !sw.contains(e.target)) {
       document.getElementById('langMenu').style.display = 'none';
     }
+    const cs = document.getElementById('curSwitcher');
+    if (cs && !cs.contains(e.target)) {
+      document.getElementById('curMenu').style.display = 'none';
+    }
   });
+
+  // ── Currency switcher (display-only; checkout stays in EUR) ──────────────
+  // Static FX rates updated occasionally; tweak as needed.
+  const PRICES = {
+    EUR: { sym:'€', monthly_list:[19,'.99'], monthly_disc:'14.99',
+           quarterly_list:[44,'.99'], quarterly_disc:'31.49',
+           yearly_list:[143,'.99'],   yearly_disc:'86.39' },
+    USD: { sym:'$', monthly_list:[21,'.99'], monthly_disc:'16.99',
+           quarterly_list:[48,'.99'], quarterly_disc:'33.99',
+           yearly_list:[155,'.99'],   yearly_disc:'93.99' },
+    GBP: { sym:'£', monthly_list:[16,'.99'], monthly_disc:'12.99',
+           quarterly_list:[38,'.49'], quarterly_disc:'26.99',
+           yearly_list:[122,'.99'],   yearly_disc:'73.99' },
+  };
+  let currentCur = localStorage.getItem('finscan_cur') || 'EUR';
+
+  function applyCur(cur) {
+    const p = PRICES[cur]; if (!p) return;
+    // 1. List prices on each plan card
+    document.querySelectorAll('[data-price-key]').forEach(el => {
+      const key = el.getAttribute('data-price-key');
+      const v = p[key];
+      if (Array.isArray(v)) {
+        el.innerHTML = `<sup>${p.sym}</sup>${v[0]}<sub>${v[1]}</sub>`;
+      }
+    });
+    // 2. Discount-line prices — regex-replace currency-amount inside <strong>
+    const eurDisc = PRICES.EUR;
+    document.querySelectorAll('#disc-monthly, #disc-yearly').forEach(el => {
+      const id = el.id;
+      const key = id.replace('disc-','') + '_disc';
+      const eur = eurDisc[key];
+      const cur = p[key];
+      // Match a <strong> wrapping any currency amount (€XX.XX, $XX.XX, £XX.XX)
+      el.innerHTML = el.innerHTML.replace(
+        /<strong>[€$£]\s?[\d.,]+<\/strong>/,
+        `<strong>${p.sym}${cur}</strong>`
+      );
+    });
+    // 3. Header chip
+    document.getElementById('currentCurSym').textContent = p.sym;
+    document.getElementById('currentCur').textContent = cur;
+    // 4. Show "Charged in EUR" note only when non-EUR is selected
+    const note = document.getElementById('curNote');
+    if (note) note.style.display = cur === 'EUR' ? 'none' : 'block';
+    currentCur = cur;
+    localStorage.setItem('finscan_cur', cur);
+  }
+
+  function setCur(cur) {
+    applyCur(cur);
+    document.getElementById('curMenu').style.display = 'none';
+  }
+
+  function toggleCurMenu() {
+    const m = document.getElementById('curMenu');
+    m.style.display = m.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Re-apply currency after language change (i18n rewrites discount-line HTML)
+  const _origApplyLang = applyLang;
+  applyLang = function(lang) {
+    _origApplyLang(lang);
+    applyCur(currentCur);
+  };
 
   // Apply saved language on load
   applyLang(currentLang);
@@ -1643,7 +1705,7 @@
 
   function applyDiscount() {
     pricingEl.classList.add('urgency-active');
-    ['disc-monthly','disc-quarterly','disc-yearly'].forEach(id => {
+    ['disc-monthly','disc-yearly'].forEach(id => {
       document.getElementById(id).style.display = 'block';
     });
   }
