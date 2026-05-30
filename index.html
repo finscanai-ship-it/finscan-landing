@@ -91,7 +91,7 @@
       display: inline-flex; align-items: center; gap: 8px;
       background: rgba(0,208,132,.12); border: 1px solid rgba(0,208,132,.3);
       color: var(--accent); padding: 6px 16px; border-radius: 999px;
-      font-size: .8rem; font-weight: 600; letter-spacing: .5px;
+      font-size: .88rem; font-weight: 600; letter-spacing: .5px;
       margin-bottom: 28px; position: relative; z-index: 1;
     }
     .hero-badge::before { content: '●'; font-size: .6rem; animation: pulse 2s infinite; }
@@ -201,6 +201,31 @@
     .section-sub {
       text-align: center; color: var(--muted); font-size: .92rem;
       max-width: 540px; margin: 0 auto 64px; line-height: 1.7;
+    }
+
+    /* ── ShinyText (reactbits-style shimmer) ─────────────────────────────── */
+    .shiny-text {
+      background: linear-gradient(120deg,
+        var(--shine-base) 40%, var(--shine-hi) 50%, var(--shine-base) 60%);
+      background-size: 200% 100%;
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+      animation: shine 3.5s linear infinite;
+    }
+    @keyframes shine { to { background-position: -200% 0; } }
+    .hero-badge.shiny-text    { --shine-base: var(--accent); --shine-hi: #eafff7; }
+    .section-label.shiny-text { --shine-base: var(--accent); --shine-hi: #eafff7; }
+
+    /* ── SplitText (reactbits-style word reveal) ─────────────────────────── */
+    .st-word {
+      display: inline-block; opacity: 0;
+      transform: translateY(.45em);
+      animation: stReveal .6s cubic-bezier(.2,.7,.2,1) forwards;
+    }
+    @keyframes stReveal { to { opacity: 1; transform: translateY(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .shiny-text { animation: none; }
+      .st-word { animation: none; opacity: 1; transform: none; }
     }
 
     .features-grid {
@@ -779,7 +804,7 @@
 
 <!-- HERO -->
 <section class="hero">
-  <div class="hero-badge" data-i18n="hero_badge">AI-Powered Stock Screener</div>
+  <div class="hero-badge shiny-text" data-i18n="hero_badge">AI-Powered Stock Screener</div>
   <h1 data-i18n="hero_h1">Stop Guessing.<br/>Start <em>Scanning</em>.</h1>
   <p data-i18n="hero_p">FinScan analyses hundreds of stocks across 18 market categories — combining technical signals, fundamental data, and analyst ratings into one clear score.</p>
   <div class="hero-btns">
@@ -839,7 +864,7 @@
 
 <!-- MOCKUPS -->
 <section class="mockup-section">
-  <div class="section-label" data-i18n="mockup_label">Live Preview</div>
+  <div class="section-label shiny-text" data-i18n="mockup_label">Live Preview</div>
   <h2 class="section-title" data-i18n="mockup_title">See it in action</h2>
   <p class="section-sub" data-i18n="mockup_sub">Real output. Real data.<br/>A sneak peek of what lands in your Excel file after every scan.</p>
   <p style="margin-top:-22px;margin-bottom:24px;color:#6B7280;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;text-align:center;font-weight:600;">
@@ -955,7 +980,7 @@
 
 <!-- FEATURES -->
 <section id="features">
-  <div class="section-label" data-i18n="feat_label">What You Get</div>
+  <div class="section-label shiny-text" data-i18n="feat_label">What You Get</div>
   <h2 class="section-title" data-i18n="feat_title">Everything you need to<br/>find the right stocks</h2>
   <p class="section-sub" data-i18n="feat_sub">FinScan combines three professional data sources into one simple Excel output — no coding, no dashboards, no subscriptions to juggle.</p>
   <div class="features-grid">
@@ -994,7 +1019,7 @@
 
 <!-- HOW IT WORKS -->
 <section class="steps" id="how-it-works">
-  <div class="section-label" data-i18n="hiw_label">How It Works</div>
+  <div class="section-label shiny-text" data-i18n="hiw_label">How It Works</div>
   <h2 class="section-title" data-i18n="hiw_title">Up and running in minutes</h2>
   <p class="section-sub" data-i18n="hiw_sub">No installations, no configuration headaches. Just open and scan.</p>
   <div class="steps-grid">
@@ -1023,7 +1048,7 @@
 
 <!-- SCORING SYSTEM -->
 <section>
-  <div class="section-label" data-i18n="score_label">Scoring System</div>
+  <div class="section-label shiny-text" data-i18n="score_label">Scoring System</div>
   <h2 class="section-title" data-i18n="score_title">One score. Full picture.</h2>
   <p class="section-sub" data-i18n="score_sub">Every stock is rated 0–100. The verdict tells you exactly where it stands.</p>
   <div class="scores-grid">
@@ -1037,7 +1062,7 @@
 
 <!-- PRICING -->
 <section id="pricing">
-  <div class="section-label" data-i18n="pricing_label">Pricing</div>
+  <div class="section-label shiny-text" data-i18n="pricing_label">Pricing</div>
   <h2 class="section-title" data-i18n="pricing_title">Simple, transparent pricing</h2>
   <p class="section-sub" data-i18n="pricing_sub">One tool. No hidden fees. Cancel any time by simply not renewing your key.</p>
   <p style="text-align:center;font-size:.85rem;color:var(--muted);margin-top:12px;margin-bottom:48px;">
@@ -1672,11 +1697,47 @@
     m.style.display = m.style.display === 'none' ? 'block' : 'none';
   }
 
+  // ── SplitText: word-by-word reveal on the hero H1 (reactbits-style) ──────
+  // Runs after i18n sets the H1 HTML, and again on every language change.
+  function splitHero() {
+    const el = document.querySelector('.hero h1');
+    if (!el) return;
+    const frag = document.createDocumentFragment();
+    const wrapWords = (text, parent) => {
+      text.split(/(\s+)/).forEach(tok => {
+        if (tok === '') return;
+        if (/^\s+$/.test(tok)) { parent.appendChild(document.createTextNode(tok)); return; }
+        const s = document.createElement('span');
+        s.className = 'st-word';
+        s.textContent = tok;
+        parent.appendChild(s);
+      });
+    };
+    el.childNodes.forEach(n => {
+      if (n.nodeType === 3) { wrapWords(n.textContent, frag); }
+      else if (n.nodeName === 'BR') { frag.appendChild(document.createElement('br')); }
+      else { // inline element (e.g. <em>Scanning</em>) — keep tag, split its text
+        const w = n.cloneNode(false);
+        n.childNodes.forEach(c => {
+          if (c.nodeType === 3) wrapWords(c.textContent, w);
+          else w.appendChild(c.cloneNode(true));
+        });
+        frag.appendChild(w);
+      }
+    });
+    el.innerHTML = '';
+    el.appendChild(frag);
+    el.querySelectorAll('.st-word').forEach((s, i) => {
+      s.style.animationDelay = (i * 0.07) + 's';
+    });
+  }
+
   // Re-apply currency after language change (i18n rewrites discount-line HTML)
   const _origApplyLang = applyLang;
   applyLang = function(lang) {
     _origApplyLang(lang);
     applyCur(currentCur);
+    splitHero();
   };
 
   // Apply saved language on load
