@@ -10,6 +10,15 @@
     "signedAt": "YYYY-MM-DD"
   },
   "partners": {
+    "tiagomelocosta": {
+      "displayName": "Tiago Melo Costa",
+      "handle": "@tiagomelocosta",
+      "platformUrl": "https://instagram.com/tiagomelocosta",
+      "photoUrl": "",
+      "introLine": "@tiagomelocosta sent you here — they get credit for any plan you pick today.",
+      "commission": { "firstSale": 40, "recurring": 20 },
+      "signedAt": "2026-06-01"
+    },
     "demo": {
       "displayName": "Demo Partner",
       "handle": "@demopartner",
