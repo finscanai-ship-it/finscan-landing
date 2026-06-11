@@ -10,6 +10,15 @@
     "signedAt": "YYYY-MM-DD"
   },
   "partners": {
+    "shecaninvest": {
+      "displayName": "Saira",
+      "handle": "@she.can.invest",
+      "platformUrl": "https://instagram.com/she.can.invest",
+      "photoUrl": "",
+      "introLine": "Saira (@she.can.invest) sent you here — she gets credit for any plan you pick today.",
+      "commission": { "firstSale": 40, "recurring": 20 },
+      "signedAt": "2026-06-10"
+    },
     "tiagomelocosta": {
       "displayName": "Tiago Melo Costa",
       "handle": "@tiagomelocosta",
