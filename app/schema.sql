@@ -62,6 +62,24 @@ drop policy if exists own_profile_update on public.profiles;
 create policy own_profile_update on public.profiles
   for update using (auth.uid() = id) with check (auth.uid() = id);
 
+-- free_picks is APPEND-ONLY (and capped at 3 by the check constraint above):
+-- a free user can add a preview pick but never remove or swap one. Without this
+-- they could cycle picks (pick 3, view, swap) to read the whole universe three
+-- rows at a time. `old <@ new` means every existing pick must still be present.
+create or replace function public.enforce_append_only_picks()
+returns trigger language plpgsql as $$
+begin
+  if not (old.free_picks <@ new.free_picks) then
+    raise exception 'free_picks is append-only: a pick cannot be removed or swapped';
+  end if;
+  return new;
+end;
+$$;
+drop trigger if exists trg_append_only_picks on public.profiles;
+create trigger trg_append_only_picks
+  before update on public.profiles
+  for each row execute function public.enforce_append_only_picks();
+
 -- universe free preview:
 --   • anonymous visitors        → the top 3 by rank (taster, no login)
 --   • signed-in free users       → only the (≤3) tickers they picked themselves

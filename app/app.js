@@ -124,20 +124,20 @@
 
   // ── Free preview: pick up to 3 stocks of your own choice ───────────────────
   function renderPicks() {
+    // Picks are permanent (append-only on the server), so no remove control.
     els.picks.innerHTML = PICKS.map((s) =>
-      '<span class="pchip">' + s +
-      '<button data-rm="' + s + '" title="Remove">×</button></span>').join("");
-    els.picks.querySelectorAll("button[data-rm]").forEach((b) =>
-      b.addEventListener("click", () => removePick(b.dataset.rm)));
+      '<span class="pchip locked">' + s + "</span>").join("");
 
     const full = PICKS.length >= MAX_PICKS;
     els.pq.disabled = full;
     els.pq.placeholder = full
-      ? "3 of 3 chosen — remove one to swap"
+      ? "That's your 3 free picks"
       : "Search a ticker or company to add…";
-    els.pickmsg.textContent = PICKS.length
-      ? PICKS.length + " of " + MAX_PICKS + " chosen."
-      : "";
+    els.pickmsg.textContent = full
+      ? "You've used all 3 free picks. Subscribe to unlock the full universe."
+      : PICKS.length
+        ? PICKS.length + " of " + MAX_PICKS + " chosen. Picks are permanent."
+        : "";
     if (full) closeMenu();
   }
 
@@ -157,13 +157,12 @@
   function addPick(sym, session) {
     sym = sym.toUpperCase();
     if (PICKS.includes(sym) || PICKS.length >= MAX_PICKS) return;
+    if (!window.confirm(
+      "Add " + sym + " to your free preview?\n\n" +
+      "Free picks are permanent. You can't remove or swap them later.")) return;
     PICKS.push(sym);
     els.pq.value = ""; closeMenu();
     savePicks(session);
-  }
-  function removePick(sym, session) {
-    PICKS = PICKS.filter((s) => s !== sym);
-    savePicks(session || currentSession);
   }
 
   let searchTimer = null, currentSession = null;

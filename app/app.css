@@ -126,6 +126,7 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
   color:var(--green); background:rgba(16,220,138,.12);
   border:1px solid rgba(16,220,138,.32); border-radius:20px; padding:6px 8px 6px 12px;
 }
+.pchip.locked{padding:6px 12px;}
 .pchip button{
   border:none; background:rgba(255,255,255,.08); color:var(--white);
   width:18px; height:18px; border-radius:50%; cursor:pointer;
