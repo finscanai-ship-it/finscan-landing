@@ -216,13 +216,23 @@
         if (msg) msg.innerHTML = '<span class="err">✗ Could not load universe: ' + e.message + "</span>";
         return;
       }
+      $("dashboard").removeAttribute("hidden");
+
+      const empty = ROWS.length === 0;
+      $("emptystate").hidden = !empty;
+      $("kpis").hidden = empty;
+      $("tablecard").hidden = empty;
+      if (empty) {
+        if (msg) msg.innerHTML = "";
+        return;
+      }
+
       if (msg) msg.innerHTML =
         '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") + ".</span>";
       renderKPIs();
       renderHead();
       wireFilters();
       applyFilters();
-      $("dashboard").removeAttribute("hidden");
     },
     hide() {
       const d = $("dashboard");

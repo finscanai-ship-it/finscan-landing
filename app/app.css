@@ -110,3 +110,21 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
 .vbadge.v-neut {background:rgba(251,191,36,.14);color:var(--amber);}
 .vbadge.v-under{background:rgba(249,115,22,.14);color:var(--orange);}
 .vbadge.v-weak {background:rgba(239,68,68,.14);color:var(--red);}
+
+/* ── welcome banner + empty state + mobile (Block 7) ───────────────────────── */
+.card.welcome{
+  border-color:rgba(16,220,138,.4);
+  background:linear-gradient(180deg,rgba(16,220,138,.10),var(--bg2));
+  font-size:15px;font-weight:600;
+}
+.empty-state{text-align:center;padding:48px 32px;}
+.empty-state .sub{max-width:460px;margin:8px auto 0;}
+
+@media(max-width:640px){
+  .wrap{padding:24px 16px;}
+  .app-header{padding:14px 16px;}
+  .app-header .who{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .card{padding:22px 18px;}
+  h1{font-size:24px;}
+  .filters #q{min-width:140px;}
+}

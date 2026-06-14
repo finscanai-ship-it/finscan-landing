@@ -23,6 +23,11 @@
 
   <main class="wrap">
 
+    <!-- Post-checkout welcome banner ─────────────────────────────────────── -->
+    <section class="card welcome" id="welcomebanner" hidden>
+      <span id="welcometext"></span>
+    </section>
+
     <!-- Signed-out: magic-link login ─────────────────────────────────────── -->
     <section class="card" id="auth" hidden>
       <h1>Sign in</h1>
@@ -49,8 +54,13 @@
 
     <!-- Signed-in: the scored universe ────────────────────────────────────── -->
     <section id="dashboard" hidden>
+      <div class="card empty-state" id="emptystate" hidden>
+        <h1>No stocks yet</h1>
+        <p class="sub">The universe hasn't been populated. The next market scan will
+          fill this dashboard with the full scored list.</p>
+      </div>
       <div class="kpis" id="kpis"></div>
-      <div class="card nopad">
+      <div class="card nopad" id="tablecard">
         <div class="filters">
           <input id="q" type="search" placeholder="Search symbol or name…">
           <select id="fcat"><option value="">All categories</option></select>
@@ -79,7 +89,7 @@
     <!-- Boot / connection status ─────────────────────────────────────────── -->
     <section class="card" id="bootcard">
       <div class="status" id="status">Booting…</div>
-      <div class="muted" id="build">build: block-6-export</div>
+      <div class="muted" id="build">build: block-7-polish</div>
     </section>
 
   </main>

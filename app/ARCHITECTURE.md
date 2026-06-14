@@ -44,7 +44,11 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 - [x] **Block 4** — Stripe checkout → `subscription_active` via Railway webhook
 - [x] **Block 5** — Dashboard: KPI cards + filters + sortable universe table
 - [x] **Block 6** — client-side CSV + XLSX export of the current filtered view
-- [ ] **Block 7** — polish: welcome state, empty/error states, mobile, tests
+- [x] **Block 7** — welcome banner (webhook-race polling), empty state, mobile polish
+
+**Phase 1 complete.** Remaining before public launch: fill the universe
+(`screener.py --push-supabase`), end-to-end test the paid flow, then link `/app`
+from the landing nav and drop the `noindex`.
 
 > Block 6 note: export is client-side (no server, no secrets) — it dumps the
 > current filtered/sorted rows incl. the full `data` jsonb fields. The richly

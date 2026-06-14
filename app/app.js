@@ -14,7 +14,14 @@
     account: $("account"), planline: $("planline"),
     accessmsg: $("accessmsg"), hint: $("hint"), bootcard: $("bootcard"),
     upgrade: $("upgrade"),
+    welcomebanner: $("welcomebanner"), welcometext: $("welcometext"),
   };
+
+  // Post-checkout return: getfinscan.com/app/?welcome=1
+  let isWelcome = new URLSearchParams(location.search).has("welcome");
+  function clearWelcomeParam() {
+    if (isWelcome) { history.replaceState(null, "", location.pathname); isWelcome = false; }
+  }
 
   const show = (el) => el && el.removeAttribute("hidden");
   const hide = (el) => el && el.setAttribute("hidden", "");
@@ -97,11 +104,42 @@
     if (btn) startCheckout(btn.dataset.plan, btn);
   });
 
+  async function isActive(userId) {
+    const { data } = await sb
+      .from("profiles").select("subscription_active")
+      .eq("id", userId).maybeSingle();
+    return !!(data && data.subscription_active);
+  }
+
+  // After Stripe checkout the webhook flips subscription_active asynchronously,
+  // so on ?welcome the profile may still read inactive for a few seconds. Poll.
+  async function handleWelcome(session, alreadyActive) {
+    show(els.welcomebanner);
+    if (alreadyActive) {
+      set(els.welcometext, "🎉 You're in — your subscription is active. Full universe unlocked.");
+      clearWelcomeParam();
+      return;
+    }
+    set(els.welcometext, "Activating your subscription… this can take a few seconds.");
+    for (let i = 0; i < 6; i++) {
+      await new Promise((r) => setTimeout(r, 2500));
+      if (await isActive(session.user.id)) {
+        clearWelcomeParam();
+        render(session);   // re-render: planline + full universe
+        return;
+      }
+    }
+    set(els.welcometext,
+      "Payment received. Activation is taking longer than usual — refresh in a minute, " +
+      "or email finscan.ai@gmail.com if it persists.");
+  }
+
   // ── Render per session ─────────────────────────────────────────────────────
   async function render(session) {
     if (!session) {
       els.who.textContent = "guest";
       hide(els.signout); hide(els.account); show(els.auth); hide(els.bootcard);
+      hide(els.welcomebanner);
       window.Dashboard && window.Dashboard.hide();
       return;
     }
@@ -109,11 +147,7 @@
     els.who.textContent = session.user.email || "signed in";
     show(els.signout); hide(els.auth); show(els.account); hide(els.bootcard);
 
-    // Plan: read own profile (RLS allows own row only).
-    const { data: prof } = await sb
-      .from("profiles").select("subscription_active, subscription_plan")
-      .eq("id", session.user.id).maybeSingle();
-    const active = prof && prof.subscription_active;
+    const active = await isActive(session.user.id);
     set(els.planline, active
       ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
       : 'Free preview — top 3 only. Upgrade to unlock the full universe.');
@@ -123,6 +157,8 @@
     // Universe table (RLS decides how many rows come back).
     set(els.accessmsg, "Loading universe…");
     window.Dashboard.load(sb);
+
+    if (isWelcome) handleWelcome(session, active);
   }
 
   // ── Boot ───────────────────────────────────────────────────────────────────
