@@ -15,7 +15,12 @@
     accessmsg: $("accessmsg"), hint: $("hint"), bootcard: $("bootcard"),
     upgrade: $("upgrade"),
     welcomebanner: $("welcomebanner"), welcometext: $("welcometext"),
+    picker: $("picker"), picks: $("picks"), pq: $("pq"),
+    pmenu: $("pmenu"), pickmsg: $("pickmsg"),
   };
+
+  const MAX_PICKS = 3;
+  let PICKS = [];          // current free-tier picks (≤3 symbols)
 
   // Post-checkout return: getfinscan.com/app/?welcome=1
   let isWelcome = new URLSearchParams(location.search).has("welcome");
@@ -104,12 +109,97 @@
     if (btn) startCheckout(btn.dataset.plan, btn);
   });
 
-  async function isActive(userId) {
+  async function getProfile(userId) {
     const { data } = await sb
-      .from("profiles").select("subscription_active")
+      .from("profiles").select("subscription_active, free_picks")
       .eq("id", userId).maybeSingle();
-    return !!(data && data.subscription_active);
+    return {
+      active: !!(data && data.subscription_active),
+      picks: (data && data.free_picks) || [],
+    };
   }
+  async function isActive(userId) {
+    return (await getProfile(userId)).active;
+  }
+
+  // ── Free preview: pick up to 3 stocks of your own choice ───────────────────
+  function renderPicks() {
+    els.picks.innerHTML = PICKS.map((s) =>
+      '<span class="pchip">' + s +
+      '<button data-rm="' + s + '" title="Remove">×</button></span>').join("");
+    els.picks.querySelectorAll("button[data-rm]").forEach((b) =>
+      b.addEventListener("click", () => removePick(b.dataset.rm)));
+
+    const full = PICKS.length >= MAX_PICKS;
+    els.pq.disabled = full;
+    els.pq.placeholder = full
+      ? "3 of 3 chosen — remove one to swap"
+      : "Search a ticker or company to add…";
+    els.pickmsg.textContent = PICKS.length
+      ? PICKS.length + " of " + MAX_PICKS + " chosen."
+      : "";
+    if (full) closeMenu();
+  }
+
+  function closeMenu() { els.pmenu.hidden = true; els.pmenu.innerHTML = ""; }
+
+  async function savePicks(session) {
+    const { error } = await sb
+      .from("profiles").update({ free_picks: PICKS }).eq("id", session.user.id);
+    if (error) {
+      els.pickmsg.innerHTML = '<span class="err">✗ ' + error.message + "</span>";
+      return;
+    }
+    renderPicks();
+    window.Dashboard.load(sb, { mode: "free" });  // RLS now returns the picked rows
+  }
+
+  function addPick(sym, session) {
+    sym = sym.toUpperCase();
+    if (PICKS.includes(sym) || PICKS.length >= MAX_PICKS) return;
+    PICKS.push(sym);
+    els.pq.value = ""; closeMenu();
+    savePicks(session);
+  }
+  function removePick(sym, session) {
+    PICKS = PICKS.filter((s) => s !== sym);
+    savePicks(session || currentSession);
+  }
+
+  let searchTimer = null, currentSession = null;
+  async function runSearch() {
+    const raw = els.pq.value.trim();
+    const q = raw.replace(/[^a-z0-9 .-]/gi, "");   // keep the PostgREST filter safe
+    if (!q) { closeMenu(); return; }
+    const { data, error } = await sb
+      .from("universe_catalog")
+      .select("symbol, name, category")
+      .or("symbol.ilike.*" + q + "*,name.ilike.*" + q + "*")
+      .limit(8);
+    if (error) return;
+    const rows = (data || []).filter((r) => !PICKS.includes(r.symbol));
+    if (!rows.length) {
+      els.pmenu.innerHTML = '<div class="pmenu-item none">No match.</div>';
+      els.pmenu.hidden = false;
+      return;
+    }
+    els.pmenu.innerHTML = rows.map((r) =>
+      '<div class="pmenu-item" data-add="' + r.symbol + '">' +
+      '<span class="ps">' + r.symbol + '</span>' +
+      '<span class="pn">' + (r.name || "") + '</span>' +
+      '<span class="pc">' + (r.category || "") + "</span></div>").join("");
+    els.pmenu.hidden = false;
+    els.pmenu.querySelectorAll("[data-add]").forEach((el) =>
+      el.addEventListener("click", () => addPick(el.dataset.add, currentSession)));
+  }
+
+  els.pq.addEventListener("input", () => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(runSearch, 200);
+  });
+  document.addEventListener("click", (e) => {
+    if (!els.picker.contains(e.target)) closeMenu();
+  });
 
   // After Stripe checkout the webhook flips subscription_active asynchronously,
   // so on ?welcome the profile may still read inactive for a few seconds. Poll.
@@ -139,24 +229,29 @@
     if (!session) {
       els.who.textContent = "guest";
       hide(els.signout); hide(els.account); show(els.auth); hide(els.bootcard);
-      hide(els.welcomebanner);
+      hide(els.welcomebanner); hide(els.picker);
       window.Dashboard && window.Dashboard.hide();
       return;
     }
 
+    currentSession = session;
     els.who.textContent = session.user.email || "signed in";
     show(els.signout); hide(els.auth); show(els.account); hide(els.bootcard);
 
-    const active = await isActive(session.user.id);
+    const prof = await getProfile(session.user.id);
+    const active = prof.active;
+    PICKS = prof.picks.slice(0, MAX_PICKS);
+
     set(els.planline, active
       ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
-      : 'Free preview — top 3 only. Upgrade to unlock the full universe.');
-    if (active) hide(els.upgrade); else show(els.upgrade);
-    els.hint.textContent = active ? "" : "Free tier shows the 3 highest-scoring stocks.";
+      : 'Free preview — choose up to 3 stocks. Upgrade to unlock the full universe.');
+    if (active) { hide(els.upgrade); hide(els.picker); }
+    else        { show(els.upgrade); show(els.picker); renderPicks(); }
+    els.hint.textContent = "";
 
     // Universe table (RLS decides how many rows come back).
     set(els.accessmsg, "Loading universe…");
-    window.Dashboard.load(sb);
+    window.Dashboard.load(sb, { mode: active ? "full" : "free" });
 
     if (isWelcome) handleWelcome(session, active);
   }

@@ -111,6 +111,44 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
 .vbadge.v-under{background:rgba(249,115,22,.14);color:var(--orange);}
 .vbadge.v-weak {background:rgba(239,68,68,.14);color:var(--red);}
 
+/* ── free-pick picker (Block 8) ────────────────────────────────────────────── */
+.picks{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0;}
+.pchip{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:700;
+  color:var(--green); background:rgba(16,220,138,.12);
+  border:1px solid rgba(16,220,138,.32); border-radius:20px; padding:6px 8px 6px 12px;
+}
+.pchip button{
+  border:none; background:rgba(255,255,255,.08); color:var(--white);
+  width:18px; height:18px; border-radius:50%; cursor:pointer;
+  font-size:12px; line-height:1; display:grid; place-items:center;
+}
+.pchip button:hover{background:var(--red);}
+.picksearch{position:relative;margin-top:14px;max-width:420px;}
+.picksearch input{
+  width:100%; font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--white);
+  background:var(--bg1); border:1px solid rgba(255,255,255,.12);
+  border-radius:10px; padding:11px 14px;
+}
+.picksearch input:focus{outline:none;border-color:var(--green);}
+.picksearch input:disabled{opacity:.5;cursor:not-allowed;}
+.pmenu{
+  position:absolute; left:0; right:0; top:calc(100% + 6px); z-index:20;
+  background:var(--bg2); border:1px solid rgba(16,220,138,.24); border-radius:10px;
+  overflow:hidden; box-shadow:0 12px 32px rgba(0,0,0,.45);
+}
+.pmenu-item{
+  display:flex; align-items:baseline; gap:10px; padding:10px 14px; cursor:pointer;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.pmenu-item:last-child{border-bottom:none;}
+.pmenu-item:hover{background:rgba(16,220,138,.08);}
+.pmenu-item .ps{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--white);}
+.pmenu-item .pn{font-size:13px;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pmenu-item .pc{font-size:11px;color:var(--dim);}
+.pmenu-item.none{color:var(--dim);cursor:default;}
+
 /* ── welcome banner + empty state + mobile (Block 7) ───────────────────────── */
 .card.welcome{
   border-color:rgba(16,220,138,.4);

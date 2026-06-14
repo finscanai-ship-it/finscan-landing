@@ -33,9 +33,16 @@ The anon key is *meant* to be in the browser. Security comes from **RLS policies
 hiding the key. The service_role key bypasses RLS — it lives only on the server.
 
 ## Access model
-- **Free tier:** anonymous or signed-in, no active sub → sees **3 stocks** (the "Try 3 free").
+- **Anonymous (not signed in):** sees the **top 3 by rank** (a no-login taster).
+- **Signed-in free:** picks **up to 3 stocks of their own choice** — stored in
+  `profiles.free_picks`; RLS returns exactly those rows. The picker searches a
+  public `universe_catalog` view (symbol/name/category only — no scores leak).
 - **Paid:** `profiles.subscription_active = true` → RLS unlocks the full universe.
 - The current license-key system stays for the CLI/Pro tier; web access is Supabase-based.
+
+> Security: a free user can `UPDATE` only the `free_picks` column of their own row
+> (enforced by a Postgres column-level `GRANT`, not just RLS) — they can never flip
+> `subscription_active`. Only the service_role key (server/webhook) can.
 
 ## Build blocks (this is Block 1)
 - [x] **Block 1** — stack decision, scaffold, deploy pipeline (this commit)
@@ -45,10 +52,15 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 - [x] **Block 5** — Dashboard: KPI cards + filters + sortable universe table
 - [x] **Block 6** — client-side CSV + XLSX export of the current filtered view
 - [x] **Block 7** — welcome banner (webhook-race polling), empty state, mobile polish
+- [x] **Block 8** — free tier = pick-your-own 3 (catalog view + `free_picks` + column grant)
 
 **Phase 1 complete.** Remaining before public launch: fill the universe
 (`screener.py --push-supabase`), end-to-end test the paid flow, then link `/app`
 from the landing nav and drop the `noindex`.
+
+> Block 8 migration: re-run `app/schema.sql` in Supabase → SQL Editor (it's
+> idempotent — adds `free_picks`, the column grant, the new `free_preview` policy,
+> and the `universe_catalog` view; leaves existing data untouched).
 
 > Block 6 note: export is client-side (no server, no secrets) — it dumps the
 > current filtered/sorted rows incl. the full `data` jsonb fields. The richly

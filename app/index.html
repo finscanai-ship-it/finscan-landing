@@ -52,6 +52,20 @@
       <p class="muted" id="hint"></p>
     </section>
 
+    <!-- Free preview: pick your own 3 stocks ──────────────────────────────── -->
+    <section class="card" id="picker" hidden>
+      <h1>Choose your free preview</h1>
+      <p class="sub">Pick up to <b>3 stocks</b> to unlock their full FinScan score
+        and metrics below. Subscribe any time to see all 1,000+.</p>
+      <div class="picks" id="picks"></div>
+      <div class="picksearch">
+        <input id="pq" type="search" autocomplete="off"
+               placeholder="Search a ticker or company to add…">
+        <div class="pmenu" id="pmenu" hidden></div>
+      </div>
+      <p class="muted" id="pickmsg"></p>
+    </section>
+
     <!-- Signed-in: the scored universe ────────────────────────────────────── -->
     <section id="dashboard" hidden>
       <div class="card empty-state" id="emptystate" hidden>
@@ -61,7 +75,7 @@
       </div>
       <div class="kpis" id="kpis"></div>
       <div class="card nopad" id="tablecard">
-        <div class="filters">
+        <div class="filters" id="filters">
           <input id="q" type="search" placeholder="Search symbol or name…">
           <select id="fcat"><option value="">All categories</option></select>
           <select id="fverdict">
@@ -89,7 +103,7 @@
     <!-- Boot / connection status ─────────────────────────────────────────── -->
     <section class="card" id="bootcard">
       <div class="status" id="status">Booting…</div>
-      <div class="muted" id="build">build: block-7-polish</div>
+      <div class="muted" id="build">build: block-8-free-picks</div>
     </section>
 
   </main>

@@ -208,7 +208,8 @@
   }
 
   window.Dashboard = {
-    async load(sb) {
+    async load(sb, opts) {
+      const free = (opts && opts.mode) === "free";
       const msg = $("accessmsg");
       try {
         ROWS = await fetchAll(sb);
@@ -219,8 +220,11 @@
       $("dashboard").removeAttribute("hidden");
 
       const empty = ROWS.length === 0;
-      $("emptystate").hidden = !empty;
-      $("kpis").hidden = empty;
+      // Free mode: the picker card carries the messaging, so KPIs/filters and the
+      // generic "no stocks yet" empty-state stay hidden; we just list the picks.
+      $("emptystate").hidden = free ? true : !empty;
+      $("kpis").hidden = free || empty;
+      $("filters").hidden = free;
       $("tablecard").hidden = empty;
       if (empty) {
         if (msg) msg.innerHTML = "";
@@ -229,7 +233,7 @@
 
       if (msg) msg.innerHTML =
         '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") + ".</span>";
-      renderKPIs();
+      if (!free) renderKPIs();
       renderHead();
       wireFilters();
       applyFilters();
