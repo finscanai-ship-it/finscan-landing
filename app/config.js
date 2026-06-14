@@ -6,4 +6,6 @@
 window.FINSCAN_CONFIG = {
   SUPABASE_URL: "https://vwcbaqdlnyxwxaxovxnd.supabase.co",
   SUPABASE_ANON_KEY: "sb_publishable_5C7EX-oKpfPJsj3bBjk0Fg_TIe_q4iJ",
+  // Railway Flask server (Stripe checkout + webhooks).
+  API_BASE: "https://web-production-01031.up.railway.app",
 };

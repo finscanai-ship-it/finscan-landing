@@ -41,7 +41,7 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 - [x] **Block 1** — stack decision, scaffold, deploy pipeline (this commit)
 - [x] **Block 2** — `universe` + `profiles` tables, RLS, owner push (`--push-supabase`)
 - [x] **Block 3** — magic-link auth + RLS-gated access state (free sees 3, sub sees all)
-- [ ] **Block 4** — Stripe checkout → account → `subscription_active` (Railway webhook)
+- [x] **Block 4** — Stripe checkout → `subscription_active` via Railway webhook
 - [ ] **Block 5** — Dashboard: full-universe table + filters + KPI cards + charts
 - [ ] **Block 6** — Excel/CSV export endpoint (reuse `_export_excel` on Railway)
 - [ ] **Block 7** — Free-tier (3 stocks) + tests + polish
@@ -90,3 +90,24 @@ Magic-link login won't redirect correctly until the URLs are allow-listed:
    for testing. For volume, wire **Resend SMTP** (already used for license emails) under
    Authentication → Emails → SMTP.
 3. No password is ever entered — `signInWithOtp` sends a one-click link.
+
+## Block 4 — Stripe checkout (web flow)
+The browser never touches Stripe secrets. Flow:
+```
+[app] signed-in user clicks Upgrade
+   → POST {API_BASE}/web/create-checkout  (Bearer = Supabase access token, {plan})
+   → [Railway] verifies token via Supabase /auth/v1/user, creates a Checkout
+     Session with client_reference_id = supabase_user_id, returns {url}
+   → browser redirects to Stripe; user pays (EARLY10/partner codes allowed)
+   → Stripe → [Railway] /webhook checkout.session.completed
+       client_reference_id is a UUID ⇒ WEB flow ⇒ set profiles.subscription_active=true
+       (NO licence key, NO zip email — that path is CLI-only)
+   → user returns to /app?welcome=1, RLS now unlocks the full universe
+```
+Cancellation: `customer.subscription.deleted` → `subscription_active=false`
+(mapped by `subscription.metadata.supabase_user_id`, fallback `stripe_customer_id`).
+
+**Railway env vars to add** (Railway → Variables; values from `server/.env.example`):
+`SUPABASE_URL`, `SUPABASE_SERVICE_KEY` (sb_secret_…), `SUPABASE_ANON_KEY`
+(sb_publishable_…), optionally `WEB_SUCCESS_URL` / `WEB_CANCEL_URL`.
+Also add the **`customer.subscription.deleted`** event to the Stripe webhook.

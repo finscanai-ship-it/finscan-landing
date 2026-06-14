@@ -13,6 +13,7 @@
     sendlink: $("sendlink"), authmsg: $("authmsg"),
     account: $("account"), planline: $("planline"),
     accessmsg: $("accessmsg"), hint: $("hint"), bootcard: $("bootcard"),
+    upgrade: $("upgrade"),
   };
 
   const show = (el) => el && el.removeAttribute("hidden");
@@ -64,6 +65,38 @@
     await sb.auth.signOut();
   });
 
+  // ── Stripe checkout (Block 4) ──────────────────────────────────────────────
+  async function startCheckout(plan, btn) {
+    const api = cfg.API_BASE;
+    if (!api) { alert("API_BASE not set in config.js"); return; }
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = "Redirecting…";
+    try {
+      const { data: { session } } = await sb.auth.getSession();
+      const resp = await fetch(api + "/web/create-checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + session.access_token,
+        },
+        body: JSON.stringify({ plan }),
+      });
+      const j = await resp.json();
+      if (j.url) { window.location.href = j.url; return; }
+      throw new Error(j.error || "checkout failed");
+    } catch (e) {
+      set(els.hint, '<span class="err">✗ ' + e.message + "</span>");
+      btn.disabled = false;
+      btn.textContent = orig;
+    }
+  }
+
+  els.upgrade.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-plan]");
+    if (btn) startCheckout(btn.dataset.plan, btn);
+  });
+
   // ── Render per session ─────────────────────────────────────────────────────
   async function render(session) {
     if (!session) {
@@ -84,6 +117,7 @@
     set(els.planline, active
       ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
       : 'Free preview — upgrade to unlock the full universe.');
+    if (active) hide(els.upgrade); else show(els.upgrade);
 
     // Prove RLS: how many rows can this user actually read?
     const { count, error } = await sb
@@ -104,7 +138,6 @@
   sb.auth.getSession().then(({ data: { session } }) => render(session));
   sb.auth.onAuthStateChange((_event, session) => render(session));
 
-  // TODO Block 4: "Upgrade" button → Stripe checkout (Railway) → subscription_active.
   // TODO Block 5: fetch universe rows → sortable/filterable table + KPI cards.
   // TODO Block 6: "Export Excel" → Railway endpoint with current filter.
 })();
