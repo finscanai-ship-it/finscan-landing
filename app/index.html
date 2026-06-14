@@ -47,10 +47,37 @@
       <p class="muted" id="hint"></p>
     </section>
 
+    <!-- Signed-in: the scored universe ────────────────────────────────────── -->
+    <section id="dashboard" hidden>
+      <div class="kpis" id="kpis"></div>
+      <div class="card nopad">
+        <div class="filters">
+          <input id="q" type="search" placeholder="Search symbol or name…">
+          <select id="fcat"><option value="">All categories</option></select>
+          <select id="fverdict">
+            <option value="">All verdicts</option>
+            <option>Outperforming</option>
+            <option>Performing</option>
+            <option>Neutral</option>
+            <option>Underperforming</option>
+            <option>Weak</option>
+          </select>
+          <input id="fscore" type="number" min="0" max="100" placeholder="Min score">
+          <span class="rowcount" id="rowcount"></span>
+        </div>
+        <div class="tablewrap">
+          <table class="utable" id="utable">
+            <thead id="uhead"></thead>
+            <tbody id="ubody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
     <!-- Boot / connection status ─────────────────────────────────────────── -->
     <section class="card" id="bootcard">
       <div class="status" id="status">Booting…</div>
-      <div class="muted" id="build">build: block-4-checkout</div>
+      <div class="muted" id="build">build: block-5-dashboard</div>
     </section>
 
   </main>
@@ -58,6 +85,7 @@
   <!-- Supabase JS client (no build step) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="config.js"></script>
+  <script src="dashboard.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

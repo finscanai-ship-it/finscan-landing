@@ -101,8 +101,8 @@
   async function render(session) {
     if (!session) {
       els.who.textContent = "guest";
-      hide(els.signout); hide(els.account); show(els.auth);
-      hide(els.bootcard);
+      hide(els.signout); hide(els.account); show(els.auth); hide(els.bootcard);
+      window.Dashboard && window.Dashboard.hide();
       return;
     }
 
@@ -116,28 +116,18 @@
     const active = prof && prof.subscription_active;
     set(els.planline, active
       ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
-      : 'Free preview — upgrade to unlock the full universe.');
+      : 'Free preview — top 3 only. Upgrade to unlock the full universe.');
     if (active) hide(els.upgrade); else show(els.upgrade);
+    els.hint.textContent = active ? "" : "Free tier shows the 3 highest-scoring stocks.";
 
-    // Prove RLS: how many rows can this user actually read?
-    const { count, error } = await sb
-      .from("universe").select("*", { count: "exact", head: true });
-    if (error) {
-      set(els.accessmsg, '<span class="warn">⚠ ' + error.message + "</span>");
-      els.hint.textContent = "";
-      return;
-    }
-    set(els.accessmsg,
-      '<span class="ok">✓ You can view <b>' + count + '</b> stock' + (count === 1 ? "" : "s") + '.</span>');
-    els.hint.textContent = active
-      ? "The sortable universe table lands here in Block 5."
-      : "Free tier shows the top 3. Stripe checkout → full access comes in Block 4.";
+    // Universe table (RLS decides how many rows come back).
+    set(els.accessmsg, "Loading universe…");
+    window.Dashboard.load(sb);
   }
 
   // ── Boot ───────────────────────────────────────────────────────────────────
   sb.auth.getSession().then(({ data: { session } }) => render(session));
   sb.auth.onAuthStateChange((_event, session) => render(session));
 
-  // TODO Block 5: fetch universe rows → sortable/filterable table + KPI cards.
   // TODO Block 6: "Export Excel" → Railway endpoint with current filter.
 })();

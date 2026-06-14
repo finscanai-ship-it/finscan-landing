@@ -42,7 +42,7 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 - [x] **Block 2** — `universe` + `profiles` tables, RLS, owner push (`--push-supabase`)
 - [x] **Block 3** — magic-link auth + RLS-gated access state (free sees 3, sub sees all)
 - [x] **Block 4** — Stripe checkout → `subscription_active` via Railway webhook
-- [ ] **Block 5** — Dashboard: full-universe table + filters + KPI cards + charts
+- [x] **Block 5** — Dashboard: KPI cards + filters + sortable universe table
 - [ ] **Block 6** — Excel/CSV export endpoint (reuse `_export_excel` on Railway)
 - [ ] **Block 7** — Free-tier (3 stocks) + tests + polish
 

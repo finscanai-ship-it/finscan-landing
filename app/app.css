@@ -1,7 +1,7 @@
 /* FinScan Web App — Phase 1 scaffold styles. Reuses the brand palette. */
 :root{
   --green:#10dc8a; --bg1:#0a1015; --bg2:#0d1620; --amber:#fbbf24;
-  --red:#ef4444; --white:#f0f4f8; --muted:#8b95a0; --dim:#5a6671;
+  --orange:#f97316; --red:#ef4444; --white:#f0f4f8; --muted:#8b95a0; --dim:#5a6671;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 body{
@@ -56,3 +56,56 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
 }
 .authform input:focus{outline:none;border-color:var(--green);}
 .upgrade{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+
+/* ── dashboard: KPIs + filters + table (Block 5) ───────────────────────────── */
+.card.nopad{padding:0;overflow:hidden;}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.kpi{
+  background:var(--bg2); border:1px solid rgba(16,220,138,.16);
+  border-radius:14px; padding:18px 20px;
+}
+.kpi-l{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.kpi-v{font-family:'JetBrains Mono',monospace;font-size:24px;font-weight:700;margin-top:6px;}
+@media(max-width:720px){.kpis{grid-template-columns:repeat(2,1fr);}}
+
+.filters{
+  display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+  padding:16px 18px; border-bottom:1px solid rgba(255,255,255,.06);
+}
+.filters input,.filters select{
+  font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--white);
+  background:var(--bg1); border:1px solid rgba(255,255,255,.12);
+  border-radius:8px; padding:9px 12px;
+}
+.filters input:focus,.filters select:focus{outline:none;border-color:var(--green);}
+.filters #q{flex:1;min-width:200px;}
+.filters #fscore{width:120px;}
+.rowcount{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--dim);}
+
+.tablewrap{overflow-x:auto;max-height:70vh;overflow-y:auto;}
+.utable{width:100%;border-collapse:collapse;font-size:13px;}
+.utable thead th{
+  position:sticky; top:0; z-index:1; background:var(--bg2);
+  font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; color:var(--muted);
+  text-align:left; padding:12px 14px; white-space:nowrap; cursor:pointer;
+  border-bottom:1px solid rgba(16,220,138,.18); user-select:none;
+}
+.utable thead th:hover{color:var(--white);}
+.utable td{
+  padding:10px 14px; border-bottom:1px solid rgba(255,255,255,.05);
+  font-family:'JetBrains Mono',monospace; white-space:nowrap;
+}
+.utable td.num,.utable th.num{text-align:right;font-variant-numeric:tabular-nums;}
+.utable td.sym{font-weight:700;color:var(--white);}
+.utable tbody tr:hover{background:rgba(16,220,138,.04);}
+.utable td.empty{text-align:center;color:var(--dim);padding:28px;font-family:'Plus Jakarta Sans',sans-serif;}
+
+.vbadge{
+  display:inline-block; padding:3px 9px; border-radius:20px;
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:700;
+}
+.vbadge.v-out  {background:rgba(16,220,138,.16);color:var(--green);}
+.vbadge.v-perf {background:rgba(16,220,138,.10);color:#7fe9c0;}
+.vbadge.v-neut {background:rgba(251,191,36,.14);color:var(--amber);}
+.vbadge.v-under{background:rgba(249,115,22,.14);color:var(--orange);}
+.vbadge.v-weak {background:rgba(239,68,68,.14);color:var(--red);}
