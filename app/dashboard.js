@@ -19,6 +19,7 @@
     { k: "name",           label: "Name",                  src: "row" },
     { k: "verdict",        label: "Verdict",               src: "row" },
     { k: "score",          label: "Score",    num: true,  src: "row" },
+    { k: "data_flag",      label: "Note",                  src: "data" },
     { k: "last_price",     label: "Price",    num: true,  src: "row", money: true },
     { k: "pe_ttm",         label: "P/E",      num: true,  src: "data" },
     { k: "peg_ttm",        label: "PEG",      num: true,  src: "data" },
@@ -155,6 +156,10 @@
         if (c.k === "verdict")
           return '<td><span class="vbadge ' + (VERDICT_CLASS[v] || "") + '">' +
                  (v || "—") + "</span></td>";
+        if (c.k === "data_flag")
+          return v ? '<td><span class="note ' +
+                     (v === "Limited data" ? "note-warn" : "") + '">' + v + "</span></td>"
+                   : '<td class="num">—</td>';
         if (c.k === "symbol") return '<td class="sym">' + fmt(v, c) + "</td>";
         return "<td" + (c.num ? ' class="num"' : "") + ">" + fmt(v, c) + "</td>";
       }).join("") + "</tr>"
