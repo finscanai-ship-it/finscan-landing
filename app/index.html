@@ -18,17 +18,37 @@
     <div class="wm">Fin<b>Scan</b></div>
     <div class="spacer"></div>
     <div class="who" id="who">—</div>
+    <button class="btn ghost" id="signout" hidden>Sign out</button>
   </header>
 
   <main class="wrap">
-    <div class="card">
-      <h1>Dashboard</h1>
-      <p class="sub">Phase 1 scaffold. The scored universe table, filters and Excel export
-        land here in Block 5. Right now this page only verifies the deploy pipeline and the
-        Supabase connection.</p>
+
+    <!-- Signed-out: magic-link login ─────────────────────────────────────── -->
+    <section class="card" id="auth" hidden>
+      <h1>Sign in</h1>
+      <p class="sub">Enter your email and we'll send you a one-click sign-in link.
+        No password needed.</p>
+      <form class="authform" id="authform">
+        <input type="email" id="email" placeholder="you@email.com" autocomplete="email" required>
+        <button class="btn" type="submit" id="sendlink">Send link</button>
+      </form>
+      <div class="status" id="authmsg" hidden></div>
+    </section>
+
+    <!-- Signed-in: account + access state ────────────────────────────────── -->
+    <section class="card" id="account" hidden>
+      <h1>Your access</h1>
+      <p class="sub" id="planline">Checking your plan…</p>
+      <div class="status" id="accessmsg">Loading universe…</div>
+      <p class="muted" id="hint"></p>
+    </section>
+
+    <!-- Boot / connection status ─────────────────────────────────────────── -->
+    <section class="card" id="bootcard">
       <div class="status" id="status">Booting…</div>
-      <div class="muted" id="build">build: block-1-scaffold</div>
-    </div>
+      <div class="muted" id="build">build: block-3-auth</div>
+    </section>
+
   </main>
 
   <!-- Supabase JS client (no build step) -->

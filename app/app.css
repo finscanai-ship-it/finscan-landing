@@ -33,3 +33,25 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
 }
 .status .ok{color:var(--green);} .status .warn{color:var(--amber);} .status .err{color:var(--red);}
 .muted{color:var(--dim);font-size:12px;margin-top:24px;font-family:'JetBrains Mono',monospace;}
+
+/* ── buttons + auth form (Block 3) ─────────────────────────────────────────── */
+.btn{
+  font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:14px;
+  color:var(--bg1); background:var(--green); border:none; cursor:pointer;
+  padding:11px 20px; border-radius:10px; white-space:nowrap;
+}
+.btn:hover{filter:brightness(1.08);}
+.btn:disabled{opacity:.55;cursor:default;}
+.btn.ghost{
+  background:transparent; color:var(--muted);
+  border:1px solid rgba(255,255,255,.14); padding:7px 14px; font-size:13px;
+}
+.btn.ghost:hover{color:var(--white);border-color:rgba(16,220,138,.4);}
+.authform{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap;}
+.authform input{
+  flex:1; min-width:220px;
+  font-family:'JetBrains Mono',monospace; font-size:14px; color:var(--white);
+  background:var(--bg1); border:1px solid rgba(255,255,255,.12);
+  border-radius:10px; padding:11px 14px;
+}
+.authform input:focus{outline:none;border-color:var(--green);}

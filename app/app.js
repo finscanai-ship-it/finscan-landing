@@ -1,69 +1,110 @@
-// FinScan Web App — Phase 1 scaffold.
-// Block 1: init Supabase client, verify connection, stub auth + data.
-// Later blocks fill the TODOs.
+// FinScan Web App — Phase 1.
+// Block 1: init Supabase client + connection test.
+// Block 3: magic-link auth + RLS-gated access state.
+// Later blocks fill the data table (5) and Stripe gating (4).
 
 (function () {
   "use strict";
 
-  const statusEl = document.getElementById("status");
-  const whoEl = document.getElementById("who");
+  const $ = (id) => document.getElementById(id);
+  const els = {
+    status: $("status"), who: $("who"), signout: $("signout"),
+    auth: $("auth"), authform: $("authform"), email: $("email"),
+    sendlink: $("sendlink"), authmsg: $("authmsg"),
+    account: $("account"), planline: $("planline"),
+    accessmsg: $("accessmsg"), hint: $("hint"), bootcard: $("bootcard"),
+  };
 
-  function line(html) { statusEl.innerHTML = html; }
+  const show = (el) => el && el.removeAttribute("hidden");
+  const hide = (el) => el && el.setAttribute("hidden", "");
+  const set = (el, html) => { if (el) el.innerHTML = html; };
 
   const cfg = window.FINSCAN_CONFIG || {};
   const configured =
-    cfg.SUPABASE_URL &&
-    !cfg.SUPABASE_URL.includes("YOUR-PROJECT") &&
-    cfg.SUPABASE_ANON_KEY &&
-    !cfg.SUPABASE_ANON_KEY.includes("YOUR-ANON");
+    cfg.SUPABASE_URL && !cfg.SUPABASE_URL.includes("YOUR-PROJECT") &&
+    cfg.SUPABASE_ANON_KEY && !cfg.SUPABASE_ANON_KEY.includes("YOUR-ANON");
 
   if (!window.supabase) {
-    line('<span class="err">✗ Supabase client failed to load (CDN blocked?).</span>');
+    set(els.status, '<span class="err">✗ Supabase client failed to load (CDN blocked?).</span>');
     return;
   }
-
   if (!configured) {
-    line(
-      '<span class="warn">⚠ Supabase not configured yet.</span><br>' +
-      'Paste your Project URL + anon key into <b>app/config.js</b> (see ARCHITECTURE.md → setup checklist).'
-    );
-    whoEl.textContent = "not connected";
+    set(els.status,
+      '<span class="warn">⚠ Supabase not configured.</span> Paste your Project URL + anon key into <b>app/config.js</b>.');
+    els.who.textContent = "not connected";
     return;
   }
 
-  // Client is ready. RLS on the server side is what actually protects data.
   const sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
   window.sb = sb; // handy during dev
 
-  async function boot() {
-    line('<span class="ok">✓ Supabase client initialised.</span> Checking session…');
-
-    // ── Auth (wired in Block 3) ───────────────────────────────────────────────
-    const { data: { session } } = await sb.auth.getSession();
-    if (session) {
-      whoEl.textContent = session.user.email || "signed in";
+  // ── Magic-link login ───────────────────────────────────────────────────────
+  els.authform.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const email = els.email.value.trim();
+    if (!email) return;
+    els.sendlink.disabled = true;
+    show(els.authmsg);
+    set(els.authmsg, "Sending…");
+    const { error } = await sb.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin + window.location.pathname },
+    });
+    els.sendlink.disabled = false;
+    if (error) {
+      set(els.authmsg, '<span class="err">✗ ' + error.message + "</span>");
     } else {
-      whoEl.textContent = "guest";
+      set(els.authmsg,
+        '<span class="ok">✓ Check your inbox.</span> Click the link in the email to sign in. ' +
+        "You can close this tab.");
+    }
+  });
+
+  els.signout.addEventListener("click", async () => {
+    await sb.auth.signOut();
+  });
+
+  // ── Render per session ─────────────────────────────────────────────────────
+  async function render(session) {
+    if (!session) {
+      els.who.textContent = "guest";
+      hide(els.signout); hide(els.account); show(els.auth);
+      hide(els.bootcard);
+      return;
     }
 
-    // ── Connection smoke-test ─────────────────────────────────────────────────
-    // The `universe` table doesn't exist until Block 2 — a "relation does not
-    // exist" error here still proves we reached Supabase. Anything else = config issue.
-    const { error } = await sb.from("universe").select("symbol").limit(1);
-    if (!error) {
-      line('<span class="ok">✓ Connected — `universe` table reachable.</span> Ready for Block 5 (table UI).');
-    } else if (/does not exist|relation/i.test(error.message)) {
-      line('<span class="ok">✓ Connected to Supabase.</span> `universe` table not created yet — that\'s Block 2.');
-    } else {
-      line('<span class="warn">⚠ Reached Supabase but query failed:</span> ' + error.message);
+    els.who.textContent = session.user.email || "signed in";
+    show(els.signout); hide(els.auth); show(els.account); hide(els.bootcard);
+
+    // Plan: read own profile (RLS allows own row only).
+    const { data: prof } = await sb
+      .from("profiles").select("subscription_active, subscription_plan")
+      .eq("id", session.user.id).maybeSingle();
+    const active = prof && prof.subscription_active;
+    set(els.planline, active
+      ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
+      : 'Free preview — upgrade to unlock the full universe.');
+
+    // Prove RLS: how many rows can this user actually read?
+    const { count, error } = await sb
+      .from("universe").select("*", { count: "exact", head: true });
+    if (error) {
+      set(els.accessmsg, '<span class="warn">⚠ ' + error.message + "</span>");
+      els.hint.textContent = "";
+      return;
     }
+    set(els.accessmsg,
+      '<span class="ok">✓ You can view <b>' + count + '</b> stock' + (count === 1 ? "" : "s") + '.</span>');
+    els.hint.textContent = active
+      ? "The sortable universe table lands here in Block 5."
+      : "Free tier shows the top 3. Stripe checkout → full access comes in Block 4.";
   }
 
-  boot().catch((e) =>
-    line('<span class="err">✗ Unexpected error: ' + (e && e.message) + '</span>')
-  );
+  // ── Boot ───────────────────────────────────────────────────────────────────
+  sb.auth.getSession().then(({ data: { session } }) => render(session));
+  sb.auth.onAuthStateChange((_event, session) => render(session));
 
-  // TODO Block 3: signIn(email) via magic link; onAuthStateChange → re-render.
-  // TODO Block 5: fetch universe rows → render sortable/filterable table + KPI cards.
-  // TODO Block 6: "Export Excel" → call Railway endpoint with current filter.
+  // TODO Block 4: "Upgrade" button → Stripe checkout (Railway) → subscription_active.
+  // TODO Block 5: fetch universe rows → sortable/filterable table + KPI cards.
+  // TODO Block 6: "Export Excel" → Railway endpoint with current filter.
 })();

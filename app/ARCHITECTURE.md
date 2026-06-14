@@ -40,7 +40,7 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 ## Build blocks (this is Block 1)
 - [x] **Block 1** — stack decision, scaffold, deploy pipeline (this commit)
 - [x] **Block 2** — `universe` + `profiles` tables, RLS, owner push (`--push-supabase`)
-- [ ] **Block 3** — Supabase Auth (login) + RLS gating
+- [x] **Block 3** — magic-link auth + RLS-gated access state (free sees 3, sub sees all)
 - [ ] **Block 4** — Stripe checkout → account → `subscription_active` (Railway webhook)
 - [ ] **Block 5** — Dashboard: full-universe table + filters + KPI cards + charts
 - [ ] **Block 6** — Excel/CSV export endpoint (reuse `_export_excel` on Railway)
@@ -79,3 +79,14 @@ landing/app/
    symbol, then deletes rows older than this run (drops stocks that left the universe).
    Core columns (symbol/name/score/verdict/category/sector/price/mcap) are queryable;
    the full row lives in `data` jsonb for the Excel export and detail views.
+
+## Block 3 — auth setup (one-time, in Supabase dashboard)
+Magic-link login won't redirect correctly until the URLs are allow-listed:
+1. Supabase → **Authentication → URL Configuration**:
+   - **Site URL**: `https://getfinscan.com/app/`
+   - **Redirect URLs** — add both: `https://getfinscan.com/app/` and (for local testing)
+     the `file://…/landing/app/index.html` path or a localhost server URL.
+2. Email auth is on by default. The built-in mailer is rate-limited (~few/hour) — fine
+   for testing. For volume, wire **Resend SMTP** (already used for license emails) under
+   Authentication → Emails → SMTP.
+3. No password is ever entered — `signInWithOtp` sends a one-click link.
