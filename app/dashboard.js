@@ -39,6 +39,7 @@
 
   let ROWS = [];
   let VIEW = [];                       // current filtered + sorted rows (for export)
+  let SB = null;                       // supabase client (for the export auth token)
   let sortKey = "rank", sortDir = 1;   // 1 asc, -1 desc
   let wired = false;
 
@@ -83,14 +84,34 @@
     downloadBlob("﻿" + lines.join("\r\n"), "text/csv;charset=utf-8", "finscan_" + stamp() + ".csv");
   }
 
-  function exportXLSX() {
-    if (!window.XLSX) { exportCSV(); return; }   // graceful fallback
-    const recs = VIEW.map(flatten);
-    const header = exportHeader(recs);
-    const ws = XLSX.utils.json_to_sheet(recs, { header });
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "FinScan");
-    XLSX.writeFile(wb, "finscan_" + stamp() + ".xlsx");
+  // Server-side branded Excel (Simple View + Full Analysis). Falls back to CSV.
+  async function exportXLSX() {
+    const cfg = window.FINSCAN_CONFIG || {};
+    const api = cfg.API_BASE;
+    const btn = $("exp-xlsx");
+    if (!api || !SB) { exportCSV(); return; }
+    const orig = btn ? btn.textContent : "";
+    if (btn) { btn.disabled = true; btn.textContent = "Building…"; }
+    try {
+      const { data: { session } } = await SB.auth.getSession();
+      const resp = await fetch(api + "/web/export", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + (session ? session.access_token : ""),
+        },
+        body: JSON.stringify({ rows: VIEW.map(flatten) }),
+      });
+      if (!resp.ok) throw new Error("export " + resp.status);
+      const blob = await resp.blob();
+      downloadBlob(blob,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "finscan_" + stamp() + ".xlsx");
+    } catch (e) {
+      exportCSV();   // graceful fallback so the button never dead-ends
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = orig; }
+    }
   }
 
   const val = (row, c) =>
@@ -226,6 +247,7 @@
 
   window.Dashboard = {
     async load(sb, opts) {
+      SB = sb;
       const free = (opts && opts.mode) === "free";
       const msg = $("accessmsg");
       try {
