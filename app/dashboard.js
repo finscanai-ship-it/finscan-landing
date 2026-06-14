@@ -14,19 +14,28 @@
 
   // Table columns. src "row" = promoted column; src "data" = inside jsonb blob.
   const COLS = [
-    { k: "rank",           label: "#",        num: true,  src: "row" },
-    { k: "symbol",         label: "Symbol",                src: "row" },
-    { k: "name",           label: "Name",                  src: "row" },
-    { k: "verdict",        label: "Verdict",               src: "row" },
-    { k: "score",          label: "Score",    num: true,  src: "row" },
-    { k: "data_flag",      label: "Note",                  src: "data" },
-    { k: "last_price",     label: "Price",    num: true,  src: "row", money: true },
-    { k: "pe_ttm",         label: "P/E",      num: true,  src: "data" },
-    { k: "peg_ttm",        label: "PEG",      num: true,  src: "data" },
-    { k: "rev_growth_yoy", label: "Rev YoY",  num: true,  src: "data", pct: true },
-    { k: "analyst_signal", label: "Analyst",               src: "data" },
-    { k: "category",       label: "Category",              src: "row" },
+    { k: "rank",          label: "#",        num: true, src: "row" },
+    { k: "symbol",        label: "Symbol",              src: "row" },
+    { k: "name",          label: "Name",                src: "row" },
+    { k: "verdict",       label: "Verdict",             src: "row" },
+    { k: "score",         label: "Score",    num: true, src: "row" },
+    { k: "data_flag",     label: "Note",                src: "data" },
+    { k: "last_price",    label: "Price",    num: true, src: "row", money: true },
+    { k: "valuation",     label: "Valuation",     src: "data", cat: true },
+    { k: "growth",        label: "Growth",        src: "data", cat: true },
+    { k: "profitability", label: "Profitability", src: "data", cat: true },
+    { k: "health",        label: "Health",        src: "data", cat: true },
+    { k: "upside",        label: "Upside %", num: true, src: "data", pct: true },
+    { k: "category",      label: "Category",      src: "row" },
   ];
+
+  // Categorical badge colour by sentiment (no buy/sell wording).
+  const CAT_GOOD = new Set(["Very Cheap", "Cheap", "High Growth", "Growing",
+    "Highly Profitable", "Profitable", "Very Healthy", "Healthy"]);
+  const CAT_BAD = new Set(["Expensive", "Very Expensive", "Declining",
+    "Loss-Making", "High Debt"]);
+  const catClass = (v) =>
+    CAT_GOOD.has(v) ? "cat-good" : CAT_BAD.has(v) ? "cat-bad" : "cat-mid";
 
   let ROWS = [];
   let VIEW = [];                       // current filtered + sorted rows (for export)
@@ -160,6 +169,9 @@
           return v ? '<td><span class="note ' +
                      (v === "Limited data" ? "note-warn" : "") + '">' + v + "</span></td>"
                    : '<td class="num">—</td>';
+        if (c.cat)
+          return (!v || v === "-") ? '<td class="num">—</td>'
+            : '<td><span class="cat ' + catClass(v) + '">' + v + "</span></td>";
         if (c.k === "symbol") return '<td class="sym">' + fmt(v, c) + "</td>";
         return "<td" + (c.num ? ' class="num"' : "") + ">" + fmt(v, c) + "</td>";
       }).join("") + "</tr>"

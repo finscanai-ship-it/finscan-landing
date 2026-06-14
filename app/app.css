@@ -118,6 +118,14 @@ h1{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
 }
 .note.note-warn{background:rgba(251,191,36,.14);color:var(--amber);}
 
+.cat{
+  display:inline-block; padding:2px 8px; border-radius:6px; white-space:nowrap;
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; font-weight:600;
+}
+.cat-good{background:rgba(16,220,138,.12);color:var(--green);}
+.cat-mid {background:rgba(251,191,36,.12);color:var(--amber);}
+.cat-bad {background:rgba(239,68,68,.12);color:var(--red);}
+
 /* ── free-pick picker (Block 8) ────────────────────────────────────────────── */
 .picks{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0;}
 .pchip{
