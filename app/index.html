@@ -64,6 +64,8 @@
           </select>
           <input id="fscore" type="number" min="0" max="100" placeholder="Min score">
           <span class="rowcount" id="rowcount"></span>
+          <button class="btn ghost sm" id="exp-csv">CSV</button>
+          <button class="btn ghost sm" id="exp-xlsx">Excel</button>
         </div>
         <div class="tablewrap">
           <table class="utable" id="utable">
@@ -77,13 +79,15 @@
     <!-- Boot / connection status ─────────────────────────────────────────── -->
     <section class="card" id="bootcard">
       <div class="status" id="status">Booting…</div>
-      <div class="muted" id="build">build: block-5-dashboard</div>
+      <div class="muted" id="build">build: block-6-export</div>
     </section>
 
   </main>
 
   <!-- Supabase JS client (no build step) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- SheetJS for client-side .xlsx export -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="config.js"></script>
   <script src="dashboard.js"></script>
   <script src="app.js"></script>

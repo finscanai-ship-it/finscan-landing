@@ -28,8 +28,60 @@
   ];
 
   let ROWS = [];
+  let VIEW = [];                       // current filtered + sorted rows (for export)
   let sortKey = "rank", sortDir = 1;   // 1 asc, -1 desc
   let wired = false;
+
+  // Core columns first, then every field from the data jsonb (full dataset).
+  const CORE_KEYS = ["rank", "symbol", "name", "verdict", "score",
+                     "last_price", "market_cap", "category", "sector"];
+
+  function flatten(r) {
+    const base = {};
+    CORE_KEYS.forEach((k) => { base[k] = r[k]; });
+    return Object.assign(base, r.data || {});
+  }
+
+  function exportHeader(records) {
+    const seen = new Set(CORE_KEYS);
+    const extra = [];
+    records.forEach((rec) =>
+      Object.keys(rec).forEach((k) => { if (!seen.has(k)) { seen.add(k); extra.push(k); } }));
+    return CORE_KEYS.concat(extra);
+  }
+
+  function downloadBlob(content, mime, filename) {
+    const url = URL.createObjectURL(new Blob([content], { type: mime }));
+    const a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function stamp() { return new Date().toISOString().slice(0, 10); }
+
+  function exportCSV() {
+    const recs = VIEW.map(flatten);
+    const header = exportHeader(recs);
+    const esc = (v) => {
+      if (v === null || v === undefined) return "";
+      const s = String(v);
+      return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+    };
+    const lines = [header.join(",")].concat(
+      recs.map((rec) => header.map((h) => esc(rec[h])).join(",")));
+    downloadBlob("﻿" + lines.join("\r\n"), "text/csv;charset=utf-8", "finscan_" + stamp() + ".csv");
+  }
+
+  function exportXLSX() {
+    if (!window.XLSX) { exportCSV(); return; }   // graceful fallback
+    const recs = VIEW.map(flatten);
+    const header = exportHeader(recs);
+    const ws = XLSX.utils.json_to_sheet(recs, { header });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "FinScan");
+    XLSX.writeFile(wb, "finscan_" + stamp() + ".xlsx");
+  }
 
   const val = (row, c) =>
     c.src === "data" ? (row.data ? row.data[c.k] : null) : row[c.k];
@@ -138,6 +190,7 @@
       return av < bv ? -sortDir : av > bv ? sortDir : 0;
     });
 
+    VIEW = rows;
     renderTable(rows);
     $("rowcount").textContent = rows.length + " / " + ROWS.length + " shown";
   }
@@ -149,6 +202,8 @@
       cats.map((c) => '<option value="' + c + '">' + c + "</option>").join("");
     ["q", "fcat", "fverdict", "fscore"].forEach((id) =>
       $(id).addEventListener("input", applyFilters));
+    $("exp-csv").addEventListener("click", exportCSV);
+    $("exp-xlsx").addEventListener("click", exportXLSX);
     wired = true;
   }
 

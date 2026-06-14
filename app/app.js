@@ -129,5 +129,4 @@
   sb.auth.getSession().then(({ data: { session } }) => render(session));
   sb.auth.onAuthStateChange((_event, session) => render(session));
 
-  // TODO Block 6: "Export Excel" → Railway endpoint with current filter.
 })();

@@ -43,8 +43,13 @@ hiding the key. The service_role key bypasses RLS — it lives only on the serve
 - [x] **Block 3** — magic-link auth + RLS-gated access state (free sees 3, sub sees all)
 - [x] **Block 4** — Stripe checkout → `subscription_active` via Railway webhook
 - [x] **Block 5** — Dashboard: KPI cards + filters + sortable universe table
-- [ ] **Block 6** — Excel/CSV export endpoint (reuse `_export_excel` on Railway)
-- [ ] **Block 7** — Free-tier (3 stocks) + tests + polish
+- [x] **Block 6** — client-side CSV + XLSX export of the current filtered view
+- [ ] **Block 7** — polish: welcome state, empty/error states, mobile, tests
+
+> Block 6 note: export is client-side (no server, no secrets) — it dumps the
+> current filtered/sorted rows incl. the full `data` jsonb fields. The richly
+> formatted Excel (charts, data bars) stays the CLI artifact; a server-side
+> branded export can come later if customers ask for it.
 
 ## Setup checklist for Tiago (do before Block 2)
 1. Create a Supabase project at supabase.com (pick EU region — closest to Lisbon/customers).
