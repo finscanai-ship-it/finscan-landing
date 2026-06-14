@@ -743,6 +743,11 @@
     /* Mode swap: hide ticker fields when in checklist mode */
     .ec-modal[data-mode="checklist"] .ec-tickers { display: none; }
     .ec-modal[data-mode="checklist"] .ec-badge { display: none; }
+    /* Scan mode now opens the web app instead of emailing a report */
+    a#ecAppLink { display: block; text-align: center; text-decoration: none; }
+    .ec-modal[data-mode="scan"] .ec-form { display: none; }
+    .ec-modal[data-mode="checklist"] #ecAppLink { display: none; }
+    .ec-modal.done #ecAppLink { display: none; }
     @media (max-width: 600px) {
       .ec-modal { padding: 28px 22px; }
       .ec-title { font-size: 1.25rem; }
@@ -1792,8 +1797,9 @@
     <button class="ec-close" onclick="closeEC()" aria-label="Close">×</button>
     <span class="ec-badge">🚀 Free trial · No card</span>
     <div class="ec-icon">🎯</div>
-    <h2 class="ec-title" id="ecTitle">Try FinScan free — analyze 3 stocks now</h2>
-    <p class="ec-sub" id="ecSub">Pick 3 tickers and we'll send you a full FinScan report — same scoring, same verdicts, same data we use across 4,000+ stocks. <strong style="color:#00D084;">One free scan per email.</strong></p>
+    <h2 class="ec-title" id="ecTitle">Try FinScan free</h2>
+    <p class="ec-sub" id="ecSub">Sign in and pick any 3 stocks you want. You get their full FinScan score and verdict, pulled from the same data we run across the whole universe. <strong style="color:#00D084;">No card needed.</strong></p>
+    <a class="ec-submit" id="ecAppLink" href="/app/">Open the free app</a>
     <form class="ec-form" id="ecForm" onsubmit="submitEC(event)">
       <div class="ec-tickers" id="ecTickers">
         <input type="text" id="ecT1" maxlength="6" placeholder="AAPL" autocomplete="off"/>
@@ -1803,7 +1809,7 @@
       <input class="ec-input" type="email" id="ecEmail" placeholder="your@email.com" required autocomplete="email"/>
       <button class="ec-submit" type="submit" id="ecBtn">Run my free scan 🚀</button>
     </form>
-    <p class="ec-disclaimer">No spam, unsubscribe anytime. Report arrives within a few minutes.</p>
+    <p class="ec-disclaimer" id="ecDisclaimer">No card required. You can pick your 3 in under a minute.</p>
     <div class="ec-switch">
       Just want the checklist?
       <a id="ecSwitchLink" onclick="toggleECMode()">Get the free 10-point PDF instead →</a>
@@ -1811,7 +1817,7 @@
     <div class="ec-success">
       <div style="font-size:2.6rem;">✅</div>
       <h3 style="color:#00D084;margin:8px 0;" id="ecSuccessTitle">Check your inbox!</h3>
-      <p style="color:#9CA3AF;font-size:.95rem;" id="ecSuccessSub">Your free scan is being processed. If you don't see it within 5 min, check spam.</p>
+      <p style="color:#9CA3AF;font-size:.95rem;" id="ecSuccessSub">Your checklist is on its way. If you don't see it in a few minutes, check spam.</p>
     </div>
   </div>
 </div>
@@ -1910,17 +1916,17 @@
       // → switch to checklist mode
       modal.setAttribute('data-mode', 'checklist');
       document.getElementById('ecTitle').textContent = 'Grab your free checklist';
-      document.getElementById('ecSub').innerHTML = 'Get our <strong style="color:#00D084;">10-Point Stock Screening Checklist</strong> — the framework FinScan uses to find undervalued stocks. Free PDF, no spam.';
+      document.getElementById('ecSub').innerHTML = 'Get our <strong style="color:#00D084;">10-Point Stock Screening Checklist</strong>, the same framework FinScan uses to find undervalued stocks. Free PDF, no spam.';
       document.getElementById('ecBtn').textContent = 'Send me the checklist 📥';
-      document.getElementById('ecSuccessSub').textContent = "Your checklist is on its way. If you don't see it in 2 min, check spam.";
-      document.getElementById('ecSwitchLink').textContent = '← Actually, run my free 3-stock scan instead';
+      document.getElementById('ecDisclaimer').textContent = 'No spam. Unsubscribe anytime.';
+      document.getElementById('ecSuccessSub').textContent = "Your checklist is on its way. If you don't see it in a few minutes, check spam.";
+      document.getElementById('ecSwitchLink').textContent = '← Actually, let me try the free app';
       ['ecT1','ecT2','ecT3'].forEach(id => document.getElementById(id).removeAttribute('required'));
     } else {
       modal.setAttribute('data-mode', 'scan');
-      document.getElementById('ecTitle').textContent = 'Try FinScan free — analyze 3 stocks now';
-      document.getElementById('ecSub').innerHTML = "Pick 3 tickers and we'll send you a full FinScan report — same scoring, same verdicts, same data we use across 4,000+ stocks. <strong style=\"color:#00D084;\">One free scan per email.</strong>";
-      document.getElementById('ecBtn').textContent = 'Run my free scan 🚀';
-      document.getElementById('ecSuccessSub').textContent = "Your free scan is being processed. If you don't see it within 5 min, check spam.";
+      document.getElementById('ecTitle').textContent = 'Try FinScan free';
+      document.getElementById('ecSub').innerHTML = "Sign in and pick any 3 stocks you want. You get their full FinScan score and verdict, pulled from the same data we run across the whole universe. <strong style=\"color:#00D084;\">No card needed.</strong>";
+      document.getElementById('ecDisclaimer').textContent = 'No card required. You can pick your 3 in under a minute.';
       document.getElementById('ecSwitchLink').textContent = 'Get the free 10-point PDF instead →';
     }
   };
