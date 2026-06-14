@@ -483,6 +483,25 @@
       color: var(--muted); font-weight: 500;
     }
 
+    /* web dashboard mockup (mirrors getfinscan.com/app) */
+    .appmock { background: #0a1015; padding: 16px; }
+    .appmock-kpis { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 12px; }
+    .appmock-kpi { background: #0d1620; border: 1px solid rgba(16,220,138,.16); border-radius: 10px; padding: 10px 12px; }
+    .appmock-kpi span { display: block; font-size: .6rem; color: #8b95a0; text-transform: uppercase; letter-spacing: .5px; }
+    .appmock-kpi b { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; color: #f0f4f8; }
+    .appmock-filters { display: flex; gap: 8px; align-items: center; margin-bottom: 10px; flex-wrap: wrap; }
+    .appmock-search { flex: 1; min-width: 140px; background: #0d1620; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 7px 10px; font-size: .72rem; color: #5a6671; font-family: 'JetBrains Mono', monospace; }
+    .appmock-sel { background: #0d1620; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; padding: 7px 10px; font-size: .72rem; color: #8b95a0; font-family: 'JetBrains Mono', monospace; }
+    .appmock-spacer { flex: 1; }
+    .appmock-btn { background: transparent; border: 1px solid rgba(255,255,255,.14); border-radius: 8px; padding: 6px 12px; font-size: .72rem; color: #8b95a0; font-weight: 700; }
+    .appmock-table { width: 100%; border-collapse: collapse; font-size: .74rem; }
+    .appmock-table th { text-align: left; color: #8b95a0; font-weight: 700; padding: 8px 10px; border-bottom: 1px solid rgba(16,220,138,.18); white-space: nowrap; }
+    .appmock-table th.r, .appmock-table td.r { text-align: right; font-variant-numeric: tabular-nums; }
+    .appmock-table td { padding: 8px 10px; border-bottom: 1px solid rgba(255,255,255,.05); font-family: 'JetBrains Mono', monospace; color: #c7ced6; white-space: nowrap; }
+    .appmock-table td.sym { font-weight: 700; color: #fff; }
+    .appmock-note { font-family: 'Plus Jakarta Sans', sans-serif; font-size: .66rem; color: #5a6671; }
+    .appmock-note.warn { color: #fbbf24; }
+
     /* excel mockup */
     .excel-wrap { background: #1D2432; padding: 0; }
     .excel-tabs {
@@ -643,6 +662,7 @@
       .mockup-wrap { gap: 32px; }
       .window { border-radius: 10px; }
       .window-bar { padding: 8px 12px; }
+      .appmock-kpis { grid-template-columns: repeat(2,1fr); }
       .window-bar .dot { width: 9px; height: 9px; }
       .window-bar .title { font-size: .65rem; }
       .xls { font-size: .62rem; }
@@ -862,7 +882,7 @@
 <!-- URGENCY BAR -->
 <div class="urgency-bar" id="urgencyBar">
   <span class="promo-tag" data-i18n="urgency_tag">⚡ Limited Offer</span>
-  <span data-i18n="urgency_text">Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in</span>
+  <span data-i18n="urgency_text">Launch offer — save <strong>10% OFF</strong> any plan — expires in</span>
   <span class="countdown" id="countdown">60:00</span>
   <a href="#pricing" id="claimLink" style="color:#FBBF24;font-weight:800;text-decoration:underline;white-space:nowrap;" data-i18n="urgency_claim">Claim now →</a>
 </div>
@@ -871,12 +891,54 @@
 <section class="mockup-section">
   <div class="section-label shiny-text" data-i18n="mockup_label">Live Preview</div>
   <h2 class="section-title" data-i18n="mockup_title">See it in action</h2>
-  <p class="section-sub" data-i18n="mockup_sub">Real output. Real data.<br/>A sneak peek of what lands in your Excel file after every scan.</p>
+  <p class="section-sub" data-i18n="mockup_sub">Real scores. Real data.<br/>The dashboard you explore the moment you sign in, with one-click Excel and CSV export.</p>
   <p style="margin-top:-22px;margin-bottom:24px;color:#6B7280;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;text-align:center;font-weight:600;">
     Sample run · Data as of May 8, 2026 close
   </p>
 
   <div class="mockup-wrap">
+
+    <!-- ── WEB DASHBOARD (the app) ───────────────────────────────── -->
+    <div>
+      <div class="window">
+        <div class="window-bar">
+          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+          <div class="title">getfinscan.com/app</div>
+        </div>
+        <div class="appmock">
+          <div class="appmock-kpis">
+            <div class="appmock-kpi"><span>Stocks</span><b>1,043</b></div>
+            <div class="appmock-kpi"><span>Outperforming</span><b>87</b></div>
+            <div class="appmock-kpi"><span>Avg score</span><b>52.3</b></div>
+            <div class="appmock-kpi"><span>Top pick</span><b>NVDA &middot; 88.4</b></div>
+          </div>
+          <div class="appmock-filters">
+            <span class="appmock-search">Search symbol or name&hellip;</span>
+            <span class="appmock-sel">All categories &#9662;</span>
+            <span class="appmock-sel">All verdicts &#9662;</span>
+            <span class="appmock-spacer"></span>
+            <span class="appmock-btn">CSV</span>
+            <span class="appmock-btn">Excel</span>
+          </div>
+          <table class="appmock-table">
+            <thead><tr>
+              <th>#</th><th>Symbol</th><th>Name</th><th>Verdict</th>
+              <th class="r">Score</th><th class="r">Price</th><th>Note</th>
+            </tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="sym">NVDA</td><td>NVIDIA Corporation</td><td><span class="badge b-sb">Outperforming</span></td><td class="r"><strong>88.4</strong></td><td class="r">$138.42</td><td><span class="appmock-note">&mdash;</span></td></tr>
+              <tr><td>2</td><td class="sym">META</td><td>Meta Platforms Inc.</td><td><span class="badge b-sb">Outperforming</span></td><td class="r"><strong>81.2</strong></td><td class="r">$645.10</td><td><span class="appmock-note">&mdash;</span></td></tr>
+              <tr><td>3</td><td class="sym">PLTR</td><td>Palantir Technologies</td><td><span class="badge b-b">Performing</span></td><td class="r"><strong>74.9</strong></td><td class="r">$28.50</td><td><span class="appmock-note">&mdash;</span></td></tr>
+              <tr><td>4</td><td class="sym">LMT</td><td>Lockheed Martin Corp.</td><td><span class="badge b-b">Performing</span></td><td class="r"><strong>68.3</strong></td><td class="r">$485.20</td><td><span class="appmock-note">&mdash;</span></td></tr>
+              <tr><td>5</td><td class="sym">MSFT</td><td>Microsoft Corporation</td><td><span class="badge b-b">Performing</span></td><td class="r"><strong>63.7</strong></td><td class="r">$478.30</td><td><span class="appmock-note">&mdash;</span></td></tr>
+              <tr><td>6</td><td class="sym">BAESY</td><td>BAE Systems plc</td><td><span class="badge b-w">Neutral</span></td><td class="r"><strong>57.1</strong></td><td class="r">$22.35</td><td><span class="appmock-note warn">Partial data</span></td></tr>
+              <tr><td>7</td><td class="sym">TSLA</td><td>Tesla Inc.</td><td><span class="badge b-w">Neutral</span></td><td class="r"><strong>41.5</strong></td><td class="r">$342.80</td><td><span class="appmock-note">&mdash;</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p class="mockup-caption">The dashboard you get the moment you sign in. Sortable, filterable, exportable.</p>
+    </div>
 
     <!-- ── EXCEL SIMPLE VIEW ─────────────────────────────────────── -->
     <div>
@@ -958,26 +1020,7 @@
           </div>
         </div>
       </div>
-      <p class="mockup-caption">Simple View — colour-coded verdicts and badges make it easy to spot opportunities at a glance</p>
-    </div>
-
-    <!-- ── VIDEO DEMO ─────────────────────────────────────────────── -->
-    <div style="max-width:840px;margin:0 auto;">
-      <div class="window">
-        <div class="window-bar">
-          <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
-          <div class="title">run_finscan.bat</div>
-        </div>
-        <div class="terminal-body" style="padding:0;min-height:auto;">
-          <video id="demoVideo" width="100%" autoplay muted loop playsinline
-                 poster="demo_poster.jpg"
-                 style="display:block;background:#0D1117;">
-            <source src="demo.mp4" type="video/mp4"/>
-            Your browser does not support HTML5 video.
-          </video>
-        </div>
-      </div>
-      <p class="mockup-caption">Watch FinScan run a full market scan — from launch to results in minutes</p>
+      <p class="mockup-caption">Export the full view to Excel or CSV. Colour-coded verdicts make opportunities easy to spot.</p>
     </div>
 
   </div>
@@ -1026,27 +1069,27 @@
 <section class="steps" id="how-it-works">
   <div class="section-label shiny-text" data-i18n="hiw_label">How It Works</div>
   <h2 class="section-title" data-i18n="hiw_title">Up and running in minutes</h2>
-  <p class="section-sub" data-i18n="hiw_sub">No installations, no configuration headaches. Just open and scan.</p>
+  <p class="section-sub" data-i18n="hiw_sub">No installs, no downloads, no licence files. Just sign in and explore.</p>
   <div class="steps-grid">
     <div class="step">
       <div class="step-num">1</div>
-      <h3 data-i18n="step1_h">Get Access</h3>
-      <p data-i18n="step1_p">Contact us by email. We send you a personalised licence key valid for your chosen period.</p>
+      <h3 data-i18n="step1_h">Sign in</h3>
+      <p data-i18n="step1_p">Enter your email and click the one-time link. No password, no install, nothing to download.</p>
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <h3 data-i18n="step2_h">Enter Your Key</h3>
-      <p data-i18n="step2_p">Open finscan.cfg in Notepad, paste your key. Done. Takes 30 seconds.</p>
+      <h3 data-i18n="step2_h">Explore free</h3>
+      <p data-i18n="step2_p">Pick any 3 stocks and unlock their full FinScan score and metrics right away.</p>
     </div>
     <div class="step">
       <div class="step-num">3</div>
-      <h3 data-i18n="step3_h">Run a Scan</h3>
-      <p data-i18n="step3_p">Double-click run_finscan.bat — pick from a menu: single stock, group, or full market scan.</p>
+      <h3 data-i18n="step3_h">Unlock everything</h3>
+      <p data-i18n="step3_p">Subscribe to see all 1,000+ scored stocks across 18 categories. Cancel anytime.</p>
     </div>
     <div class="step">
       <div class="step-num">4</div>
-      <h3 data-i18n="step4_h">Read the Results</h3>
-      <p data-i18n="step4_p">Open your Excel file in the output folder. Ranked, scored, and ready to act on.</p>
+      <h3 data-i18n="step4_h">Filter, sort, export</h3>
+      <p data-i18n="step4_p">Sort by score, filter by sector or verdict, export your view to Excel or CSV in one click.</p>
     </div>
   </div>
 </section>
@@ -1344,10 +1387,10 @@
       hero_btn1:'🚀 Request Access', hero_btn2:'See How It Works ↓',
       stat1:'Stocks Analysed', stat2:'Market Categories', stat3:'Data Points per Stock', stat4:'Data Sources',
       urgency_tag:'⚡ Limited Offer',
-      urgency_text:'Launch offer — save <strong>up to 40% OFF</strong> any plan — expires in',
+      urgency_text:'Launch offer — save <strong>10% OFF</strong> any plan — expires in',
       urgency_claim:'Claim now →',
       mockup_label:'Live Preview', mockup_title:'See it in action',
-      mockup_sub:'Real output. Real data.<br/>A sneak peek of what lands in your Excel file after every scan.',
+      mockup_sub:'Real scores. Real data.<br/>The dashboard you explore the moment you sign in, with one-click Excel and CSV export.',
       feat_label:'What You Get', feat_title:'Everything you need to<br/>find the right stocks',
       feat_sub:'FinScan combines three professional data sources into one simple Excel output — no coding, no dashboards, no subscriptions to juggle.',
       feat1_h:'Composite Scoring', feat1_p:'Every stock gets a score from 0 to 100 combining technicals, fundamentals, and analyst sentiment — so you always know what\'s worth your attention.',
@@ -1356,11 +1399,11 @@
       feat4_h:'Deep Fundamentals', feat4_p:'P/E, Forward P/E, EV/EBITDA, gross margin, FCF margin, revenue growth, debt/equity, ROE — pulled from Yahoo Finance and FMP.',
       feat5_h:'Analyst Intelligence', feat5_p:'Analyst consensus ratings, price targets, EPS beat history, insider ownership, and short float — sourced from Finviz in real time.',
       feat6_h:'Simple + Full View', feat6_p:'Two Excel sheets in every report: a Simple View with plain-English badges for quick decisions, and a Full Analysis sheet with all the raw data.',
-      hiw_label:'How It Works', hiw_title:'Up and running in minutes', hiw_sub:'No installations, no configuration headaches. Just open and scan.',
-      step1_h:'Get Access', step1_p:'Contact us by email. We send you a personalised licence key valid for your chosen period.',
-      step2_h:'Enter Your Key', step2_p:'Open finscan.cfg in Notepad, paste your key. Done. Takes 30 seconds.',
-      step3_h:'Run a Scan', step3_p:'Double-click run_finscan.bat — pick from a menu: single stock, group, or full market scan.',
-      step4_h:'Read the Results', step4_p:'Open your Excel file in the output folder. Ranked, scored, and ready to act on.',
+      hiw_label:'How It Works', hiw_title:'Up and running in minutes', hiw_sub:'No installs, no downloads, no licence files. Just sign in and explore.',
+      step1_h:'Sign in', step1_p:'Enter your email and click the one-time link. No password, no install, nothing to download.',
+      step2_h:'Explore free', step2_p:'Pick any 3 stocks and unlock their full FinScan score and metrics right away.',
+      step3_h:'Unlock everything', step3_p:'Subscribe to see all 1,000+ scored stocks across 18 categories. Cancel anytime.',
+      step4_h:'Filter, sort, export', step4_p:'Sort by score, filter by sector or verdict, export your view to Excel or CSV in one click.',
       score_label:'Scoring System', score_title:'One score. Full picture.',
       score_sub:'Every stock is rated 0–100. The verdict tells you exactly where it stands.',
       score_sb:'<strong>Outperforming</strong> — Score ≥ 75', score_b:'<strong>Performing</strong> — Score ≥ 60',
@@ -1397,10 +1440,10 @@
       hero_btn1:'🚀 Solicitar Acceso', hero_btn2:'Cómo Funciona ↓',
       stat1:'Acciones Analizadas', stat2:'Categorías de Mercado', stat3:'Datos por Acción', stat4:'Fuentes de Datos',
       urgency_tag:'⚡ Oferta Limitada',
-      urgency_text:'Oferta de lanzamiento — ahorra <strong>hasta un 40%</strong> en cualquier plan — expira en',
+      urgency_text:'Oferta de lanzamiento — ahorra <strong>10%</strong> en cualquier plan — expira en',
       urgency_claim:'Reclamar ahora →',
       mockup_label:'Vista Previa', mockup_title:'Míralo en acción',
-      mockup_sub:'Resultados reales. Datos reales.<br/>Un adelanto de lo que aparece en tu archivo Excel después de cada análisis.',
+      mockup_sub:'Puntuaciones reales. Datos reales.<br/>El panel que exploras nada más iniciar sesión, con exportación a Excel o CSV en un clic.',
       feat_label:'Lo Que Obtienes', feat_title:'Todo lo que necesitas para<br/>encontrar las acciones correctas',
       feat_sub:'FinScan combina tres fuentes de datos profesionales en un simple Excel — sin código, sin paneles, sin suscripciones adicionales.',
       feat1_h:'Puntuación Compuesta', feat1_p:'Cada acción recibe una puntuación de 0 a 100 que combina técnicos, fundamentales y sentimiento de analistas.',
@@ -1409,11 +1452,11 @@
       feat4_h:'Fundamentos Profundos', feat4_p:'P/E, P/E Futuro, EV/EBITDA, margen bruto, margen FCF, crecimiento de ingresos, deuda/capital, ROE.',
       feat5_h:'Inteligencia de Analistas', feat5_p:'Calificaciones de consenso, objetivos de precio, historial de batidas EPS, propiedad interna y flotación corta.',
       feat6_h:'Vista Simple + Completa', feat6_p:'Dos hojas Excel por informe: Vista Simple con etiquetas en lenguaje claro, y hoja de Análisis Completo con todos los datos.',
-      hiw_label:'Cómo Funciona', hiw_title:'En marcha en minutos', hiw_sub:'Sin instalaciones, sin complicaciones. Solo abre y escanea.',
-      step1_h:'Obtén Acceso', step1_p:'Contáctanos por email. Te enviamos una clave de licencia personalizada válida por el período elegido.',
-      step2_h:'Introduce Tu Clave', step2_p:'Abre finscan.cfg en el Bloc de notas, pega tu clave. Listo. Tarda 30 segundos.',
-      step3_h:'Ejecuta un Análisis', step3_p:'Haz doble clic en run_finscan.bat — elige en el menú: acción individual, grupo o análisis completo del mercado.',
-      step4_h:'Lee los Resultados', step4_p:'Abre tu archivo Excel en la carpeta de salida. Clasificados, puntuados y listos para actuar.',
+      hiw_label:'Cómo Funciona', hiw_title:'En marcha en minutos', hiw_sub:'Sin instalaciones, sin descargas, sin archivos de licencia. Solo inicia sesión y explora.',
+      step1_h:'Inicia sesión', step1_p:'Introduce tu email y pulsa el enlace de un solo uso. Sin contraseña, sin instalar, sin descargar nada.',
+      step2_h:'Explora gratis', step2_p:'Elige 3 acciones cualesquiera y desbloquea al instante su puntuación y métricas FinScan completas.',
+      step3_h:'Desbloquéalo todo', step3_p:'Suscríbete para ver las 1.000+ acciones puntuadas en 18 categorías. Cancela cuando quieras.',
+      step4_h:'Filtra, ordena, exporta', step4_p:'Ordena por puntuación, filtra por sector o veredicto y exporta tu vista a Excel o CSV con un clic.',
       score_label:'Sistema de Puntuación', score_title:'Una puntuación. Visión completa.',
       score_sub:'Cada acción recibe una nota de 0 a 100. El veredicto te dice exactamente dónde está.',
       score_sb:'<strong>Sobresaliente</strong> — Puntuación ≥ 75', score_b:'<strong>En Rendimiento</strong> — Puntuación ≥ 60',
@@ -1450,10 +1493,10 @@
       hero_btn1:'🚀 Zugang anfragen', hero_btn2:'Wie es funktioniert ↓',
       stat1:'Analysierte Aktien', stat2:'Marktkategorien', stat3:'Datenpunkte je Aktie', stat4:'Datenquellen',
       urgency_tag:'⚡ Begrenztes Angebot',
-      urgency_text:'Launch-Angebot — spare <strong>bis zu 40%</strong> auf jeden Plan — läuft ab in',
+      urgency_text:'Launch-Angebot — spare <strong>10%</strong> auf jeden Plan — läuft ab in',
       urgency_claim:'Jetzt sichern →',
       mockup_label:'Vorschau', mockup_title:'Sieh es in Aktion',
-      mockup_sub:'Echte Ergebnisse. Echte Daten.<br/>Ein Vorgeschmack auf das, was nach jedem Scan in deiner Excel-Datei landet.',
+      mockup_sub:'Echte Scores. Echte Daten.<br/>Das Dashboard, das du direkt nach der Anmeldung erkundest, mit Excel- und CSV-Export per Klick.',
       feat_label:'Was Du bekommst', feat_title:'Alles was du brauchst,<br/>um die richtigen Aktien zu finden',
       feat_sub:'FinScan kombiniert drei professionelle Datenquellen in einem einfachen Excel — kein Code, keine Dashboards, keine zusätzlichen Abos.',
       feat1_h:'Zusammengesetzter Score', feat1_p:'Jede Aktie erhält einen Score von 0 bis 100 aus Technik, Fundamentaldaten und Analystensentiment.',
@@ -1462,11 +1505,11 @@
       feat4_h:'Tiefgreifende Fundamentaldaten', feat4_p:'KGV, Forward-KGV, EV/EBITDA, Bruttomarge, FCF-Marge, Umsatzwachstum, Verschuldung, ROE.',
       feat5_h:'Analysten-Intelligenz', feat5_p:'Konsensratings, Kursziele, EPS-Übertrefferhistorie, Insiderbesitz und Leerverkaufsquote.',
       feat6_h:'Einfache + Vollständige Ansicht', feat6_p:'Zwei Excel-Blätter je Bericht: Einfache Ansicht mit klaren Badges und Vollanalyse-Blatt mit Rohdaten.',
-      hiw_label:'So funktioniert es', hiw_title:'In Minuten einsatzbereit', hiw_sub:'Keine Installation, keine Konfiguration. Einfach öffnen und scannen.',
-      step1_h:'Zugang erhalten', step1_p:'Kontaktiere uns per E-Mail. Wir senden dir einen persönlichen Lizenzschlüssel für deinen gewählten Zeitraum.',
-      step2_h:'Schlüssel eingeben', step2_p:'Öffne finscan.cfg im Editor, füge deinen Schlüssel ein. Fertig. Dauert 30 Sekunden.',
-      step3_h:'Scan starten', step3_p:'Doppelklick auf run_finscan.bat — wähle im Menü: einzelne Aktie, Gruppe oder Vollmarkt-Scan.',
-      step4_h:'Ergebnisse lesen', step4_p:'Öffne deine Excel-Datei im Ausgabeordner. Eingestuft, bewertet und bereit zum Handeln.',
+      hiw_label:'So funktioniert es', hiw_title:'In Minuten einsatzbereit', hiw_sub:'Keine Installation, kein Download, keine Lizenzdateien. Einfach anmelden und loslegen.',
+      step1_h:'Anmelden', step1_p:'E-Mail eingeben und auf den Einmal-Link klicken. Kein Passwort, keine Installation, kein Download.',
+      step2_h:'Kostenlos testen', step2_p:'Wähle 3 beliebige Aktien und schalte sofort ihren vollständigen FinScan-Score und die Kennzahlen frei.',
+      step3_h:'Alles freischalten', step3_p:'Abonniere und sieh alle 1.000+ bewerteten Aktien in 18 Kategorien. Jederzeit kündbar.',
+      step4_h:'Filtern, sortieren, exportieren', step4_p:'Nach Score sortieren, nach Sektor oder Verdikt filtern und deine Ansicht mit einem Klick als Excel oder CSV exportieren.',
       score_label:'Bewertungssystem', score_title:'Ein Score. Vollständiges Bild.',
       score_sub:'Jede Aktie wird von 0–100 bewertet. Das Urteil zeigt dir genau, wo sie steht.',
       score_sb:'<strong>Herausragend</strong> — Score ≥ 75', score_b:'<strong>Stark</strong> — Score ≥ 60',
@@ -1503,10 +1546,10 @@
       hero_btn1:'🚀 Demander l\'accès', hero_btn2:'Voir comment ça marche ↓',
       stat1:'Actions analysées', stat2:'Catégories de marché', stat3:'Points de données par action', stat4:'Sources de données',
       urgency_tag:'⚡ Offre limitée',
-      urgency_text:'Offre de lancement — économisez <strong>jusqu\'à 40%</strong> sur tout plan — expire dans',
+      urgency_text:'Offre de lancement — économisez <strong>10%</strong> sur tout plan — expire dans',
       urgency_claim:'Profiter maintenant →',
       mockup_label:'Aperçu', mockup_title:'Voyez-le en action',
-      mockup_sub:'Vrais résultats. Vraies données.<br/>Un aperçu de ce qui apparaît dans votre fichier Excel après chaque analyse.',
+      mockup_sub:'Vrais scores. Vraies données.<br/>Le tableau de bord que vous explorez dès la connexion, avec export Excel ou CSV en un clic.',
       feat_label:'Ce que vous obtenez', feat_title:'Tout ce qu\'il vous faut<br/>pour trouver les bonnes actions',
       feat_sub:'FinScan combine trois sources de données professionnelles en un Excel simple — pas de code, pas de tableaux de bord, pas d\'abonnements supplémentaires.',
       feat1_h:'Score Composite', feat1_p:'Chaque action reçoit un score de 0 à 100 combinant technique, fondamentaux et sentiment des analystes.',
@@ -1515,11 +1558,11 @@
       feat4_h:'Fondamentaux Approfondis', feat4_p:'P/E, Forward P/E, EV/EBITDA, marge brute, marge FCF, croissance des revenus, dette/fonds propres, ROE.',
       feat5_h:'Intelligence des Analystes', feat5_p:'Notations de consensus, objectifs de cours, historique des surprises EPS, participation interne et ventes à découvert.',
       feat6_h:'Vue Simple + Complète', feat6_p:'Deux feuilles Excel par rapport : une Vue Simple avec des badges en langage clair, et une feuille d\'Analyse Complète.',
-      hiw_label:'Comment ça marche', hiw_title:'Opérationnel en quelques minutes', hiw_sub:'Pas d\'installation, pas de configuration. Ouvrez et scannez.',
-      step1_h:'Obtenir l\'accès', step1_p:'Contactez-nous par e-mail. Nous vous envoyons une clé de licence personnalisée pour la période choisie.',
-      step2_h:'Entrer votre clé', step2_p:'Ouvrez finscan.cfg dans le Bloc-notes, collez votre clé. Terminé en 30 secondes.',
-      step3_h:'Lancer une analyse', step3_p:'Double-cliquez sur run_finscan.bat — choisissez dans le menu : action unique, groupe ou analyse complète du marché.',
-      step4_h:'Lire les résultats', step4_p:'Ouvrez votre fichier Excel dans le dossier de sortie. Classé, noté et prêt à l\'action.',
+      hiw_label:'Comment ça marche', hiw_title:'Opérationnel en quelques minutes', hiw_sub:'Pas d\'installation, pas de téléchargement, pas de fichier de licence. Connectez-vous et explorez.',
+      step1_h:'Connexion', step1_p:'Saisissez votre e-mail et cliquez sur le lien à usage unique. Sans mot de passe, sans installation, rien à télécharger.',
+      step2_h:'Explorer gratuitement', step2_p:'Choisissez 3 actions au choix et débloquez aussitôt leur score FinScan complet et leurs métriques.',
+      step3_h:'Tout débloquer', step3_p:'Abonnez-vous pour voir les 1 000+ actions notées dans 18 catégories. Annulable à tout moment.',
+      step4_h:'Filtrer, trier, exporter', step4_p:'Triez par score, filtrez par secteur ou verdict et exportez votre vue en Excel ou CSV en un clic.',
       score_label:'Système de notation', score_title:'Un score. Vision complète.',
       score_sub:'Chaque action est notée de 0 à 100. Le verdict vous dit exactement où elle en est.',
       score_sb:'<strong>Surperformant</strong> — Score ≥ 75', score_b:'<strong>Performant</strong> — Score ≥ 60',
@@ -1556,10 +1599,10 @@
       hero_btn1:'🚀 Pedir Acesso', hero_btn2:'Ver Como Funciona ↓',
       stat1:'Ações Analisadas', stat2:'Categorias de Mercado', stat3:'Dados por Ação', stat4:'Fontes de Dados',
       urgency_tag:'⚡ Oferta Limitada',
-      urgency_text:'Oferta de lançamento — poupe <strong>até 40%</strong> em qualquer plano — termina em',
+      urgency_text:'Oferta de lançamento — poupe <strong>10%</strong> em qualquer plano — termina em',
       urgency_claim:'Aproveitar agora →',
       mockup_label:'Pré-visualização', mockup_title:'Veja em ação',
-      mockup_sub:'Resultados reais. Dados reais.<br/>Uma amostra do que aparece no seu ficheiro Excel após cada scan.',
+      mockup_sub:'Pontuações reais. Dados reais.<br/>O dashboard que explora assim que faz login, com exportação para Excel ou CSV num clique.',
       feat_label:'O Que Obtém', feat_title:'Tudo o que precisa para<br/>encontrar as ações certas',
       feat_sub:'O FinScan combina três fontes de dados profissionais num Excel simples — sem código, sem dashboards, sem subscrições extra.',
       feat1_h:'Pontuação Composta', feat1_p:'Cada ação recebe uma pontuação de 0 a 100 combinando técnicos, fundamentais e sentimento de analistas.',
@@ -1568,11 +1611,11 @@
       feat4_h:'Fundamentais Aprofundados', feat4_p:'P/E, P/E Futuro, EV/EBITDA, margem bruta, margem FCF, crescimento de receita, dívida/capital, ROE.',
       feat5_h:'Inteligência de Analistas', feat5_p:'Ratings de consenso, alvos de preço, histórico de EPS acima do esperado, posse interna e posições curtas.',
       feat6_h:'Vista Simples + Completa', feat6_p:'Dois separadores Excel por relatório: Vista Simples com etiquetas em linguagem clara, e folha de Análise Completa.',
-      hiw_label:'Como Funciona', hiw_title:'Pronto em minutos', hiw_sub:'Sem instalações, sem configurações complicadas. Abra e scaneie.',
-      step1_h:'Obter Acesso', step1_p:'Contacte-nos por email. Enviamos-lhe uma chave de licença personalizada para o período escolhido.',
-      step2_h:'Introduzir a Chave', step2_p:'Abra o finscan.cfg no Bloco de Notas, cole a sua chave. Pronto. Demora 30 segundos.',
-      step3_h:'Executar um Scan', step3_p:'Clique duas vezes em run_finscan.bat — escolhe no menu: ação individual, grupo ou scan completo do mercado.',
-      step4_h:'Ler os Resultados', step4_p:'Abra o seu ficheiro Excel na pasta de saída. Classificado, pontuado e pronto para agir.',
+      hiw_label:'Como Funciona', hiw_title:'Pronto em minutos', hiw_sub:'Sem instalações, sem downloads, sem ficheiros de licença. Faça login e explore.',
+      step1_h:'Faça login', step1_p:'Introduza o seu email e clique no link de uso único. Sem palavra-passe, sem instalar, sem descarregar nada.',
+      step2_h:'Explore grátis', step2_p:'Escolha 3 ações à sua escolha e desbloqueie logo a pontuação e métricas FinScan completas.',
+      step3_h:'Desbloqueie tudo', step3_p:'Subscreva para ver as 1.000+ ações pontuadas nas 18 categorias. Cancele quando quiser.',
+      step4_h:'Filtre, ordene, exporte', step4_p:'Ordene por pontuação, filtre por setor ou veredicto e exporte a sua vista para Excel ou CSV num clique.',
       score_label:'Sistema de Pontuação', score_title:'Uma pontuação. Visão completa.',
       score_sub:'Cada ação é avaliada de 0 a 100. O veredicto diz-lhe exatamente onde está.',
       score_sb:'<strong>Em Destaque</strong> — Pontuação ≥ 75', score_b:'<strong>Em Performance</strong> — Pontuação ≥ 60',
