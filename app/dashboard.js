@@ -13,7 +13,7 @@
   };
 
   // Table columns. src "row" = promoted column; src "data" = inside jsonb blob.
-  const COLS = [
+  const SIMPLE_COLS = [
     { k: "rank",          label: "#",        num: true, src: "row" },
     { k: "symbol",        label: "Symbol",              src: "row" },
     { k: "name",          label: "Name",                src: "row" },
@@ -28,6 +28,51 @@
     { k: "upside",        label: "Upside %", num: true, src: "data", pct: true },
     { k: "category",      label: "Category",      src: "row" },
   ];
+
+  // Full Analysis — every metric (mirrors the Excel "Full Analysis" sheet).
+  const FULL_COLS = [
+    { k: "rank",            label: "#",            num: true, src: "row" },
+    { k: "symbol",          label: "Symbol",                  src: "row" },
+    { k: "name",            label: "Name",                    src: "row" },
+    { k: "score",           label: "Score",        num: true, src: "row" },
+    { k: "last_price",      label: "Price",        num: true, src: "row", money: true },
+    { k: "data_flag",       label: "Note",                    src: "data" },
+    { k: "peg_ttm",         label: "PEG",          num: true, src: "data" },
+    { k: "pe_ttm",          label: "P/E",          num: true, src: "data" },
+    { k: "pe_forward",      label: "Fwd P/E",      num: true, src: "data" },
+    { k: "ps_ratio",        label: "P/S",          num: true, src: "data" },
+    { k: "pb_ratio",        label: "P/B",          num: true, src: "data" },
+    { k: "ev_ebitda",       label: "EV/EBITDA",    num: true, src: "data" },
+    { k: "eps_beat",        label: "EPS Beat",                src: "data" },
+    { k: "eps_surprise_pct",label: "EPS Surprise %", num: true, src: "data", pct: true },
+    { k: "eps_growth_yoy",  label: "EPS Growth %", num: true, src: "data", pct: true },
+    { k: "rev_growth_yoy",  label: "Rev Growth %", num: true, src: "data", pct: true },
+    { k: "gross_margin",    label: "Gross Margin %", num: true, src: "data", pct: true },
+    { k: "oper_margin",     label: "Op Margin %",  num: true, src: "data", pct: true },
+    { k: "net_margin",      label: "Net Margin %", num: true, src: "data", pct: true },
+    { k: "roe",             label: "ROE %",        num: true, src: "data", pct: true },
+    { k: "roa",             label: "ROA %",        num: true, src: "data", pct: true },
+    { k: "fcf_margin",      label: "FCF Margin %", num: true, src: "data", pct: true },
+    { k: "debt_equity",     label: "Debt/Eq",      num: true, src: "data" },
+    { k: "current_ratio",   label: "Current Ratio",num: true, src: "data" },
+    { k: "div_yield",       label: "Div Yield %",  num: true, src: "data", pct: true },
+    { k: "target_price",    label: "Target $",     num: true, src: "data", money: true },
+    { k: "insider_own_pct", label: "Insider %",    num: true, src: "data", pct: true },
+    { k: "short_float_pct", label: "Short Float %",num: true, src: "data", pct: true },
+    { k: "earnings_date",   label: "Next Earnings",           src: "data" },
+    { k: "beta",            label: "Beta",         num: true, src: "data" },
+    { k: "trend",           label: "EMA Trend",               src: "data" },
+    { k: "macd_tag",        label: "MACD",                    src: "data" },
+    { k: "bb_signal",       label: "Bollinger",               src: "data" },
+    { k: "golden_cross",    label: "Golden Cross",            src: "data" },
+    { k: "rsi",             label: "RSI",          num: true, src: "data" },
+    { k: "pct_off_high",    label: "% off 52w High", num: true, src: "data", pct: true },
+    { k: "market_cap",      label: "Market Cap",   num: true, src: "row", big: true },
+    { k: "sector",          label: "Sector",                  src: "row" },
+  ];
+
+  let viewMode = "simple";                       // "simple" | "full"
+  const activeCols = () => (viewMode === "full" ? FULL_COLS : SIMPLE_COLS);
 
   // Categorical badge colour by sentiment (no buy/sell wording).
   const CAT_GOOD = new Set(["Very Cheap", "Cheap", "High Growth", "Growing",
@@ -117,11 +162,19 @@
   const val = (row, c) =>
     c.src === "data" ? (row.data ? row.data[c.k] : null) : row[c.k];
 
+  function fmtCap(n) {
+    if (n >= 1e12) return "$" + (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9)  return "$" + (n / 1e9).toFixed(2) + "B";
+    if (n >= 1e6)  return "$" + (n / 1e6).toFixed(2) + "M";
+    return "$" + n.toLocaleString();
+  }
+
   function fmt(v, c) {
     if (v === null || v === undefined || v === "") return "—";
     if (c.num) {
       const n = Number(v);
       if (!isFinite(n)) return "—";
+      if (c.big)   return fmtCap(n);
       if (c.money) return "$" + n.toLocaleString(undefined, { maximumFractionDigits: 2 });
       if (c.pct)   return n.toFixed(1) + "%";
       return n.toLocaleString(undefined, { maximumFractionDigits: 2 });
@@ -165,7 +218,7 @@
   }
 
   function renderHead() {
-    $("uhead").innerHTML = "<tr>" + COLS.map((c) => {
+    $("uhead").innerHTML = "<tr>" + activeCols().map((c) => {
       const arrow = c.k === sortKey ? (sortDir === 1 ? " ▲" : " ▼") : "";
       return '<th data-k="' + c.k + '"' + (c.num ? ' class="num"' : "") + ">" +
              c.label + arrow + "</th>";
@@ -180,8 +233,9 @@
   }
 
   function renderTable(rows) {
+    const cols = activeCols();
     $("ubody").innerHTML = rows.length ? rows.map((r) =>
-      "<tr>" + COLS.map((c) => {
+      "<tr>" + cols.map((c) => {
         const v = val(r, c);
         if (c.k === "verdict")
           return '<td><span class="vbadge ' + (VERDICT_CLASS[v] || "") + '">' +
@@ -197,7 +251,7 @@
         return "<td" + (c.num ? ' class="num"' : "") + ">" + fmt(v, c) + "</td>";
       }).join("") + "</tr>"
     ).join("")
-      : '<tr><td class="empty" colspan="' + COLS.length + '">No matches.</td></tr>';
+      : '<tr><td class="empty" colspan="' + cols.length + '">No matches.</td></tr>';
   }
 
   function applyFilters() {
@@ -214,7 +268,7 @@
       return true;
     });
 
-    const c = COLS.find((x) => x.k === sortKey);
+    const c = activeCols().find((x) => x.k === sortKey) || activeCols()[0];
     rows.sort((a, b) => {
       let av = val(a, c), bv = val(b, c);
       if (c.num) {
@@ -242,6 +296,16 @@
       $(id).addEventListener("input", applyFilters));
     $("exp-csv").addEventListener("click", exportCSV);
     $("exp-xlsx").addEventListener("click", exportXLSX);
+    document.querySelectorAll("#viewtabs .vtab").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (b.dataset.view === viewMode) return;
+        viewMode = b.dataset.view;
+        document.querySelectorAll("#viewtabs .vtab").forEach((x) =>
+          x.classList.toggle("active", x.dataset.view === viewMode));
+        if (!activeCols().some((c) => c.k === sortKey)) { sortKey = "rank"; sortDir = 1; }
+        renderHead();
+        applyFilters();
+      }));
     wired = true;
   }
 
