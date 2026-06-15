@@ -140,6 +140,31 @@
       .btn-primary { animation: none; box-shadow: 0 0 32px rgba(0,208,132,.5); }
     }
 
+    /* Silver glowing CTA — same treatment as .btn-primary but brushed-silver */
+    .btn-silver {
+      background: linear-gradient(135deg, #dfe5eb, #aab3bd);
+      color: #1a2128;
+      padding: 18px 44px; border-radius: 14px;
+      font-weight: 900; font-size: 1.15rem;
+      text-decoration: none; letter-spacing: .5px;
+      transition: transform .2s, filter .2s;
+      text-shadow: 0 1px 3px rgba(255,255,255,.4);
+      animation: btnGlowPulseSilver 2.2s ease-in-out infinite;
+    }
+    .btn-silver:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+      animation-play-state: paused;
+      box-shadow: 0 0 70px rgba(190,200,210,.75), 0 0 28px rgba(190,200,210,.55);
+    }
+    @keyframes btnGlowPulseSilver {
+      0%, 100% { box-shadow: 0 0 24px rgba(190,200,210,.4), 0 0 8px rgba(190,200,210,.3); }
+      50%      { box-shadow: 0 0 60px rgba(190,200,210,.8), 0 0 24px rgba(190,200,210,.55); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .btn-silver { animation: none; box-shadow: 0 0 32px rgba(190,200,210,.5); }
+    }
+
     .btn-secondary {
       background: transparent; color: var(--text);
       padding: 16px 36px; border-radius: 10px;
@@ -148,6 +173,8 @@
       transition: border-color .2s, background .2s;
     }
     .btn-secondary:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.04); }
+    .btn-secondary.btn-green { border-color: #00D084; color: var(--text); }
+    .btn-secondary.btn-green:hover { border-color: #00D084; background: rgba(0,208,132,.08); }
 
     /* ticker tape */
     .ticker-wrap {
@@ -837,11 +864,11 @@
 <section class="hero">
   <div class="hero-badge shiny-text" data-i18n="hero_badge">AI-Powered Stock Screener</div>
   <h1 data-i18n="hero_h1">Stop Guessing.<br/>Start <em>Scanning</em>.</h1>
-  <p data-i18n="hero_p">FinScan analyses hundreds of stocks across 18 market categories — combining technical signals, fundamental data, and analyst ratings into one clear score.</p>
+  <p data-i18n="hero_p">FinScan analyses hundreds of stocks across 18 market categories combining technical signals, fundamental data, and analyst ratings into one clear score.</p>
   <div class="hero-btns">
     <a class="btn-primary" href="#pricing" data-i18n="hero_btn1">🚀 Request Access</a>
-    <a class="btn-secondary" href="#" onclick="openFreeTrial();return false;" data-i18n="hero_btn3">🎯 Try for Free</a>
-    <a class="btn-secondary" href="#how-it-works" data-i18n="hero_btn2">See How It Works ↓</a>
+    <a class="btn-silver" href="#" onclick="openFreeTrial();return false;" data-i18n="hero_btn3">🎯 Try for Free</a>
+    <a class="btn-secondary btn-green" href="#how-it-works" data-i18n="hero_btn2">See How It Works ↓</a>
   </div>
 
   <!-- TICKER inside hero -->
@@ -1391,7 +1418,7 @@
       nav_features:'Features', nav_pricing:'Pricing', nav_cta:'Get Access',
       hero_badge:'AI-Powered Stock Screener',
       hero_h1:'Stop Guessing.<br/>Start <em>Scanning</em>.',
-      hero_p:'FinScan analyses hundreds of stocks across 18 market categories — combining technical signals, fundamental data, and analyst ratings into one clear score.',
+      hero_p:'FinScan analyses hundreds of stocks across 18 market categories combining technical signals, fundamental data, and analyst ratings into one clear score.',
       hero_btn1:'🚀 Request Access', hero_btn2:'See How It Works ↓', hero_btn3:'🎯 Try for Free',
       stat1:'Stocks Analysed', stat2:'Market Categories', stat3:'Data Points per Stock', stat4:'Data Sources',
       urgency_tag:'⚡ Limited Offer',
