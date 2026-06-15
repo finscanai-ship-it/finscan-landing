@@ -1,10 +1,11 @@
 name: Refresh market data
 
-# Daily at 22:30 UTC (~30 min after US market close).
+# Monthly: 1st of each month at 22:30 UTC (~30 min after US market close).
+# Landing prices are intentionally a fixed monthly snapshot, not a daily feed.
 # Also run on push to main (for fast iteration when the script changes).
 on:
   schedule:
-    - cron: '30 22 * * 1-5'   # Mon-Fri, after NYSE close
+    - cron: '30 22 1 * *'   # 1st of the month, after NYSE close
   workflow_dispatch: {}        # allow manual "run" from GitHub UI
 
 # Tokens needed to push the commit back to the repo

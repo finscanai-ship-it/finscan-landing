@@ -3,8 +3,9 @@ Refresh market_data.json from Yahoo Finance.
 
 Pulls the most recent two trading-day closes for each ticker via yfinance,
 computes the day-over-day % change, and writes the result to
-../market_data.json. Designed to be run by GitHub Actions on a daily cron
-(weekdays only — the script is no-op-safe on weekends/holidays).
+../market_data.json. Designed to be run by GitHub Actions on a monthly cron
+(landing prices are a fixed monthly snapshot; the script is no-op-safe on
+weekends/holidays).
 
 Usage (locally):
     pip install yfinance
@@ -117,7 +118,7 @@ def main() -> int:
     out = {
         "_comment": existing.get(
             "_comment",
-            "Auto-refreshed daily by .github/workflows/refresh-data.yml."
+            "Auto-refreshed monthly by .github/workflows/refresh-data.yml."
         ),
         "as_of_iso":   most_recent_date.strftime("%Y-%m-%d"),
         "as_of_label": "PRIOR CLOSE · " + most_recent_date.strftime("%b %-d, %Y").upper() if os.name != "nt"

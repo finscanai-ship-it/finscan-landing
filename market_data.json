@@ -1,5 +1,5 @@
 {
-  "_comment": "Auto-refreshed daily by .github/workflows/refresh-data.yml (script: scripts/refresh_market_data.py). DO NOT edit by hand \u2014 your changes will be overwritten on next workflow run. To change the symbol set, edit the script.",
+  "_comment": "Auto-refreshed monthly by .github/workflows/refresh-data.yml (script: scripts/refresh_market_data.py). DO NOT edit by hand \u2014 your changes will be overwritten on next workflow run. To change the symbol set, edit the script.",
   "as_of_iso": "2026-06-12",
   "as_of_label": "PRIOR CLOSE \u00b7 JUN 12, 2026",
   "tickers": {
