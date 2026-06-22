@@ -91,6 +91,8 @@
   // Core columns first, then every field from the data jsonb (full dataset).
   const CORE_KEYS = ["rank", "symbol", "name", "verdict", "score",
                      "last_price", "market_cap", "category", "sector"];
+  const CORE_SELECT = CORE_KEYS.join(",");   // light first-paint projection (no jsonb)
+  let DATA_PROMISE = null;                    // resolves once the heavy `data` blobs are merged in
 
   function flatten(r) {
     const base = {};
@@ -116,7 +118,8 @@
 
   function stamp() { return new Date().toISOString().slice(0, 10); }
 
-  function exportCSV() {
+  async function exportCSV() {
+    if (DATA_PROMISE) { try { await DATA_PROMISE; } catch (_) {} }
     const recs = VIEW.map(flatten);
     const header = exportHeader(recs);
     const esc = (v) => {
@@ -138,6 +141,7 @@
     const orig = btn ? btn.textContent : "";
     if (btn) { btn.disabled = true; btn.textContent = "Building…"; }
     try {
+      if (DATA_PROMISE) { try { await DATA_PROMISE; } catch (_) {} }
       const { data: { session } } = await SB.auth.getSession();
       const resp = await fetch(api + "/web/export", {
         method: "POST",
@@ -182,22 +186,22 @@
     return String(v);
   }
 
-  async function fetchAll(sb, signal) {
+  async function pageThrough(sb, columns, signal) {
     // Page through in case the universe exceeds PostgREST's per-request cap.
-    const page = 1000;
+    const pageSize = 1000;
     let from = 0, all = [];
     while (true) {
       let q = sb
-        .from("universe").select("*")
+        .from("universe").select(columns)
         .order("rank", { ascending: true })
-        .range(from, from + page - 1);
+        .range(from, from + pageSize - 1);
       if (signal) q = q.abortSignal(signal);
       const { data, error } = await q;
       if (error) throw error;
       if (!data) break;
       all = all.concat(data);
-      if (data.length < page) break;
-      from += page;
+      if (data.length < pageSize) break;
+      from += pageSize;
     }
     return all;
   }
@@ -317,14 +321,18 @@
       SB = sb;
       const free = (opts && opts.mode) === "free";
       const msg = $("accessmsg");
-      // Hard timeout so a stalled request (paused/over-quota Supabase, RLS
-      // stall, flaky network) can never leave "Loading universe…" spinning
-      // forever with no feedback. The whole body is inside try/catch so a
-      // throw in the render step surfaces an error instead of hanging too.
+      DATA_PROMISE = null;
+      // Hard timeout so a stalled first-paint request (paused/over-quota
+      // Supabase, RLS stall, flaky network) can never leave "Loading universe…"
+      // spinning forever. The whole body is inside try/catch so a throw in the
+      // render step surfaces an error instead of hanging too.
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 45000);
       try {
-        ROWS = await fetchAll(sb, ctrl.signal);
+        // Phase 1 — light core columns only (no heavy `data` jsonb). Paints the
+        // table + KPIs near-instantly even on a 1,000+ row universe, instead of
+        // blocking on multi-MB of metrics ("takes a long time to load").
+        ROWS = await pageThrough(sb, CORE_SELECT, ctrl.signal);
 
         const dash = $("dashboard");
         if (dash) dash.removeAttribute("hidden");
@@ -341,12 +349,33 @@
           return;
         }
 
-        if (msg) msg.innerHTML =
-          '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") + ".</span>";
         if (!free) renderKPIs();
         renderHead();
         wireFilters();
         applyFilters();
+        if (msg) msg.innerHTML =
+          '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") +
+          '.</span> <span class="muted">Loading detailed metrics…</span>';
+
+        // Phase 2 — fetch the heavy `data` jsonb in the background, merge it in
+        // by symbol, then re-render. Exports await DATA_PROMISE so they never
+        // ship a half-populated sheet.
+        DATA_PROMISE = (async () => {
+          try {
+            const blobs = await pageThrough(sb, "symbol,data", null);
+            const bySym = new Map(blobs.map((b) => [b.symbol, b.data]));
+            ROWS.forEach((r) => { r.data = bySym.get(r.symbol) || null; });
+            applyFilters();
+            if (msg) msg.innerHTML =
+              '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' +
+              (ROWS.length === 1 ? "" : "s") + ".</span>";
+          } catch (e) {
+            // The core table already works; just flag that metrics didn't load.
+            if (msg) msg.innerHTML =
+              '<span class="ok">✓ Loaded ' + ROWS.length + ' stocks.</span> ' +
+              '<span class="warn">Some metrics didn\'t load — refresh to retry.</span>';
+          }
+        })();
       } catch (e) {
         const why = ctrl.signal.aborted
           ? "request timed out after 45s — the data service did not respond (it may be paused, over quota, or blocked)"
