@@ -110,13 +110,33 @@
   });
 
   async function getProfile(userId) {
-    const { data } = await sb
-      .from("profiles").select("subscription_active, free_picks")
-      .eq("id", userId).maybeSingle();
-    return {
-      active: !!(data && data.subscription_active),
-      picks: (data && data.free_picks) || [],
-    };
+    // Resolve the plan RELIABLY. A transient read must never silently downgrade
+    // a paying customer to "free" (which shows the Upgrade buttons while RLS is
+    // still serving them the full universe). We retry on BOTH an error and an
+    // unexpected empty read — an empty result with no error is the tell-tale of
+    // a not-yet-attached / stale JWT (auth.uid() momentarily null server-side),
+    // which is exactly what showed Saira the free UI. We refresh the session
+    // between attempts so a stale token can't keep reading as "no row".
+    // A genuine free user returns a real row with active=false → confirmed, ok.
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const { data, error } = await sb
+        .from("profiles").select("subscription_active, free_picks")
+        .eq("id", userId).maybeSingle();
+      if (!error && data) {
+        return {
+          active: !!data.subscription_active,
+          picks: data.free_picks || [],
+          ok: true,
+        };
+      }
+      console.warn("getProfile unresolved (attempt " + (attempt + 1) + "/3):",
+        error ? error.message : "no profile row returned");
+      await sb.auth.refreshSession().catch(() => {});
+      await new Promise((r) => setTimeout(r, 500 * (attempt + 1)));
+    }
+    // Could not confirm after retries. Do NOT assume "free" — signal unknown so
+    // render() shows a neutral confirming state instead of the upgrade prompt.
+    return { active: false, picks: [], ok: false };
   }
   async function isActive(userId) {
     return (await getProfile(userId)).active;
@@ -241,12 +261,24 @@
     const active = prof.active;
     PICKS = prof.picks.slice(0, MAX_PICKS);
 
-    set(els.planline, active
-      ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
-      : 'Free preview — choose up to 3 stocks. Upgrade to unlock the full universe.');
-    if (active) { hide(els.upgrade); hide(els.picker); }
-    else        { show(els.upgrade); show(els.picker); renderPicks(); }
-    els.hint.textContent = "";
+    if (!prof.ok) {
+      // Entitlement unconfirmed after retries — never wrongly prompt a paying
+      // customer to upgrade. Show a neutral confirming state. RLS still gates
+      // the data server-side, so this also can't expose paid rows to a free user.
+      set(els.planline, '<span class="warn">Confirming your subscription…</span>');
+      hide(els.upgrade); hide(els.picker);
+      set(els.hint,
+        '<span class="warn">⚠ Could not confirm your plan. If you just subscribed, ' +
+        'hard-refresh (Ctrl+Shift+R) — don\'t pay again. ' +
+        'Email finscan.ai@gmail.com if it persists.</span>');
+    } else {
+      set(els.planline, active
+        ? '<span class="ok">Active subscriber</span> — full universe unlocked.'
+        : 'Free preview — choose up to 3 stocks. Upgrade to unlock the full universe.');
+      if (active) { hide(els.upgrade); hide(els.picker); }
+      else        { show(els.upgrade); show(els.picker); renderPicks(); }
+      els.hint.textContent = "";
+    }
 
     // Universe table (RLS decides how many rows come back).
     set(els.accessmsg, "Loading universe…");

@@ -182,16 +182,19 @@
     return String(v);
   }
 
-  async function fetchAll(sb) {
+  async function fetchAll(sb, signal) {
     // Page through in case the universe exceeds PostgREST's per-request cap.
     const page = 1000;
     let from = 0, all = [];
     while (true) {
-      const { data, error } = await sb
+      let q = sb
         .from("universe").select("*")
         .order("rank", { ascending: true })
         .range(from, from + page - 1);
+      if (signal) q = q.abortSignal(signal);
+      const { data, error } = await q;
       if (error) throw error;
+      if (!data) break;
       all = all.concat(data);
       if (data.length < page) break;
       from += page;
@@ -314,32 +317,46 @@
       SB = sb;
       const free = (opts && opts.mode) === "free";
       const msg = $("accessmsg");
+      // Hard timeout so a stalled request (paused/over-quota Supabase, RLS
+      // stall, flaky network) can never leave "Loading universe…" spinning
+      // forever with no feedback. The whole body is inside try/catch so a
+      // throw in the render step surfaces an error instead of hanging too.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 45000);
       try {
-        ROWS = await fetchAll(sb);
+        ROWS = await fetchAll(sb, ctrl.signal);
+
+        const dash = $("dashboard");
+        if (dash) dash.removeAttribute("hidden");
+
+        const empty = ROWS.length === 0;
+        // Free mode: the picker card carries the messaging, so KPIs/filters and the
+        // generic "no stocks yet" empty-state stay hidden; we just list the picks.
+        $("emptystate").hidden = free ? true : !empty;
+        $("kpis").hidden = free || empty;
+        $("filters").hidden = free;
+        $("tablecard").hidden = empty;
+        if (empty) {
+          if (msg) msg.innerHTML = "";
+          return;
+        }
+
+        if (msg) msg.innerHTML =
+          '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") + ".</span>";
+        if (!free) renderKPIs();
+        renderHead();
+        wireFilters();
+        applyFilters();
       } catch (e) {
-        if (msg) msg.innerHTML = '<span class="err">✗ Could not load universe: ' + e.message + "</span>";
-        return;
+        const why = ctrl.signal.aborted
+          ? "request timed out after 45s — the data service did not respond (it may be paused, over quota, or blocked)"
+          : (e && e.message ? e.message : String(e));
+        if (msg) msg.innerHTML =
+          '<span class="err">✗ Could not load universe: ' + why +
+          '. Please refresh, or email finscan.ai@gmail.com if it persists.</span>';
+      } finally {
+        clearTimeout(timer);
       }
-      $("dashboard").removeAttribute("hidden");
-
-      const empty = ROWS.length === 0;
-      // Free mode: the picker card carries the messaging, so KPIs/filters and the
-      // generic "no stocks yet" empty-state stay hidden; we just list the picks.
-      $("emptystate").hidden = free ? true : !empty;
-      $("kpis").hidden = free || empty;
-      $("filters").hidden = free;
-      $("tablecard").hidden = empty;
-      if (empty) {
-        if (msg) msg.innerHTML = "";
-        return;
-      }
-
-      if (msg) msg.innerHTML =
-        '<span class="ok">✓ Loaded ' + ROWS.length + ' stock' + (ROWS.length === 1 ? "" : "s") + ".</span>";
-      if (!free) renderKPIs();
-      renderHead();
-      wireFilters();
-      applyFilters();
     },
     hide() {
       const d = $("dashboard");
