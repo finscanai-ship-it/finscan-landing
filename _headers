@@ -1,0 +1,7 @@
+# Always revalidate HTML and the web-app assets so a deploy reaches every
+# customer on their next load — no stale cached JS serving old bugs.
+# (Fingerprinted media like *.mp4/*.png keep Netlify's default long cache.)
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+/app/*
+  Cache-Control: public, max-age=0, must-revalidate

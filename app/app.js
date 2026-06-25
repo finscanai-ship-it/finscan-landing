@@ -74,7 +74,17 @@
   });
 
   els.signout.addEventListener("click", async () => {
-    await sb.auth.signOut();
+    els.signout.disabled = true;
+    // Local scope clears the session without a server round-trip, and we race a
+    // short timeout + reload regardless — so sign-out always works even when
+    // Supabase is slow/unreachable (previously the click just hung silently).
+    try {
+      await Promise.race([
+        sb.auth.signOut({ scope: "local" }),
+        new Promise((r) => setTimeout(r, 2500)),
+      ]);
+    } catch (e) { /* ignore — we reload into a clean guest state regardless */ }
+    location.reload();
   });
 
   // ── Stripe checkout (Block 4) ──────────────────────────────────────────────
