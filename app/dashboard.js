@@ -25,6 +25,7 @@
     { k: "growth",        label: "Growth",        src: "data", cat: true },
     { k: "profitability", label: "Profitability", src: "data", cat: true },
     { k: "health",        label: "Health",        src: "data", cat: true },
+    { k: "sentiment",     label: "Sentiment",     src: "data", cat: true },
     { k: "upside",        label: "Upside %", num: true, src: "data", pct: true },
     { k: "category",      label: "Category",      src: "row" },
   ];
@@ -58,10 +59,15 @@
     { k: "div_yield",       label: "Div Yield %",  num: true, src: "data", pct: true },
     { k: "target_price",    label: "Target $",     num: true, src: "data", money: true },
     { k: "insider_own_pct", label: "Insider %",    num: true, src: "data", pct: true },
+    { k: "inst_own",        label: "Inst %",       num: true, src: "data", pct: true },
     { k: "short_float_pct", label: "Short Float %",num: true, src: "data", pct: true },
+    { k: "sentiment",       label: "Sentiment",               src: "data", cat: true },
+    { k: "news_sentiment",  label: "News Tone",    num: true, src: "data" },
+    { k: "rs_3m",           label: "vs Sector 3M", num: true, src: "data" },
     { k: "earnings_date",   label: "Next Earnings",           src: "data" },
     { k: "beta",            label: "Beta",         num: true, src: "data" },
     { k: "trend",           label: "EMA Trend",               src: "data" },
+    { k: "ema_stack",       label: "EMA Stack",               src: "data" },
     { k: "macd_tag",        label: "MACD",                    src: "data" },
     { k: "bb_signal",       label: "Bollinger",               src: "data" },
     { k: "golden_cross",    label: "Golden Cross",            src: "data" },
@@ -76,9 +82,10 @@
 
   // Categorical badge colour by sentiment (no buy/sell wording).
   const CAT_GOOD = new Set(["Very Cheap", "Cheap", "High Growth", "Growing",
-    "Highly Profitable", "Profitable", "Very Healthy", "Healthy"]);
+    "Highly Profitable", "Profitable", "Very Healthy", "Healthy",
+    "Bullish", "Leaning Bullish"]);
   const CAT_BAD = new Set(["Expensive", "Very Expensive", "Declining",
-    "Loss-Making", "High Debt"]);
+    "Loss-Making", "High Debt", "Bearish", "Leaning Bearish"]);
   const catClass = (v) =>
     CAT_GOOD.has(v) ? "cat-good" : CAT_BAD.has(v) ? "cat-bad" : "cat-mid";
 
