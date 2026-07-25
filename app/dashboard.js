@@ -26,7 +26,6 @@
     { k: "profitability", label: "Profitability", src: "data", cat: true },
     { k: "health",        label: "Health",        src: "data", cat: true },
     { k: "sentiment",     label: "Sentiment",     src: "data", cat: true },
-    { k: "upside",        label: "Upside %", num: true, src: "data", pct: true },
     { k: "category",      label: "Category",      src: "row" },
   ];
 
@@ -67,7 +66,7 @@
     { k: "earnings_date",   label: "Next Earnings",           src: "data" },
     { k: "beta",            label: "Beta",         num: true, src: "data" },
     { k: "trend",           label: "EMA Trend",               src: "data" },
-    { k: "ema_stack",       label: "EMA Stack",               src: "data" },
+    { k: "ema_stack",       label: "Trend Alignment",         src: "data" },
     { k: "macd_tag",        label: "MACD",                    src: "data" },
     { k: "bb_signal",       label: "Bollinger",               src: "data" },
     { k: "golden_cross",    label: "Golden Cross",            src: "data" },
@@ -83,9 +82,9 @@
   // Categorical badge colour by sentiment (no buy/sell wording).
   const CAT_GOOD = new Set(["Very Cheap", "Cheap", "High Growth", "Growing",
     "Highly Profitable", "Profitable", "Very Healthy", "Healthy",
-    "Bullish", "Leaning Bullish"]);
+    "Positive", "Leaning Positive"]);
   const CAT_BAD = new Set(["Expensive", "Very Expensive", "Declining",
-    "Loss-Making", "High Debt", "Bearish", "Leaning Bearish"]);
+    "Loss-Making", "High Debt", "Negative", "Leaning Negative"]);
   const catClass = (v) =>
     CAT_GOOD.has(v) ? "cat-good" : CAT_BAD.has(v) ? "cat-bad" : "cat-mid";
 
